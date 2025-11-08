@@ -16,3 +16,9 @@ python-slugify>=8.0.0
 # Fake Data Generation
 Faker>=20.0.0
 
+# Environment Variables
+python-decouple>=3.8
+
+# Payment Gateway (Zarinpal)
+requests>=2.31.0
+

@@ -51,7 +51,7 @@
                     {% if item.product.images.first %}
                         <img alt="{{ item.product.title }}" src="{{ item.product.images.first.image.url }}"/>
                     {% else %}
-                        <img alt="{{ item.product.title }}" src='{% static "./assets/image/products/1.webp" %}'/>
+                        <img alt="{{ item.product.title }}" class="bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'/>
                     {% endif %}
                 </div>
                 <div class="mr-2 md:mr-5 w-full flex flex-wrap gap-y-3">

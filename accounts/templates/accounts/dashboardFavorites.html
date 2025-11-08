@@ -24,7 +24,7 @@
                         {% if product.images.first %}
                         <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
                         {% else %}
-                        <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+                        <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                         {% endif %}
                     </a>
                     <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">

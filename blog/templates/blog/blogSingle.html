@@ -24,8 +24,8 @@
                                      src="{{ related_post.image.url }}">
                             {% else %}
                                 <img alt="{{ related_post.title }}"
-                                     class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload"
-                                     src='{% static "./assets/image/blog/2.png" %}'>
+                                     class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload bg-gray-100"
+                                     src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
                         <div class="p-2 mt-2">
@@ -90,8 +90,8 @@
                     <img alt="{{ post.title }}" class="w-full h-72 md:h-96 rounded-3xl object-cover object-center mb-3.5"
                          src="{{ post.image.url }}"/>
                     {% else %}
-                    <img alt="{{ post.title }}" class="w-full h-72 md:h-96 rounded-3xl object-cover object-center mb-3.5"
-                         src='{% static "./assets/image/blog/2.png" %}'/>
+                    <img alt="{{ post.title }}" class="w-full h-72 md:h-96 rounded-3xl object-cover object-center mb-3.5 bg-gray-100"
+                         src='{% static "./assets/image/placeholder.svg" %}'/>
                     {% endif %}
                     <div class="flex gap-4 mb-10 flex-wrap">
                         <div class="text-xs flex gap-x-1 items-center text-zinc-400">

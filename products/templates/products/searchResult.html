@@ -19,18 +19,61 @@
 <img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
 </button>
 <ul class="submenu hidden mt-2">
-{% recursetree categories %}
+{% if selected_category_obj %}
+<!-- نمایش دکمه بازگشت به دسته‌بندی والد -->
+{% if selected_category_obj.parent %}
 <li>
-<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition {% if selected_category == node.slug %}text-primary-500 font-semibold{% endif %} category-filter-link" href="#" data-category-slug="{{ node.slug }}">
-{{ node.name }}
+<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition font-semibold" href="?q={{ query|urlencode }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&category={{ selected_category_obj.parent.slug }}">
+← {{ selected_category_obj.parent.name }}
 </a>
-{% if not node.is_leaf_node %}
-<ul class="pr-4 mt-2">
-{{ children }}
-</ul>
+</li>
+{% else %}
+<li>
+<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition font-semibold" href="?q={{ query|urlencode }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+← همه دسته‌بندی‌ها
+</a>
+</li>
+{% endif %}
+<!-- نمایش دسته‌بندی فعلی -->
+<li>
+<a class="text-xs flex justify-between w-full py-2 px-4 text-primary-500 font-semibold bg-primary-50 rounded-lg" href="?q={{ query|urlencode }}&category={{ selected_category_obj.slug }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+{{ selected_category_obj.name }} (فعلی)
+</a>
+</li>
+{% endif %}
+<!-- نمایش دسته‌بندی‌های سطح فعلی -->
+{% for category in filter_categories %}
+<li>
+<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition {% if selected_category == category.slug %}text-primary-500 font-semibold{% endif %}" href="?q={{ query|urlencode }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&category={{ category.slug }}">
+{{ category.name }}
+</a>
+</li>
+{% empty %}
+<li class="text-xs text-zinc-500 px-4 py-2">
+{% if selected_category_obj %}
+زیرمجموعه‌ای وجود ندارد
+{% else %}
+دسته‌بندی‌ای یافت نشد
 {% endif %}
 </li>
-{% endrecursetree %}
+{% endfor %}
+</ul>
+</div>
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<span class="text-zinc-700 text-sm">برند ها</span>
+<img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
+</button>
+<ul class="submenu hidden mt-2">
+{% for brand in brands %}
+<li>
+<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition {% if selected_brand == brand.slug %}text-primary-500 font-semibold{% endif %}" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}&brand={{ brand.slug }}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+{{ brand.name }}
+</a>
+</li>
+{% empty %}
+<li class="text-xs text-zinc-500 px-4 py-2">برندی یافت نشد</li>
+{% endfor %}
 </ul>
 </div>
 <div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
@@ -95,19 +138,19 @@
 <div class="text-zinc-600 text-sm">
             مرتب سازی:
           </div>
-<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=created_at" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'created_at' or not sort_by %}text-primary-500{% else %}text-zinc-500{% endif %}">
+<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=created_at" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'created_at' or not sort_by %}text-primary-500{% else %}text-zinc-500{% endif %}">
             جدیدترین
           </a>
-<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=sales" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'sales' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=sales" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'sales' %}text-primary-500{% else %}text-zinc-500{% endif %}">
             پرفروش ترین
           </a>
-<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=price_asc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_asc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=price_asc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_asc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
             ارزان ترین
           </a>
-<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=price_desc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_desc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=price_desc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_desc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
             گران ترین
           </a>
-<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=views" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'views' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+<a href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&sort=views" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'views' %}text-primary-500{% else %}text-zinc-500{% endif %}">
             پربازدیدترین
           </a>
 </div>
@@ -123,7 +166,7 @@
 {% if product.images.first %}
 <img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
 {% else %}
-<img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+<img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src='{% static "./assets/image/placeholder.svg" %}'>
 {% endif %}
 </a>
 <a class="text-xs md:text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
@@ -161,7 +204,7 @@
 {% if products.has_other_pages %}
 <div class="flex justify-center mb-12">
 {% if products.has_previous %}
-<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ products.previous_page_number }}">
+<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ products.previous_page_number }}">
 <svg class="size-4 md:size-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 <path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path>
 </svg>
@@ -173,13 +216,13 @@
           {{ num }}
       </a>
 {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-<a class="border border-zinc-100 text-sm md:text-base px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ num }}">
+<a class="border border-zinc-100 text-sm md:text-base px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ num }}">
           {{ num }}
       </a>
 {% endif %}
 {% endfor %}
 {% if products.has_next %}
-<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ products.next_page_number }}">
+<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}&page={{ products.next_page_number }}">
 <svg class="size-4 md:size-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
 <path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
 </svg>

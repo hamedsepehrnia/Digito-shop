@@ -1,8 +1,8 @@
 from django.contrib import admin
+from core.admin_utils import format_date_for_admin
 from .models import Post, Category, Comment
 
 
-@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug', 'created_at']
     prepopulated_fields = {'slug': ('name',)}
@@ -14,13 +14,12 @@ class CommentInline(admin.TabularInline):
     readonly_fields = ['author', 'content', 'created_at', 'is_approved']
 
 
-@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'author', 'category', 'status', 'views', 'jalali_created', 'created_at']
+    list_display = ['title', 'author', 'category', 'status', 'views', 'jalali_created']
     list_filter = ['status', 'category', 'created_at']
     search_fields = ['title', 'content', 'excerpt']
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ['views', 'created_at', 'updated_at', 'published_at']
+    readonly_fields = ['views', 'updated_at', 'published_at']
     inlines = [CommentInline]
     actions = ['publish_posts', 'draft_posts']
     
@@ -29,7 +28,8 @@ class PostAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'author', 'category', 'status')
         }),
         ('محتوا', {
-            'fields': ('excerpt', 'content', 'image')
+            'fields': ('excerpt', 'content', 'image'),
+            'description': '<strong>راهنمای سایز تصویر:</strong> سایز بهینه 1200x600 پیکسل (نسبت 2:1) یا 1200x800 پیکسل (نسبت 3:2). فرمت پیشنهادی: JPG یا WebP'
         }),
         ('آمار', {
             'fields': ('views', 'created_at', 'updated_at', 'published_at')
@@ -37,8 +37,8 @@ class PostAdmin(admin.ModelAdmin):
     )
     
     def jalali_created(self, obj):
-        return obj.jalali_created()
-    jalali_created.short_description = 'تاریخ ایجاد (شمسی)'
+        return format_date_for_admin(obj.created_at, include_time=False)
+    jalali_created.short_description = 'تاریخ ایجاد'
     
     def publish_posts(self, request, queryset):
         """انتشار پست‌های انتخاب شده"""
@@ -54,17 +54,16 @@ class PostAdmin(admin.ModelAdmin):
     draft_posts.short_description = 'برگرداندن به پیش‌نویس'
 
 
-@admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['post', 'author', 'is_approved', 'jalali_created', 'created_at']
+    list_display = ['post', 'author', 'is_approved', 'jalali_created']
     list_filter = ['is_approved', 'created_at']
     search_fields = ['content', 'author__phone', 'post__title']
-    readonly_fields = ['created_at']
+    readonly_fields = []
     actions = ['approve_comments', 'disapprove_comments']
     
     def jalali_created(self, obj):
-        return obj.jalali_created()
-    jalali_created.short_description = 'تاریخ (شمسی)'
+        return format_date_for_admin(obj.created_at, include_time=True)
+    jalali_created.short_description = 'تاریخ ثبت'
     
     def approve_comments(self, request, queryset):
         """تایید گروهی کامنت‌های انتخاب شده"""

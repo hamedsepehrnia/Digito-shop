@@ -6,7 +6,13 @@ class About(models.Model):
     """مدل برای صفحه درباره ما"""
     title = models.CharField(max_length=255, verbose_name="عنوان")
     content = models.TextField(verbose_name="محتوا")
-    image = models.ImageField(upload_to='about/', blank=True, null=True, verbose_name="عکس")
+    image = models.ImageField(
+        upload_to='about/', 
+        blank=True, 
+        null=True, 
+        verbose_name="عکس",
+        help_text="سایز بهینه: 1200x800 پیکسل (نسبت 3:2)"
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به‌روزرسانی")
     is_active = models.BooleanField(default=True, verbose_name="فعال است")
@@ -59,9 +65,9 @@ class ContactInfo(models.Model):
         return f"اطلاعات تماس - {self.email}"
     
     def save(self, *args, **kwargs):
-        # فقط یک رکورد فعال می‌تواند وجود داشته باشد
-        if self.is_active:
-            ContactInfo.objects.filter(is_active=True).update(is_active=False)
+        # فقط یک رکورد می‌تواند وجود داشته باشد
+        if not self.pk and ContactInfo.objects.exists():
+            return
         super().save(*args, **kwargs)
 
 
@@ -162,7 +168,74 @@ class FooterSettings(models.Model):
         return "تنظیمات فوتر"
     
     def save(self, *args, **kwargs):
-        # فقط یک رکورد فعال می‌تواند وجود داشته باشد
-        if self.is_active:
-            FooterSettings.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
+        # فقط یک رکورد می‌تواند وجود داشته باشد
+        if not self.pk and FooterSettings.objects.exists():
+            return
         super().save(*args, **kwargs)
+
+
+class Banner(models.Model):
+    """مدل برای بنرهای سایت"""
+    BANNER_TYPE_CHOICES = [
+        ('hero', 'بنر اصلی (Hero Slider)'),
+        ('sidebar', 'بنر کناری'),
+        ('bottom', 'بنر پایین صفحه'),
+    ]
+    
+    title = models.CharField(max_length=255, verbose_name="عنوان")
+    image = models.ImageField(
+        upload_to='banners/', 
+        verbose_name="تصویر",
+        help_text="سایز بهینه: بنر اصلی (Hero): 1920x384 پیکسل | بنر کناری: 300x600 پیکسل (نسبت 1:2) | بنر پایین: 1200x675 پیکسل (نسبت 16:9)"
+    )
+    link = models.URLField(blank=True, null=True, verbose_name="لینک")
+    banner_type = models.CharField(max_length=20, choices=BANNER_TYPE_CHOICES, default='hero', verbose_name="نوع بنر")
+    order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
+    is_active = models.BooleanField(default=True, verbose_name="فعال است")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="تاریخ به‌روزرسانی")
+    
+    class Meta:
+        verbose_name = "بنر"
+        verbose_name_plural = "بنرها"
+        ordering = ['banner_type', 'order', 'id']
+    
+    def __str__(self):
+        return f"{self.get_banner_type_display()} - {self.title}"
+
+
+class AdminSettings(models.Model):
+    """تنظیمات پنل ادمین"""
+    use_jalali_date = models.BooleanField(default=True, verbose_name="استفاده از تاریخ شمسی")
+    site_title = models.CharField(max_length=100, default="پنل مدیریت دیجیتو", verbose_name="عنوان سایت")
+    site_header = models.CharField(max_length=100, default="مدیریت دیجیتو", verbose_name="هدر سایت")
+    site_index_title = models.CharField(max_length=100, default="پنل مدیریت", verbose_name="عنوان صفحه اصلی")
+    show_hidden_models = models.BooleanField(default=False, verbose_name="نمایش مدل‌های پنهان شده (حالت پیشرفته)")
+    
+    class Meta:
+        verbose_name = "تنظیمات پنل ادمین"
+        verbose_name_plural = "تنظیمات پنل ادمین"
+    
+    def __str__(self):
+        return "تنظیمات پنل ادمین"
+    
+    def save(self, *args, **kwargs):
+        # فقط یک رکورد می‌تواند وجود داشته باشد
+        if not self.pk and AdminSettings.objects.exists():
+            return
+        super().save(*args, **kwargs)
+    
+    @classmethod
+    def get_settings(cls):
+        """دریافت تنظیمات یا ایجاد تنظیمات پیش‌فرض"""
+        settings, created = cls.objects.get_or_create(
+            pk=1,
+            defaults={
+                'use_jalali_date': True,
+                'site_title': 'پنل مدیریت دیجیتو',
+                'site_header': 'مدیریت دیجیتو',
+                'site_index_title': 'پنل مدیریت',
+                'show_hidden_models': False,
+            }
+        )
+        return settings

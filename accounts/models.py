@@ -53,10 +53,15 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         ('male', "مرد"),
         ('female', "زن")
     )
-    gender = models.CharField(choices=gender_choices, null=True, blank=True, max_length=50)
+    gender = models.CharField(choices=gender_choices, null=True, blank=True, max_length=50, verbose_name="جنسیت")
 
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True, verbose_name="فعال است")
+    is_admin = models.BooleanField(default=False, verbose_name="مدیر است")
+
+    class Meta:
+        verbose_name = "کاربر"
+        verbose_name_plural = "کاربران"
+        ordering = ['-id']
 
     objects = MyUserManager()
 
@@ -84,10 +89,15 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     def is_staff(self):
         return self.is_admin
 class PhoneOTP(models.Model):
-    phone_number = models.CharField(max_length=15)
-    otp = models.CharField(max_length=6)
-    created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
+    otp = models.CharField(max_length=6, verbose_name="کد تایید")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ایجاد")
+    expires_at = models.DateTimeField(verbose_name="تاریخ انقضا")
+
+    class Meta:
+        verbose_name = "کد تایید تلفن"
+        verbose_name_plural = "کدهای تایید تلفن"
+        ordering = ['-created_at']
 
     def is_valid(self):
         return timezone.now() < self.expires_at
@@ -95,16 +105,21 @@ class PhoneOTP(models.Model):
     def __str__(self):
         return f"{self.phone_number} • {self.otp}"
 class Address(models.Model):
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='addresses')
-    subject = models.CharField(max_length=50, null=True, blank=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    province = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    address_details = models.CharField(max_length=50)
-    phone_number = models.CharField(max_length=15)
-    postal_code = models.CharField(max_length=50)
-    additional_info = models.CharField(max_length=50)
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='addresses', verbose_name="کاربر")
+    subject = models.CharField(max_length=50, null=True, blank=True, verbose_name="عنوان آدرس")
+    first_name = models.CharField(max_length=50, verbose_name="نام")
+    last_name = models.CharField(max_length=50, verbose_name="نام خانوادگی")
+    province = models.CharField(max_length=50, verbose_name="استان")
+    city = models.CharField(max_length=50, verbose_name="شهر")
+    address_details = models.CharField(max_length=50, verbose_name="جزئیات آدرس")
+    phone_number = models.CharField(max_length=15, verbose_name="شماره تلفن")
+    postal_code = models.CharField(max_length=50, verbose_name="کد پستی")
+    additional_info = models.CharField(max_length=50, verbose_name="اطلاعات اضافی", blank=True)
+
+    class Meta:
+        verbose_name = "آدرس"
+        verbose_name_plural = "آدرس‌ها"
+        ordering = ['-id']
     
     def __str__(self):
         address_parts = []

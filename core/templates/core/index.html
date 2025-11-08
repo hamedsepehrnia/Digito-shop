@@ -7,26 +7,18 @@
     <div class="px-2 md:px-12">
         <div class="swiper heroSlider rounded-2xl md:rounded-4xl relative">
             <div class="swiper-wrapper">
+                {% for banner in hero_banners %}
+                <a class="swiper-slide" href="{% if banner.link %}{{ banner.link }}{% else %}#{% endif %}">
+                    <img alt="{{ banner.title }}" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src="{{ banner.image.url }}"/>
+                </a>
+                {% empty %}
+                <!-- Fallback to static images if no banners exist -->
                 <a class="swiper-slide" href="">
                     <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
                          src='{% static "./assets/image/heroSlider/1.webp" %}'/>
                 </a>
-                <a class="swiper-slide" href="">
-                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
-                         src='{% static "./assets/image/heroSlider/2.webp" %}'/>
-                </a>
-                <a class="swiper-slide" href="">
-                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
-                         src='{% static "./assets/image/heroSlider/3.webp" %}'/>
-                </a>
-                <a class="swiper-slide" href="">
-                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
-                         src='{% static "./assets/image/heroSlider/4.webp" %}'/>
-                </a>
-                <a class="swiper-slide" href="">
-                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
-                         src='{% static "./assets/image/heroSlider/5.webp" %}'/>
-                </a>
+                {% endfor %}
             </div>
             <svg class="absolute -left-2 rotate-180 top-14 z-10 w-auto hidden md:block" fill="none" height="285"
                  viewbox="0 0 76 285" width="76" xmlns="http://www.w3.org/2000/svg">
@@ -113,10 +105,10 @@
                         </a>
                         {% endif %}
                         <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
-                            {% if product.image %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% if product.images.first %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
                             {% else %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
                         <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
@@ -182,8 +174,13 @@
                             <p class="text-xs md:text-sm text-zinc-700">
                                 {{ category.name }}
                             </p>
-                            <img alt="{{ category.name }}" class="max-w-12 md:max-w-14"
-                                 src='{% static "./assets/image/category/1.jpg" %}'/>
+                            {% if category.image %}
+                                <img alt="{{ category.name }}" class="max-w-12 md:max-w-14 object-contain"
+                                     src="{{ category.image.url }}"/>
+                            {% else %}
+                                <img alt="{{ category.name }}" class="max-w-12 md:max-w-14 bg-gray-100"
+                                     src='{% static "./assets/image/placeholder.svg" %}'/>
+                            {% endif %}
                         </a>
                     </div>
                     {% empty %}
@@ -198,6 +195,12 @@
     <!-- slider for category -->
     <div class="mt-12 md:mt-20 px-4 md:px-14 md:flex gap-5">
         <!-- banner -->
+        {% if sidebar_banner %}
+        <a href="{% if sidebar_banner.link %}{{ sidebar_banner.link }}{% else %}#{% endif %}" class="flex flex-row-reverse md:flex-col justify-between md:justify-center items-center mb-4 md:mb-12 px-8 md:px-0 mx-auto mt-2 w-full sm:w-6/12 md:w-2/12 rounded-3xl overflow-hidden">
+            <img alt="{{ sidebar_banner.title }}" class="w-full h-full object-cover" src="{{ sidebar_banner.image.url }}"/>
+        </a>
+        {% else %}
+        <!-- Fallback to static banner if no sidebar banner exists -->
         <div class="flex flex-row-reverse md:flex-col justify-between md:justify-center items-center mb-4 md:mb-12 px-8 md:px-0 mx-auto mt-2 w-full sm:w-6/12 md:w-2/12 bg-primary-500 rounded-3xl">
             <div>
                 <p class="text-zinc-100 mb-2 text-center text-sm md:text-base">
@@ -209,6 +212,7 @@
             </div>
             <img alt="" class="w-4/12 md:w-11/12" src='{% static "./assets/image/Electronics.webp" %}'/>
         </div>
+        {% endif %}
         <!-- main slider -->
         <div class="containerPSlider swiper md:w-10/12">
             <div class="sliderForCategory">
@@ -225,10 +229,10 @@
                         </a>
                         {% endif %}
                         <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
-                            {% if product.image %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% if product.images.first %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
                             {% else %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/4.webp" %}'>
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
                         <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
@@ -284,12 +288,19 @@
     </div>
     <!-- 2 banner -->
     <div class="mt-10 md:mt-16 flex flex-col md:flex-row gap-3 md:gap-5 px-4 md:px-14">
+        {% for banner in bottom_banners %}
+        <a href="{% if banner.link %}{{ banner.link }}{% else %}#{% endif %}">
+            <img alt="{{ banner.title }}" class="w-full rounded-3xl" src="{{ banner.image.url }}"/>
+        </a>
+        {% empty %}
+        <!-- Fallback to static images if no banners exist -->
         <a href="">
             <img alt="" class="w-full rounded-3xl" src='{% static "./assets/image/banner/1.webp" %}'/>
         </a>
         <a href="">
             <img alt="" class="w-full rounded-3xl" src='{% static "./assets/image/banner/2.webp" %}'/>
         </a>
+        {% endfor %}
     </div>
     <!-- slider 2 -->
     <div class="mt-12 md:mt-20 px-4 md:px-14">
@@ -327,10 +338,10 @@
                         </a>
                         {% endif %}
                         <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
-                            {% if product.image %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% if product.images.first %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
                             {% else %}
-                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
                         <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
@@ -389,162 +400,29 @@
         <div class="containerPSlider swiper">
             <div class="brands">
                 <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for brand in brands %}
                     <div class="card swiper-slide shiny">
                         <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
+                           href="{% url 'shop' %}?brand={{ brand.slug }}">
                             <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/1.png" %}'/>
+                                {% if brand.logo %}
+                                    <img alt="{{ brand.name }}" class="max-w-24 md:max-w-32 w-full mx-auto object-contain"
+                                         src="{{ brand.logo.url }}"/>
+                                {% else %}
+                                    <img alt="{{ brand.name }}" class="max-w-24 md:max-w-32 w-full mx-auto bg-gray-100"
+                                         src='{% static "./assets/image/placeholder.svg" %}'/>
+                                {% endif %}
                             </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
+                            <p class="text-xs md:text-sm text-zinc-700 h-16 text-center">
+                                {{ brand.name }}
                             </p>
                         </a>
                     </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/2.jpg" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
+                    {% empty %}
+                    <div class="col-span-full text-center text-zinc-500 py-10">
+                        برندی یافت نشد
                     </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/3.jpg" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/4.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/5.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/6.jpg" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/7.jpg" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/8.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/9.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/10.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/11.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/12.png" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
-                    <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
-                           href="#">
-                            <div class="w-full h-44 flex justify-center items-center">
-                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
-                                     src='{% static "./assets/image/brands/13.jpg" %}'/>
-                            </div>
-                            <p class="text-xs md:text-sm text-zinc-700 h-16">
-                                شیائومی
-                            </p>
-                        </a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -582,8 +460,8 @@
                                      src="{{ post.image.url }}">
                             {% else %}
                                 <img alt="{{ post.title }}"
-                                 class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload"
-                                 src='{% static "./assets/image/blog/2.png" %}'>
+                                 class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload bg-gray-100"
+                                 src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
                         <div class="p-2 mt-2">

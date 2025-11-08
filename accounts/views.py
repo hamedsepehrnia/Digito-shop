@@ -8,11 +8,13 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import FormView, UpdateView
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
+from django.conf import settings
 from datetime import timedelta
 import random
 
 from .models import MyUser, PhoneOTP, Address, Favorite
 from .forms import CompleteProfileForm, AddressForm
+from .utils import send_otp_via_kavenegar, check_otp_rate_limit
 from orders.models import Order
 from products.models import Product
 
@@ -188,9 +190,48 @@ def dashboard_order_details(request, order_id):
 @csrf_exempt
 def send_otp_ajax(request):
     phone = request.POST.get("phone")
+    
+    if not phone:
+        return JsonResponse({"success": False, "error": "شماره تلفن الزامی است"}, status=400)
+    
+    # بررسی محدودیت تعداد درخواست
+    rate_limit_ok, rate_limit_error = check_otp_rate_limit(phone)
+    if not rate_limit_ok:
+        return JsonResponse({"success": False, "error": rate_limit_error}, status=429)
+    
+    # تولید OTP
     otp = f"{random.randint(100000, 999999)}"
+    
+    # حذف OTP های قبلی
     PhoneOTP.objects.filter(phone_number=phone).delete()
-    PhoneOTP.objects.create(phone_number=phone, otp=otp, expires_at=timezone.now() + timedelta(minutes=5))
+    
+    # ایجاد OTP جدید
+    expiry_minutes = settings.OTP_EXPIRY_MINUTES
+    otp_record = PhoneOTP.objects.create(
+        phone_number=phone,
+        otp=otp,
+        expires_at=timezone.now() + timedelta(minutes=expiry_minutes)
+    )
+    
+    # ارسال OTP
+    use_kavenegar = settings.OTP_USE_KAVENEGAR
+    is_debug = settings.DEBUG
+    
+    # اگر DEBUG=True و OTP_USE_KAVENEGAR=False باشد، OTP را در پاسخ برمی‌گردانیم
+    if is_debug and not use_kavenegar:
+        return JsonResponse({"success": True, "otp": otp, "message": "کد تایید در حالت توسعه نمایش داده می‌شود"})
+    
+    # در حالت production یا اگر OTP_USE_KAVENEGAR=True باشد، از کاوه نگار استفاده می‌کنیم
+    if use_kavenegar:
+        success, message = send_otp_via_kavenegar(phone, otp)
+        if success:
+            return JsonResponse({"success": True, "message": "کد تایید به شماره شما ارسال شد"})
+        else:
+            # در صورت خطا در ارسال، OTP را حذف می‌کنیم
+            otp_record.delete()
+            return JsonResponse({"success": False, "error": message}, status=500)
+    
+    # اگر هیچ کدام از شرایط بالا برقرار نبود، OTP را در پاسخ برمی‌گردانیم
     return JsonResponse({"success": True, "otp": otp})
 
 

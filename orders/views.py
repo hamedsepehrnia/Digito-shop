@@ -4,8 +4,11 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.urls import reverse
 
 from .models import Order, OrderItem
+from .payment import get_zarinpal_payment_url, verify_zarinpal_payment
 from cart.models import Cart, CartItem
 from accounts.models import Address
 
@@ -100,15 +103,41 @@ def create_order(request):
         # خالی کردن سبد خرید
         cart.items.all().delete()
         
-        # در حالت واقعی، اینجا باید به درگاه پرداخت متصل شوید
-        # برای حالا، پرداخت را به صورت خودکار تایید می‌کنیم
+        # پرداخت
         if payment_method == 'online':
-            order.payment_status = True
-            order.status = 'paid'
-            order.save()
-        
-        messages.success(request, 'سفارش شما با موفقیت ثبت شد')
-        return redirect('checkout_complete', order_id=order.id)
+            # بررسی فعال بودن زرین‌پال
+            if settings.ZARINPAL_ACTIVE:
+                # استفاده از زرین‌پال
+                final_price = order.get_final_price()
+                description = f"پرداخت سفارش {order.order_number}"
+                callback_url = request.build_absolute_uri(reverse('zarinpal_callback'))
+                
+                payment_url, authority = get_zarinpal_payment_url(
+                    amount=final_price,
+                    description=description,
+                    callback_url=callback_url,
+                    order_id=order.id
+                )
+                
+                if payment_url:
+                    # ذخیره authority در session برای استفاده در callback
+                    request.session['zarinpal_authority'] = authority
+                    request.session['zarinpal_order_id'] = order.id
+                    return redirect(payment_url)
+                else:
+                    messages.error(request, f'خطا در اتصال به درگاه پرداخت: {authority}')
+                    return redirect('checkout')
+            else:
+                # پرداخت خودکار (برای تست)
+                order.payment_status = True
+                order.status = 'paid'
+                order.save()
+                messages.success(request, 'سفارش شما با موفقیت ثبت و پرداخت شد')
+                return redirect('checkout_complete', order_id=order.id)
+        else:
+            # پرداخت در محل
+            messages.success(request, 'سفارش شما با موفقیت ثبت شد')
+            return redirect('checkout_complete', order_id=order.id)
         
     except Cart.DoesNotExist:
         messages.error(request, 'سبد خرید یافت نشد')
@@ -146,3 +175,45 @@ def order_detail(request, order_id):
         'order': order,
         'order_items': order.items.all(),
     })
+
+
+@login_required
+def zarinpal_callback(request):
+    """Callback زرین‌پال بعد از پرداخت"""
+    authority = request.GET.get('Authority')
+    status = request.GET.get('Status')
+    
+    # دریافت اطلاعات از session
+    session_authority = request.session.get('zarinpal_authority')
+    order_id = request.session.get('zarinpal_order_id')
+    
+    if not order_id:
+        messages.error(request, 'سفارش یافت نشد')
+        return redirect('checkout')
+    
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # پاک کردن session
+    if 'zarinpal_authority' in request.session:
+        del request.session['zarinpal_authority']
+    if 'zarinpal_order_id' in request.session:
+        del request.session['zarinpal_order_id']
+    
+    if status == 'OK' and authority == session_authority:
+        # تایید پرداخت
+        final_price = order.get_final_price()
+        success, ref_id, message = verify_zarinpal_payment(authority, final_price)
+        
+        if success:
+            order.payment_status = True
+            order.status = 'paid'
+            # می‌توانید ref_id را در یک فیلد ذخیره کنید
+            order.save()
+            messages.success(request, f'پرداخت با موفقیت انجام شد. کد پیگیری: {ref_id}')
+            return redirect('checkout_complete', order_id=order.id)
+        else:
+            messages.error(request, f'خطا در تایید پرداخت: {message}')
+            return redirect('checkout')
+    else:
+        messages.warning(request, 'پرداخت لغو شد')
+        return redirect('checkout')

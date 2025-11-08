@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView
 from django.urls import path
 from django.contrib import messages
-from products.models import Product, Category
+from products.models import Product, Category, Brand
 from blog.models import Post
 from accounts.models import Favorite
-from .models import About, AboutSection, ContactInfo
+from .models import About, AboutSection, ContactInfo, Banner
 from .forms import ContactMessageForm
 
 class HomePageView(TemplateView):
@@ -23,6 +23,16 @@ class HomePageView(TemplateView):
         context['latest_posts'] = Post.objects.filter(status='published').order_by('-created_at')[:6]
         # دسته‌بندی‌ها - از context processor استفاده می‌شود، نیازی به override نیست
         # اگر نیاز به محدود کردن دارید، می‌توانید از context['categories'][:7] در template استفاده کنید
+        
+        # بنرهای اصلی (Hero Slider)
+        context['hero_banners'] = Banner.objects.filter(banner_type='hero', is_active=True).order_by('order', 'id')
+        # بنرهای پایین صفحه
+        context['bottom_banners'] = Banner.objects.filter(banner_type='bottom', is_active=True).order_by('order', 'id')[:2]
+        # بنر کناری (برای نمایش در کنار محصولات شگفت‌انگیز)
+        context['sidebar_banner'] = Banner.objects.filter(banner_type='sidebar', is_active=True).order_by('order', 'id').first()
+        
+        # برندها (برای نمایش در بخش برندها)
+        context['brands'] = Brand.objects.filter(is_active=True).order_by('order', 'name')
         
         # بررسی favorite برای کاربران لاگین شده
         user_favorites = set()

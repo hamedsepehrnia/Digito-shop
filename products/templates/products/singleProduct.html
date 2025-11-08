@@ -47,8 +47,8 @@
                                 <img alt="عکس محصول" class="w-full max-w-96 object-cover rounded-lg" id="mainImage"
                                      src='{{ product.images.first.image.url }}'/>
                                 {% else %}
-                                <img alt="عکس محصول" class="w-full max-w-96 object-cover rounded-lg" id="mainImage"
-                                     src='{% static "./assets/image/products/2.webp" %}'/>
+                                <img alt="عکس محصول" class="w-full max-w-96 object-cover rounded-lg bg-gray-100" id="mainImage"
+                                     src='{% static "./assets/image/placeholder.svg" %}'/>
                                 {% endif %}
                                 <div class="hidden absolute w-20 h-20 bg-gray-300 opacity-30 pointer-events-none"
                                      id="zoomLens"></div>
@@ -439,8 +439,8 @@
                                 <img alt="{{ related_product.title }}" class="max-w-40 mx-auto"
                                      src='{{ related_product.images.first.image.url }}'>
                                 {% else %}
-                                <img alt="{{ related_product.title }}" class="max-w-40 mx-auto"
-                                     src='{% static "./assets/image/products/2.webp" %}'>
+                                <img alt="{{ related_product.title }}" class="max-w-40 mx-auto bg-gray-100"
+                                     src='{% static "./assets/image/placeholder.svg" %}'>
                                 {% endif %}
                             </a>
                             <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2"

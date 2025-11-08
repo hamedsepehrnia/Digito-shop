@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import About, AboutSection, ContactInfo, ContactMessage, FooterLink, FooterLinkGroup, SocialMedia, FooterSettings
+from django.utils.html import format_html
+from core.admin_utils import format_date_for_admin
+from .models import About, AboutSection, ContactInfo, ContactMessage, FooterLink, FooterLinkGroup, SocialMedia, FooterSettings, AdminSettings, Banner
 
 
 class AboutSectionInline(admin.TabularInline):
@@ -9,29 +11,37 @@ class AboutSectionInline(admin.TabularInline):
     fields = ['title', 'content', 'order']
 
 
-@admin.register(About)
+# Admin class برای مدل پنهان AboutSection (فقط در حالت پیشرفته نمایش داده می‌شود)
+class AboutSectionAdmin(admin.ModelAdmin):
+    list_display = ['about', 'title', 'order']
+    list_filter = ['about']
+    search_fields = ['about__title', 'title', 'content']
+    list_editable = ['order']
+    list_per_page = 25
+
+
 class AboutAdmin(admin.ModelAdmin):
     """مدیریت صفحه درباره ما"""
-    list_display = ['title', 'is_active', 'jalali_created', 'created_at']
+    list_display = ['title', 'is_active', 'jalali_created']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'content']
-    readonly_fields = ['created_at', 'updated_at']
+    readonly_fields = ['updated_at', 'jalali_created']
     inlines = [AboutSectionInline]
     fieldsets = (
         ('اطلاعات اصلی', {
-            'fields': ('title', 'content', 'image', 'is_active')
+            'fields': ('title', 'content', 'image', 'is_active'),
+            'description': '<strong>راهنمای سایز تصویر:</strong> سایز بهینه 1200x800 پیکسل (نسبت 3:2). فرمت پیشنهادی: JPG یا WebP'
         }),
         ('اطلاعات زمانی', {
-            'fields': ('created_at', 'updated_at')
+            'fields': ('jalali_created', 'updated_at')
         }),
     )
     
     def jalali_created(self, obj):
-        return obj.jalali_created()
-    jalali_created.short_description = 'تاریخ (شمسی)'
+        return format_date_for_admin(obj.created_at, include_time=False)
+    jalali_created.short_description = 'تاریخ ایجاد'
 
 
-@admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
     """مدیریت اطلاعات تماس"""
     list_display = ['email', 'phone', 'is_active', 'created_at']
@@ -46,27 +56,35 @@ class ContactInfoAdmin(admin.ModelAdmin):
             'fields': ('created_at', 'updated_at')
         }),
     )
+    
+    def has_add_permission(self, request):
+        # فقط یک رکورد می‌تواند وجود داشته باشد
+        if ContactInfo.objects.exists():
+            return False
+        return super().has_add_permission(request)
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
-@admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
     """مدیریت پیام‌های تماس"""
-    list_display = ['name', 'phone', 'is_read', 'jalali_created', 'created_at']
+    list_display = ['name', 'phone', 'is_read', 'jalali_created']
     list_filter = ['is_read', 'created_at']
     search_fields = ['name', 'phone', 'message']
-    readonly_fields = ['created_at', 'jalali_created']
+    readonly_fields = ['jalali_created']
     fieldsets = (
         ('اطلاعات پیام', {
             'fields': ('name', 'phone', 'message', 'is_read')
         }),
         ('اطلاعات زمانی', {
-            'fields': ('created_at', 'jalali_created')
+            'fields': ('jalali_created',)
         }),
     )
     
     def jalali_created(self, obj):
-        return obj.jalali_created()
-    jalali_created.short_description = 'تاریخ (شمسی)'
+        return format_date_for_admin(obj.created_at, include_time=True)
+    jalali_created.short_description = 'تاریخ ارسال'
     
     actions = ['mark_as_read', 'mark_as_unread']
     
@@ -83,7 +101,6 @@ class ContactMessageAdmin(admin.ModelAdmin):
     mark_as_unread.short_description = 'علامت‌گذاری به عنوان خوانده نشده'
 
 
-@admin.register(FooterLink)
 class FooterLinkAdmin(admin.ModelAdmin):
     """مدیریت لینک‌های فوتر"""
     list_display = ['title', 'url', 'order', 'is_active', 'created_at']
@@ -101,7 +118,6 @@ class FooterLinkInline(admin.TabularInline):
     verbose_name_plural = "لینک‌ها"
 
 
-@admin.register(FooterLinkGroup)
 class FooterLinkGroupAdmin(admin.ModelAdmin):
     """مدیریت گروه‌های لینک فوتر"""
     list_display = ['title', 'order', 'is_active', 'get_links_count', 'created_at']
@@ -116,7 +132,6 @@ class FooterLinkGroupAdmin(admin.ModelAdmin):
     get_links_count.short_description = 'تعداد لینک‌ها'
 
 
-@admin.register(SocialMedia)
 class SocialMediaAdmin(admin.ModelAdmin):
     """مدیریت شبکه‌های اجتماعی"""
     list_display = ['platform', 'url', 'order', 'is_active', 'created_at']
@@ -126,7 +141,6 @@ class SocialMediaAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at']
 
 
-@admin.register(FooterSettings)
 class FooterSettingsAdmin(admin.ModelAdmin):
     """مدیریت تنظیمات فوتر"""
     list_display = ['is_active', 'created_at', 'updated_at']
@@ -146,3 +160,66 @@ class FooterSettingsAdmin(admin.ModelAdmin):
         if FooterSettings.objects.exists():
             return False
         return super().has_add_permission(request)
+    
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+class BannerAdmin(admin.ModelAdmin):
+    """مدیریت بنرهای سایت"""
+    list_display = ['get_image_preview', 'title', 'banner_type', 'order', 'is_active', 'jalali_created']
+    list_filter = ['banner_type', 'is_active', 'created_at']
+    search_fields = ['title']
+    list_editable = ['order', 'is_active']
+    readonly_fields = ['updated_at', 'jalali_created', 'get_image_preview']
+    list_per_page = 25
+    
+    fieldsets = (
+        ('اطلاعات بنر', {
+            'fields': ('title', 'image', 'get_image_preview', 'link', 'banner_type', 'order', 'is_active'),
+            'description': '<strong>راهنمای سایز تصویر:</strong><br>'
+                          '• بنر اصلی (Hero Slider): 1920x384 پیکسل (نسبت 5:1) - برای نمایش در اسلایدر بالای صفحه<br>'
+                          '• بنر کناری (Sidebar): 300x600 پیکسل (نسبت 1:2) - برای نمایش در کنار محصولات شگفت‌انگیز<br>'
+                          '• بنر پایین صفحه: 1200x675 پیکسل (نسبت 16:9) - برای نمایش در بخش پایین صفحه<br>'
+                          '• فرمت پیشنهادی: JPG یا WebP برای حجم کمتر'
+        }),
+        ('اطلاعات زمانی', {
+            'fields': ('jalali_created', 'updated_at')
+        }),
+    )
+    
+    def get_image_preview(self, obj):
+        if obj and obj.image:
+            from django.utils.html import format_html
+            return format_html('<img src="{}" style="max-height: 50px; max-width: 100px;" />', obj.image.url)
+        return "تصویری وجود ندارد"
+    get_image_preview.short_description = "پیش‌نمایش"
+    
+    def jalali_created(self, obj):
+        return format_date_for_admin(obj.created_at, include_time=False)
+    jalali_created.short_description = 'تاریخ ایجاد'
+
+
+class AdminSettingsAdmin(admin.ModelAdmin):
+    """مدیریت تنظیمات پنل ادمین"""
+    list_display = ['use_jalali_date', 'show_hidden_models', 'site_title', 'site_header', 'site_index_title']
+    list_filter = ['use_jalali_date', 'show_hidden_models']
+    readonly_fields = []
+    fieldsets = (
+        ('تنظیمات تاریخ', {
+            'fields': ('use_jalali_date',)
+        }),
+        ('تنظیمات نمایش', {
+            'fields': ('site_title', 'site_header', 'site_index_title', 'show_hidden_models'),
+            'description': 'مدل‌های پنهان شده: تصاویر محصولات، مشخصات محصولات، آیتم‌های سفارش، آیتم‌های سبد خرید، کدهای تایید تلفن، بخش‌های درباره ما'
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        # فقط یک رکورد می‌تواند وجود داشته باشد
+        if AdminSettings.objects.exists():
+            return False
+        return super().has_add_permission(request)
+    
+    def has_delete_permission(self, request, obj=None):
+        return False

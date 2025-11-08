@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config, Csv
 AUTH_USER_MODEL = 'accounts.MyUser'
 
 
@@ -22,12 +23,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f1u+9g&qd+9xu+n+s828bxkrl0w6()uf7_78a+e3hq(9edvzv^"
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-f1u+9g&qd+9xu+n+s828bxkrl0w6()uf7_78a+e3hq(9edvzv^")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+
+# Admin Panel Settings
+ADMIN_SITE_TITLE = config('ADMIN_SITE_TITLE', default='دیجیتو')
+ADMIN_SITE_HEADER = config('ADMIN_SITE_HEADER', default='پنل مدیریت دیجیتو')
+ADMIN_SITE_INDEX_TITLE = config('ADMIN_SITE_INDEX_TITLE', default='خوش آمدید به پنل مدیریت')
+
+# OTP Settings (Kavenegar)
+KAVENEGAR_API_KEY = config('KAVENEGAR_API_KEY', default='')
+KAVENEGAR_SENDER = config('KAVENEGAR_SENDER', default='10001001001')
+OTP_USE_KAVENEGAR = config('OTP_USE_KAVENEGAR', default=False, cast=bool)
+OTP_MAX_REQUESTS_PER_HOUR = config('OTP_MAX_REQUESTS_PER_HOUR', default=5, cast=int)
+OTP_MAX_REQUESTS_PER_DAY = config('OTP_MAX_REQUESTS_PER_DAY', default=10, cast=int)
+OTP_EXPIRY_MINUTES = config('OTP_EXPIRY_MINUTES', default=5, cast=int)
+
+# Payment Gateway (Zarinpal)
+ZARINPAL_MERCHANT_ID = config('ZARINPAL_MERCHANT_ID', default='')
+ZARINPAL_SANDBOX = config('ZARINPAL_SANDBOX', default=True, cast=bool)
+ZARINPAL_ACTIVE = config('ZARINPAL_ACTIVE', default=False, cast=bool)
 
 
 # Application definition

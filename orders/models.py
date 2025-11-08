@@ -20,7 +20,7 @@ class Order(models.Model):
         ('cash', 'پرداخت در محل'),
     ]
 
-    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='orders')
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='orders', verbose_name="کاربر")
     order_number = models.CharField(max_length=20, unique=True, verbose_name="شماره سفارش")
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, verbose_name="آدرس")
     
@@ -60,12 +60,12 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', verbose_name="سفارش")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name="محصول")
+    color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="رنگ")
     quantity = models.PositiveIntegerField(verbose_name="تعداد")
     price = models.PositiveIntegerField(verbose_name="قیمت واحد")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="تاریخ ثبت")
 
     class Meta:
         verbose_name = 'آیتم سفارش'

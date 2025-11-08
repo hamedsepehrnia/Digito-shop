@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'digito_admin:index' %}">
+        {{ site_header|default:_('Django administration') }}
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirfont@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+<style>
+    /* استایل‌های ساده و کم‌تأثیر */
+    #header {
+        background: #417690;
+    }
+    
+    #branding h1, #branding h1 a:link, #branding h1 a:visited {
+        color: #fff;
+    }
+    
+    /* تغییر فونت به Vazir */
+    * {
+        font-family: 'Vazir', 'Tahoma', 'Arial', sans-serif !important;
+    }
+    
+    body, input, textarea, select, button {
+        font-family: 'Vazir', 'Tahoma', 'Arial', sans-serif !important;
+    }
+</style>
+{% endblock %}
+

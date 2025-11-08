@@ -664,26 +664,29 @@ const categories = {
   cat7: ["زیرمجموعه ۵-۱", "زیرمجموعه ۵-۲"],
   cat8: ["زیرمجموعه ۵-۱", "زیرمجموعه ۵-۲"],
 };
-// defult show first category
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".category-item").forEach(item => item.classList.remove("bg-gradient-to-l","from-zinc-100","to-transparent"));
-  if (document.querySelector("[data-category='cat1']")) {
-    document.querySelector("[data-category='cat1']").classList.add("bg-gradient-to-l","from-zinc-100","to-transparent");
-  }
-});
-document.querySelectorAll(".category-item").forEach(item => {
-  item.addEventListener("mouseenter", (e) => {
-    const category = e.target.getAttribute("data-category");
-    const subContainer = document.getElementById("subcategory-container");
-    // change color selected category
-    document.querySelectorAll(".category-item").forEach(item => item.classList.remove("bg-gradient-to-l","from-zinc-100","to-transparent"));
-    e.target.classList.add("bg-gradient-to-l","from-zinc-100","to-transparent");
-    // show sub category
-    subContainer.innerHTML = categories[category]
-      ? categories[category].map(sub => sub).join("")
-      : "<p class='text-gray-400'>زیرمجموعه‌ای وجود ندارد</p>";
-  });
-});
+// Category menu initialization is now handled in base.html template
+// The old static category initialization is disabled
+// document.addEventListener("DOMContentLoaded", () => {
+//   document.querySelectorAll(".category-item").forEach(item => item.classList.remove("bg-gradient-to-l","from-zinc-100","to-transparent"));
+//   if (document.querySelector("[data-category='cat1']")) {
+//     document.querySelector("[data-category='cat1']").classList.add("bg-gradient-to-l","from-zinc-100","to-transparent");
+//   }
+// });
+// Category menu is now dynamic and handled in base.html template
+// The old static category logic is disabled
+// document.querySelectorAll(".category-item").forEach(item => {
+//   item.addEventListener("mouseenter", (e) => {
+//     const category = e.target.getAttribute("data-category");
+//     const subContainer = document.getElementById("subcategory-container");
+//     // change color selected category
+//     document.querySelectorAll(".category-item").forEach(item => item.classList.remove("bg-gradient-to-l","from-zinc-100","to-transparent"));
+//     e.target.classList.add("bg-gradient-to-l","from-zinc-100","to-transparent");
+//     // show sub category
+//     subContainer.innerHTML = categories[category]
+//       ? categories[category].map(sub => sub).join("")
+//       : "<p class='text-gray-400'>زیرمجموعه‌ای وجود ندارد</p>";
+//   });
+// });
 // close category mouse leave
 const dropdownMenu = document.getElementById("dropdown-menu");
 if (document.getElementById("dropdown-menu")) {

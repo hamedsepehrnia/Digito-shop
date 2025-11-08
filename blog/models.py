@@ -35,7 +35,13 @@ class Post(models.Model):
     author = models.ForeignKey(MyUser, on_delete=models.SET_NULL, null=True, verbose_name="نویسنده")
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="دسته‌بندی")
     
-    image = models.ImageField(upload_to='blog/', blank=True, null=True, verbose_name="تصویر")
+    image = models.ImageField(
+        upload_to='blog/', 
+        blank=True, 
+        null=True, 
+        verbose_name="تصویر",
+        help_text="سایز بهینه: 1200x600 پیکسل (نسبت 2:1) یا 1200x800 پیکسل (نسبت 3:2). فرمت پیشنهادی: JPG یا WebP"
+    )
     
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft', verbose_name="وضعیت")
     views = models.PositiveIntegerField(default=0, verbose_name="بازدید")
