@@ -124,3 +124,7 @@ Thumbs.db
 *.html.py
 *.psd
 
+#other
+TELEGRAM_POST.txt
+django_admin_customization_prompt.json
+django_admin_customization_prompt.txt
