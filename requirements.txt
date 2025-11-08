@@ -1,0 +1,18 @@
+# Django Framework
+Django>=5.2,<5.3
+
+# Persian Tools (for Jalali date/time)
+persiantools
+
+# Image Processing (required for ImageField)
+Pillow>=10.0.0
+
+# Hierarchical Category System (MPTT - Modified Preorder Tree Traversal)
+django-mptt>=0.17.0
+
+# Slug Generation (supports Persian/Unicode)
+python-slugify>=8.0.0
+
+# Fake Data Generation
+Faker>=20.0.0
+

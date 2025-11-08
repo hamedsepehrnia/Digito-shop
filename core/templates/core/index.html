@@ -1,0 +1,624 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+
+<main class="mt-0 md:mt-8">
+    <!-- hero slider -->
+    <div class="px-2 md:px-12">
+        <div class="swiper heroSlider rounded-2xl md:rounded-4xl relative">
+            <div class="swiper-wrapper">
+                <a class="swiper-slide" href="">
+                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src='{% static "./assets/image/heroSlider/1.webp" %}'/>
+                </a>
+                <a class="swiper-slide" href="">
+                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src='{% static "./assets/image/heroSlider/2.webp" %}'/>
+                </a>
+                <a class="swiper-slide" href="">
+                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src='{% static "./assets/image/heroSlider/3.webp" %}'/>
+                </a>
+                <a class="swiper-slide" href="">
+                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src='{% static "./assets/image/heroSlider/4.webp" %}'/>
+                </a>
+                <a class="swiper-slide" href="">
+                    <img alt="" class="w-full h-60 md:h-96 object-cover object-bottom"
+                         src='{% static "./assets/image/heroSlider/5.webp" %}'/>
+                </a>
+            </div>
+            <svg class="absolute -left-2 rotate-180 top-14 z-10 w-auto hidden md:block" fill="none" height="285"
+                 viewbox="0 0 76 285" width="76" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_d_6_41)">
+                    <path d="M70 275V10C70 86 14 91.0878 14 142.752C14 194.416 70 201 70 275Z" fill="white"></path>
+                </g>
+                <defs>
+                    <filter color-interpolation-filters="sRGB" filterunits="userSpaceOnUse" height="285"
+                            id="filter0_d_6_41" width="76" x="0" y="0">
+                        <feflood flood-opacity="0" result="BackgroundImageFix"></feflood>
+                        <fecolormatrix in="SourceAlpha" result="hardAlpha" type="matrix"
+                                       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></fecolormatrix>
+                        <feoffset dx="-4"></feoffset>
+                        <fegaussianblur stddeviation="5"></fegaussianblur>
+                        <fecomposite in2="hardAlpha" operator="out"></fecomposite>
+                        <fecolormatrix type="matrix"
+                                       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"></fecolormatrix>
+                        <feblend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_6_41"></feblend>
+                        <feblend in="SourceGraphic" in2="effect1_dropShadow_6_41" mode="normal"
+                                 result="shape"></feblend>
+                    </filter>
+                </defs>
+            </svg>
+            <svg class="absolute -right-2 top-14 z-10 w-auto hidden md:block" fill="none" height="285"
+                 viewbox="0 0 76 285" width="76" xmlns="http://www.w3.org/2000/svg">
+                <g filter="url(#filter0_d_6_41)">
+                    <path d="M70 275V10C70 86 14 91.0878 14 142.752C14 194.416 70 201 70 275Z" fill="white"></path>
+                </g>
+                <defs>
+                    <filter color-interpolation-filters="sRGB" filterunits="userSpaceOnUse" height="285"
+                            id="filter0_d_6_41" width="76" x="0" y="0">
+                        <feflood flood-opacity="0" result="BackgroundImageFix"></feflood>
+                        <fecolormatrix in="SourceAlpha" result="hardAlpha" type="matrix"
+                                       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"></fecolormatrix>
+                        <feoffset dx="-4"></feoffset>
+                        <fegaussianblur stddeviation="5"></fegaussianblur>
+                        <fecomposite in2="hardAlpha" operator="out"></fecomposite>
+                        <fecolormatrix type="matrix"
+                                       values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0"></fecolormatrix>
+                        <feblend in2="BackgroundImageFix" mode="normal" result="effect1_dropShadow_6_41"></feblend>
+                        <feblend in="SourceGraphic" in2="effect1_dropShadow_6_41" mode="normal"
+                                 result="shape"></feblend>
+                    </filter>
+                </defs>
+            </svg>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+    <!-- slider 1 -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14">
+        <!-- top slider -->
+        <div class="flex gap-x-4 justify-between items-center mb-7">
+            <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
+                پرفروش ترین محصولات
+            </div>
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            </div>
+            <div class="w-32 min-w-fit text-left">
+                <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
+                   href="{% url 'shop' %}?sort_by=sales_desc">
+                    مشاهده همه
+                    <svg class="fill-zinc-600 group-hover:-translate-x-1 transition group-hover:fill-primary-500 size-2.5 md:size-3"
+                         fill="" height="" viewbox="0 0 256 256" width="" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <!-- main slider -->
+        <div class="containerPSlider swiper">
+            <div class="productSlider1">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for product in bestseller_products %}
+                    <div class="card swiper-slide shiny my-2 p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-200 relative">
+                        {% if user.is_authenticated %}
+                        <a href="#" class="toggle-favorite" data-product-id="{{ product.id }}">
+                            <svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 size-9 favorite-icon"
+                                 fill="{% if product.id in user_favorites %}#ffffff{% else %}#000000{% endif %}" height="" viewbox="0 0 256 256" width=""
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
+                            </svg>
+                        </a>
+                        {% endif %}
+                        <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
+                            {% if product.image %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% else %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+                            {% endif %}
+                        </a>
+                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                            {{ product.title }}
+                        </a>
+                        <div class="flex my-5">
+                            <div class="text-xl md:text-2xl text-zinc-800">{{ product.price|floatformat:0 }}</div>
+                            <div class="-rotate-90 text-zinc-400 text-xs">
+                                تومان
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            {% if product.stock > 0 %}
+                            <button class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all add-to-cart-btn" data-product-id="{{ product.id }}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </button>
+                            {% elif not user.is_authenticated %}
+                            <a class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all"
+                               href="{% url 'dashboard-details' %}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </a>
+                            {% else %}
+                            <span class="text-xs text-red-500">ناموجود</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center text-zinc-500 py-10">
+                        محصولی یافت نشد
+                            </div>
+                    {% endfor %}
+                        </div>
+            </div>
+        </div>
+    </div>
+    <!-- category -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14">
+        <div class="containerPSlider swiper">
+            <div class="category">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for category in categories %}
+                    <div class="card swiper-slide">
+                        <a class="flex justify-between items-center shiny w-full border border-zinc-100 rounded-2xl hover:shadow-lg transition py-3 px-5"
+                           href="{% url 'shop' %}?category={{ category.slug }}">
+                            <p class="text-xs md:text-sm text-zinc-700">
+                                {{ category.name }}
+                            </p>
+                            <img alt="{{ category.name }}" class="max-w-12 md:max-w-14"
+                                 src='{% static "./assets/image/category/1.jpg" %}'/>
+                        </a>
+                    </div>
+                    {% empty %}
+                    <div class="text-center text-zinc-500 py-10 w-full">
+                        دسته‌بندی‌ای وجود ندارد
+                    </div>
+                    {% endfor %}
+                    </div>
+                    </div>
+        </div>
+    </div>
+    <!-- slider for category -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14 md:flex gap-5">
+        <!-- banner -->
+        <div class="flex flex-row-reverse md:flex-col justify-between md:justify-center items-center mb-4 md:mb-12 px-8 md:px-0 mx-auto mt-2 w-full sm:w-6/12 md:w-2/12 bg-primary-500 rounded-3xl">
+            <div>
+                <p class="text-zinc-100 mb-2 text-center text-sm md:text-base">
+                    محصولات جدید
+                </p>
+                <p class="text-white text-xl md:text-3xl font-yekanBakhExtraBold text-center">
+                    دیجیتال
+                </p>
+            </div>
+            <img alt="" class="w-4/12 md:w-11/12" src='{% static "./assets/image/Electronics.webp" %}'/>
+        </div>
+        <!-- main slider -->
+        <div class="containerPSlider swiper md:w-10/12">
+            <div class="sliderForCategory">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for product in amazing_products %}
+                    <div class="card swiper-slide shiny my-2 p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-200 relative">
+                        {% if user.is_authenticated %}
+                        <a href="#" class="toggle-favorite" data-product-id="{{ product.id }}">
+                            <svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 size-9 favorite-icon"
+                                 fill="{% if product.id in user_favorites %}#ffffff{% else %}#000000{% endif %}" height="" viewbox="0 0 256 256" width=""
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
+                            </svg>
+                        </a>
+                        {% endif %}
+                        <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
+                            {% if product.image %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% else %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/4.webp" %}'>
+                            {% endif %}
+                        </a>
+                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                            {{ product.title }}
+                        </a>
+                        <div class="flex my-5">
+                            <div class="text-xl md:text-2xl text-zinc-800">{{ product.price|floatformat:0 }}</div>
+                            <div class="-rotate-90 text-zinc-400 text-xs">
+                                تومان
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            {% if product.stock > 0 %}
+                            <button class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all add-to-cart-btn" data-product-id="{{ product.id }}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </button>
+                            {% elif not user.is_authenticated %}
+                            <a class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all"
+                               href="{% url 'dashboard-details' %}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </a>
+                            {% else %}
+                            <span class="text-xs text-red-500">ناموجود</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center text-zinc-500 py-10">
+                        محصولی یافت نشد
+                            </div>
+                    {% endfor %}
+                        </div>
+            </div>
+        </div>
+    </div>
+    <!-- 2 banner -->
+    <div class="mt-10 md:mt-16 flex flex-col md:flex-row gap-3 md:gap-5 px-4 md:px-14">
+        <a href="">
+            <img alt="" class="w-full rounded-3xl" src='{% static "./assets/image/banner/1.webp" %}'/>
+        </a>
+        <a href="">
+            <img alt="" class="w-full rounded-3xl" src='{% static "./assets/image/banner/2.webp" %}'/>
+        </a>
+    </div>
+    <!-- slider 2 -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14">
+        <!-- top slider -->
+        <div class="flex gap-x-4 justify-between items-center mb-7">
+            <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
+                جدیدترین محصولات
+            </div>
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            </div>
+            <div class="w-32 min-w-fit text-left">
+                <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
+                   href="{% url 'shop' %}?sort_by=latest">
+                    مشاهده همه
+                    <svg class="fill-zinc-600 group-hover:-translate-x-1 transition group-hover:fill-primary-500 size-2.5 md:size-3"
+                         fill="" height="" viewbox="0 0 256 256" width="" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <!-- main slider -->
+        <div class="containerPSlider swiper">
+            <div class="productSlider2">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for product in latest_products %}
+                    <div class="card swiper-slide shiny my-2 p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-200 relative">
+                        {% if user.is_authenticated %}
+                        <a href="#" class="toggle-favorite" data-product-id="{{ product.id }}">
+                            <svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 size-9 favorite-icon"
+                                 fill="{% if product.id in user_favorites %}#ffffff{% else %}#000000{% endif %}" height="" viewbox="0 0 256 256" width=""
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
+                            </svg>
+                        </a>
+                        {% endif %}
+                        <a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
+                            {% if product.image %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src="{{ product.image.url }}">
+                            {% else %}
+                                <img alt="{{ product.title }}" class="max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+                            {% endif %}
+                        </a>
+                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                            {{ product.title }}
+                        </a>
+                        <div class="flex my-5">
+                            <div class="text-xl md:text-2xl text-zinc-800">{{ product.price|floatformat:0 }}</div>
+                            <div class="-rotate-90 text-zinc-400 text-xs">
+                                تومان
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            {% if product.stock > 0 %}
+                            <button class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all add-to-cart-btn" data-product-id="{{ product.id }}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </button>
+                            {% elif not user.is_authenticated %}
+                            <a class="group/edit bg-primary-500 hover:bg-primary-400 text-white flex justify-center items-center text-xs md:text-sm mx-auto gap-x-2 px-5 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all"
+                               href="{% url 'dashboard-details' %}">
+                                <svg class="stroke-white size-5 md:size-6" fill="none" height="24" viewbox="0 0 24 24"
+                                     width="24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13"
+                                          stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+                                    <path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4"
+                                          stroke="#" stroke-width="1.5"></path>
+                                    <path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z"
+                                          stroke="#" stroke-width="1.5"></path>
+                                </svg>
+                                افزودن به سبد خرید
+                            </a>
+                            {% else %}
+                            <span class="text-xs text-red-500">ناموجود</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center text-zinc-500 py-10">
+                        محصولی یافت نشد
+                            </div>
+                    {% endfor %}
+                        </div>
+            </div>
+        </div>
+    </div>
+    <!-- brands -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14">
+        <div class="containerPSlider swiper">
+            <div class="brands">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/1.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/2.jpg" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/3.jpg" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/4.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/5.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/6.jpg" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/7.jpg" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/8.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/9.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/10.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/11.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/12.png" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                    <div class="card swiper-slide shiny">
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                           href="#">
+                            <div class="w-full h-44 flex justify-center items-center">
+                                <img alt="" class="max-w-24 md:max-w-32 w-full mx-auto"
+                                     src='{% static "./assets/image/brands/13.jpg" %}'/>
+                            </div>
+                            <p class="text-xs md:text-sm text-zinc-700 h-16">
+                                شیائومی
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- blog -->
+    <div class="mt-12 md:mt-20 px-4 md:px-14">
+        <!-- top blog -->
+        <div class="flex gap-x-4 justify-between items-center mb-7">
+            <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
+                خواندنی ها
+            </div>
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            </div>
+            <div class="w-32 min-w-fit text-left">
+                <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
+                   href="{% url 'blog' %}">
+                    مشاهده همه
+                    <svg class="fill-zinc-600 group-hover:-translate-x-1 transition group-hover:fill-primary-500 size-2.5 md:size-3"
+                         fill="" height="" viewbox="0 0 256 256" width="" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <!-- main blog -->
+        <div class="containerPSlider swiper">
+            <div class="blog">
+                <div class="card-wrapper swiper-wrapper pb-10">
+                    {% for post in latest_posts %}
+                    <div class="card swiper-slide bg-white rounded-3xl border hover:border-zinc-300 transition border-zinc-300 group p-2 md:p-3 hover:drop-shadow-lg">
+                        <a class="image-box block overflow-hidden rounded-lg md:rounded-2xl" href="{% url 'blog_detail' post.pk %}">
+                            {% if post.image %}
+                                <img alt="{{ post.title }}"
+                                 class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload"
+                                     src="{{ post.image.url }}">
+                            {% else %}
+                                <img alt="{{ post.title }}"
+                                 class="rounded-2xl w-full transition-transform duration-300 ease-in-out group-hover:rotate-3 group-hover:scale-110 lazyload"
+                                 src='{% static "./assets/image/blog/2.png" %}'>
+                            {% endif %}
+                        </a>
+                        <div class="p-2 mt-2">
+                            <a class="text-xs md:text-sm font-normal md:font-semibold h-8 lg:h-10 line-clamp-2 text-zinc-700"
+                               href="{% url 'blog_detail' post.pk %}">
+                                {{ post.title }}
+                            </a>
+                            <div class="flex justify-between mt-8">
+                                <div class="text-xs flex gap-x-1 items-center text-zinc-400">
+                                    <svg class="fill-zinc-400" fill="" height="16" viewbox="0 0 256 256" width="16"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"></path>
+                                    </svg>
+                                    {{ post.jalali_created }}
+                                </div>
+                                <a class="flex justify-center items-center gap-x-1 group w-fit text-xs md:text-sm transition text-zinc-600 group-hover:text-zinc-700"
+                                   href="{% url 'blog_detail' post.pk %}">
+                                    ادامه مطلب
+                                    <svg class="fill-zinc-600 transition group-hover:fill-zinc-700 size-2 md:size-4"
+                                         fill="" height="14" viewbox="0 0 256 256" width="14"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-full text-center text-zinc-500 py-10">
+                        پستی یافت نشد
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,205 @@
+::selection{
+  background-color: oklch(60.56% 0.2337 19.25);
+  color: white;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background-color: #fcfcfc;
+}
+::-webkit-scrollbar-thumb {
+  background: #ed1944; 
+  border-radius: 4px;
+}
+#modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+#modal.active div {
+  transform: scale(1);
+}
+.drop-shadow-custom{
+  filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.0784313725));
+}
+/* hero slider next and prev btn */
+.swiper-button-next,
+.swiper-button-prev {
+  height: 2.2rem;
+  width: 2.2rem;
+  top: 52%;
+}
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  color: rgb(113 113 122);
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.15s;
+}
+.swiper-button-next:hover:after,
+.swiper-button-prev:hover:after {
+  color: rgb(63 63 70);
+}
+
+/* show and hide next and prev hero slider btn */
+@media only screen and (max-width: 768px) {
+  .swiper-button-next {
+    display: none;
+  }
+  .swiper-button-prev {
+    display: none;
+  }
+  .swiper-btn-next {
+    display: none;
+  }
+  .swiper-btn-prev {
+    display: none;
+  }
+}
+/* progressBar top site */
+#progressBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, oklch(60.56% 0.2337 19.25), oklch(52.33% 0.2041 20.11));
+  box-shadow: 0 0 10px oklch(60.56% 0.2337 19.25), 0 0 20px oklch(60.56% 0.2337 19.25), 0 0 30px oklch(52.33% 0.2041 20.11), 0 0 40px oklch(52.33% 0.2041 20.11);
+  transition: width 0.2s ease-out;
+  z-index: 9999;
+}
+/* loading */
+.wrapper{
+  width:200px;
+  height:60px;
+  position: absolute;
+  left:50%;
+  top:40%;
+  transform: translate(-50%, -50%);
+}
+.circle{
+  width:15px;
+  height:15px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: oklch(60.56% 0.2337 19.25);
+  left:15%;
+  transform-origin: 50%;
+  animation: circle .5s alternate infinite ease;
+}
+
+@keyframes circle{
+  0%{
+      top:60px;
+      height:5px;
+      border-radius: 50px 50px 25px 25px;
+      transform: scaleX(1.7);
+  }
+  40%{
+      height:20px;
+      border-radius: 50%;
+      transform: scaleX(1);
+  }
+  100%{
+      top:0%;
+  }
+}
+.circle:nth-child(2){
+  left:45%;
+  animation-delay: .2s;
+}
+.circle:nth-child(3){
+  left:auto;
+  right:20%;
+  animation-delay: .3s;
+}
+.shadow{
+  width:20px;
+  height:4px;
+  border-radius: 50%;
+  background-color: rgba(124, 124, 124, 0.5);
+  position: absolute;
+  top:62px;
+  transform-origin: 50%;
+  z-index: -1;
+  left:15%;
+  filter: blur(1px);
+  animation: shadow .5s alternate infinite ease;
+}
+
+@keyframes shadow{
+  0%{
+      transform: scaleX(1.5);
+  }
+  40%{
+      transform: scaleX(1);
+      opacity: .7;
+  }
+  100%{
+      transform: scaleX(.2);
+      opacity: .4;
+  }
+}
+.shadow:nth-child(4){
+  left: 45%;
+  animation-delay: .2s
+}
+.shadow:nth-child(5){
+  left:auto;
+  right:15%;
+  animation-delay: .3s;
+}
+.wrapper span{
+  position: absolute;
+  top:75px;
+  font-family: 'Lato';
+  font-size: 20px;
+  letter-spacing: 12px;
+  color: #fff;
+  left:15%;
+}
+/* light shadow with hover */
+.shiny {
+  position: relative;
+  overflow: hidden;
+}
+
+.shiny::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  transition: all 0.5s ease-in-out;
+}
+
+.shiny:hover::after {
+  left: 100%;
+}
+.faq-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  padding: 0 1rem;
+}
+.faq-content.open {
+  max-height: 200px;
+  padding: 1rem;
+}
+.rules-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+  padding: 0 1rem;
+}
+.rules-content.open {
+  max-height: 200px;
+  padding: 1rem;
+}

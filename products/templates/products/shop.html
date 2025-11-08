@@ -1,0 +1,272 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load mptt_tags %}
+{% block content %}
+<main class="mt-0 md:mt-8">
+<div class="flex flex-col lg:flex-row px-4 md:px-8 md:mt-10 gap-5 pb-20">
+<!-- filters -->
+<div class="lg:w-3/12">
+<!-- filter btn -->
+<a class="filter-mobile md:hidden border border-zinc-200 bg-primary-500 fixed p-4 bottom-5 right-5 z-10 rounded-2xl" href="#">
+<svg fill="#fff" height="32" viewbox="0 0 256 256" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M230.6,49.53A15.81,15.81,0,0,0,216,40H40A16,16,0,0,0,28.19,66.76l.08.09L96,139.17V216a16,16,0,0,0,24.87,13.32l32-21.34A16,16,0,0,0,160,194.66V139.17l67.74-72.32.08-.09A15.8,15.8,0,0,0,230.6,49.53ZM40,56h0Zm106.18,74.58A8,8,0,0,0,144,136v58.66L112,216V136a8,8,0,0,0-2.16-5.47L40,56H216Z"></path></svg>
+</a>
+<div class="space-y-5 fixed transform translate-y-full md:translate-y-0 transition-transform duration-300 ease-in-out md:static bottom-0 z-[15] bg-white w-11/12 md:w-full shadow-2xl md:shadow-none border border-zinc-300 md:border-0 pb-5 px-5 md:px-0 rounded-t-2xl md:rounded-none" id="mobile-filter">
+<button class="md:hidden mt-5 text-gray-400 cursor-pointer bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center" id="closeFilter" type="button">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" fill-rule="evenodd"></path></svg>
+</button>
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<span class="text-zinc-700 text-sm">دسته بندی</span>
+<img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
+</button>
+<ul class="submenu hidden mt-2">
+{% recursetree categories %}
+<li>
+<a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition {% if selected_category == node.slug %}text-primary-500 font-semibold{% endif %}" href="{% url 'shop' %}?category={{ node.slug }}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
+{{ node.name }}
+</a>
+{% if not node.is_leaf_node %}
+<ul class="pr-4 mt-2">
+{{ children }}
+</ul>
+{% endif %}
+</li>
+{% endrecursetree %}
+</ul>
+</div>
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<span class="text-zinc-700 text-sm">برند ها</span>
+<img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
+</button>
+<ul class="submenu hidden mt-2">
+{% for color in colors %}
+<li>
+<div class="flex w-full items-center gap-x-2 py-1 px-4">
+<input class="h-4 w-4 accent-primary-500 cursor-pointer rounded-xl border-gray-300 bg-gray-100 color-filter" id="color_{{ color.id }}" type="checkbox" value="{{ color.id }}" {% if selected_color == color.id|stringformat:"s" %}checked{% endif %}/>
+<label class="w-full cursor-pointer py-2 pl-4 text-zinc-600 text-xs flex items-center gap-x-2" for="color_{{ color.id }}">
+<span style="width: 20px; height: 20px; background-color: {{ color.hex_code }}; border-radius: 4px; border: 1px solid #e5e7eb;"></span>
+<span>{{ color.name }}</span>
+</label>
+</div>
+</li>
+{% empty %}
+<li class="text-xs text-zinc-500 px-4 py-2">رنگی یافت نشد</li>
+{% endfor %}
+</ul>
+</div>
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<span class="text-zinc-700 text-sm">فیلتر بر اساس قیمت</span>
+<img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
+</button>
+<ul class="submenu hidden mt-2">
+<div class="space-y-4 px-6">
+<div id="shop-price-slider"></div>
+<div class="flex items-center justify-between">
+<div class="text-red-400">
+<span class="text-xs font-semibold xl:text-sm" id="shop-price-slider-min">
+{% if price_range.min_price %}{{ price_range.min_price|floatformat:0 }}{% else %}0{% endif %}
+</span>
+<span class="text-xs">تومان</span>
+</div>
+<div class="text-red-400">
+<span class="text-xs font-semibold xl:text-sm" id="shop-price-slider-max">
+{% if price_range.max_price %}{{ price_range.max_price|floatformat:0 }}{% else %}0{% endif %}
+</span>
+<span class="text-xs">تومان</span>
+</div>
+</div>
+</div>
+</ul>
+</div>
+<label class="border border-zinc-100 h-fit rounded-2xl hover:shadow-sm transition-all flex justify-between w-full py-5 px-4 cursor-pointer" for="onlyAvailableDesktop">
+<div class="text-zinc-700 text-sm">
+              فقط کالا های موجود
+            </div>
+<div class="relative inline-flex cursor-pointer items-center">
+<input class="peer sr-only only-available-filter" id="onlyAvailableDesktop" type="checkbox" {% if only_available %}checked{% endif %}/>
+<div class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-primary-400 peer-checked:after:translate-x-full peer-focus:ring-primary-400"></div>
+</div>
+</label>
+</div>
+</div>
+<!-- products -->
+<div class="lg:w-9/12">
+<div class="flex flex-wrap gap-3 md:gap-5 justify-start items-center bg-white shadow-box-sm rounded-3xl px-5 py-6 border border-zinc-100 mb-5">
+<div class="text-zinc-600 text-sm">
+            مرتب سازی:
+          </div>
+<a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}sort=created_at" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'created_at' or not sort_by %}text-primary-500{% else %}text-zinc-500{% endif %}">
+            جدیدترین
+          </a>
+<a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}sort=sales" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'sales' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+            پرفروش ترین
+          </a>
+<a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}sort=price_asc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_asc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+            ارزان ترین
+          </a>
+<a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}sort=price_desc" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'price_desc' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+            گران ترین
+          </a>
+<a href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}sort=views" class="text-xs hover:text-primary-500 transition cursor-pointer {% if sort_by == 'views' %}text-primary-500{% else %}text-zinc-500{% endif %}">
+            پربازدیدترین
+          </a>
+</div>
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+{% for product in products %}
+<div class="p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-100 relative">
+{% if user.is_authenticated %}
+<a href="#" class="toggle-favorite" data-product-id="{{ product.id }}">
+<svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 size-9 favorite-icon" fill="{% if product.id in user_favorites %}#ffffff{% else %}#000000{% endif %}" height="" viewbox="0 0 256 256" width="" xmlns="http://www.w3.org/2000/svg"><path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path></svg>
+</a>
+{% endif %}
+<a class="image-box mb-6 block py-10" href="{% url 'product' product.slug %}">
+{% if product.images.first %}
+<img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src="{{ product.images.first.image.url }}">
+{% else %}
+<img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src='{% static "./assets/image/products/2.webp" %}'>
+{% endif %}
+</a>
+<a class="text-xs md:text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+              {{ product.title }}
+            </a>
+<div class="border-b-2 border-dashed border-zinc-200 my-5 w-full h-auto"></div>
+<div class="flex justify-between items-center">
+{% if product.stock > 0 %}
+<a class="group/edit bg-primary-500 hover:bg-primary-400 px-3 md:px-2.5 py-2.5 rounded-xl shadow-lg transition-all add-to-cart" href="#" data-product-id="{{ product.id }}">
+<svg class="stroke-white" fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.86399 16.455C4.40999 18.638 4.68299 19.729 5.49599 20.365C6.30999 21 7.43499 21 9.68499 21H14.315C16.565 21 17.69 21 18.505 20.365C19.318 19.729 19.591 18.638 20.136 16.455C20.994 13.023 21.423 11.308 20.523 10.154C19.622 9 17.853 9 14.316 9H9.68499C6.14699 9 4.37899 9 3.47799 10.154C2.94899 10.831 2.87799 11.702 3.08399 13" stroke="#" stroke-linecap="round" stroke-width="1.5"></path>
+<path d="M19.5 9.5L18.79 6.895C18.516 5.89 18.379 5.388 18.098 5.009C17.8178 4.63246 17.4373 4.3424 17 4.172C16.56 4 16.04 4 15 4M4.5 9.5L5.21 6.895C5.484 5.89 5.621 5.388 5.902 5.009C6.18218 4.63246 6.56269 4.3424 7 4.172C7.44 4 7.96 4 9 4" stroke="#" stroke-width="1.5"></path>
+<path d="M9 4C9 3.73478 9.10536 3.48043 9.29289 3.29289C9.48043 3.10536 9.73478 3 10 3H14C14.2652 3 14.5196 3.10536 14.7071 3.29289C14.8946 3.48043 15 3.73478 15 4C15 4.26522 14.8946 4.51957 14.7071 4.70711C14.5196 4.89464 14.2652 5 14 5H10C9.73478 5 9.48043 4.89464 9.29289 4.70711C9.10536 4.51957 9 4.26522 9 4Z" stroke="#" stroke-width="1.5"></path>
+</svg>
+</a>
+{% endif %}
+<div class="flex">
+<div class="text-base md:text-xl">{{ product.price|floatformat:0 }}</div>
+<div class="-rotate-90 text-zinc-400 text-xs md:text-sm">
+                  تومان
+                </div>
+</div>
+</div>
+</div>
+{% empty %}
+<div class="col-span-full text-center py-12">
+<p class="text-zinc-600 text-sm md:text-base">محصولی یافت نشد.</p>
+</div>
+{% endfor %}
+</div>
+</div>
+</div>
+<!-- pagination -->
+{% if products.has_other_pages %}
+<div class="flex justify-center mb-12">
+{% if products.has_previous %}
+<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}{% if sort_by %}sort={{ sort_by }}&{% endif %}page={{ products.previous_page_number }}">
+<svg class="size-4 md:size-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+</a>
+{% endif %}
+{% for num in products.paginator.page_range %}
+{% if products.number == num %}
+<a class="border border-zinc-100 text-sm md:text-base px-3.5 md:px-4 py-2 mx-1 transition-colors duration-300 transform bg-primary-500 text-white rounded-md" href="#">
+          {{ num }}
+      </a>
+{% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+<a class="border border-zinc-100 text-sm md:text-base px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md hover:bg-primary-500 hover:text-white" href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}{% if sort_by %}sort={{ sort_by }}&{% endif %}page={{ num }}">
+          {{ num }}
+      </a>
+{% endif %}
+{% endfor %}
+{% if products.has_next %}
+<a class="flex items-center justify-center px-3.5 md:px-4 py-2 mx-1 text-gray-700 transition-colors duration-300 transform bg-white rounded-md -scale-x-100 hover:bg-primary-500 hover:text-white" href="?{% if selected_category %}category={{ selected_category }}&{% endif %}{% if selected_color %}color={{ selected_color }}&{% endif %}{% if search_query %}search={{ search_query }}&{% endif %}{% if only_available %}only_available=true&{% endif %}{% if sort_by %}sort={{ sort_by }}&{% endif %}page={{ products.next_page_number }}">
+<svg class="size-4 md:size-5" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" fill-rule="evenodd"></path>
+</svg>
+</a>
+{% endif %}
+</div>
+{% endif %}
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // فیلتر رنگ
+    const colorFilters = document.querySelectorAll('.color-filter');
+    colorFilters.forEach(filter => {
+        filter.addEventListener('change', function() {
+            const colorId = this.value;
+            const url = new URL(window.location.href);
+            if (this.checked) {
+                url.searchParams.set('color', colorId);
+            } else {
+                url.searchParams.delete('color');
+            }
+            window.location.href = url.toString();
+        });
+    });
+    
+    // فیلتر فقط کالاهای موجود
+    const onlyAvailableFilter = document.querySelector('.only-available-filter');
+    if (onlyAvailableFilter) {
+        onlyAvailableFilter.addEventListener('change', function() {
+            const url = new URL(window.location.href);
+            if (this.checked) {
+                url.searchParams.set('only_available', 'true');
+            } else {
+                url.searchParams.delete('only_available');
+            }
+            window.location.href = url.toString();
+        });
+    }
+    
+    // Price slider initialization (اگر از noUiSlider استفاده می‌کنید)
+    {% if price_range.min_price and price_range.max_price %}
+    if (typeof noUiSlider !== 'undefined' && document.getElementById('shop-price-slider')) {
+        const priceSlider = document.getElementById('shop-price-slider');
+        const minPrice = {{ price_range.min_price|default:0 }};
+        const maxPrice = {{ price_range.max_price|default:1000000 }};
+        
+        noUiSlider.create(priceSlider, {
+            start: [minPrice, maxPrice],
+            connect: true,
+            range: {
+                'min': minPrice,
+                'max': maxPrice
+            },
+            step: 10000,
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+        
+        const minDisplay = document.getElementById('shop-price-slider-min');
+        const maxDisplay = document.getElementById('shop-price-slider-max');
+        
+        priceSlider.noUiSlider.on('update', function (values, handle) {
+            if (handle === 0) {
+                minDisplay.textContent = Math.round(values[0]).toLocaleString('fa-IR');
+            } else {
+                maxDisplay.textContent = Math.round(values[1]).toLocaleString('fa-IR');
+            }
+        });
+        
+        priceSlider.noUiSlider.on('end', function (values) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('min_price', Math.round(values[0]));
+            url.searchParams.set('max_price', Math.round(values[1]));
+            window.location.href = url.toString();
+        });
+    }
+    {% endif %}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,406 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+{% block content %}
+    <main class="p-6 flex-1 overflow-y-auto">
+        <div class="bg-white rounded-2xl min-h-80 h-auto shadow-custom p-4">
+            <div class="px-2 md:px-3 pt-3 pb-5 mb-3 text-zinc-700 text-sm md:text-base flex items-center gap-x-2 border-b border-zinc-200">
+                <svg class="fill-primary-500" fill="" height="20" viewbox="0 0 256 256" width="20"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"></path>
+                </svg>
+                آدرس های من
+            </div>
+            <div class="flex justify-end items-center mb-4">
+                <a class="open-modal text-xs md:text-sm bg-zinc-400 hover:opacity-90 hover:shadow-lg transition rounded-lg px-4 py-2.5 text-white"
+                   data-modal="addAddress" href="#">
+                    اضافه کردن آدرس
+                </a>
+            </div>
+
+            <!-- modal add address -->
+            <div class="modal fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center transition-opacity duration-300 z-50 hidden"
+                 id="addAddress">
+                <div class="modal-box bg-white p-2 rounded-xl shadow-lg w-11/12 md:w-6/12 transition-transform duration-300 opacity-0 scale-90 max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center p-4 border-b border-zinc-300">
+                        <h3 class="text-gray-700">اضافه کردن آدرس</h3>
+                        <button class="close-modal text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form class="space-y-6 px-2 lg:px-8 pb-4 sm:pb-6 pt-4 text-xs md:text-base" id="add-address-form"
+                          method="post" action="{% url 'add_address' %}">
+                        {% csrf_token %}
+                        <div class="mt-0">
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    عنوان آدرس
+                                </label>
+                                {{ form.subject }}
+                            </div>
+                        </div>
+                        <div class="sm:flex gap-x-5">
+                            <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    نام
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    نام خانوادگی
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="sm:flex gap-x-5 mt-7">
+                            <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    استان
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.province }}
+                            </div>
+                            <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    شهر
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.city }}
+                            </div>
+                        </div>
+                        <div class="mt-7">
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    خیابان و کوچه و شماره پلاک و واحد
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.address_details }}
+                            </div>
+                        </div>
+                        <div class="sm:flex gap-x-5 mt-5">
+                            <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    تلفن
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.phone_number }}
+                            </div>
+                            <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    کد پستی
+                                    <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                         width="10" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                    </svg>
+                                </label>
+                                {{ form.postal_code }}
+                            </div>
+                        </div>
+                        <div class="mt-5">
+                            <div class="flex flex-col gap-y-1">
+                                <label class="text-zinc-700 flex">
+                                    توضیحات اضافه
+                                </label>
+                                {{ form.additional_info }}
+                            </div>
+                        </div>
+                        <button class="block bg-primary-500 hover:bg-primary-400 text-white text-center w-8/12 mx-auto mt-10 px-5 py-3 rounded-xl shadow-lg transition-all font-yekanBakhBold"
+                                type="submit">
+                            ثبت آدرس
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                {% for address in addresses %}
+                    <div class="border border-zinc-300 rounded-md">
+                        <div class="border-b border-b-zinc-400 p-3 text-zinc-800 text-sm flex justify-between items-center">
+                            {{ address.subject }}
+                            <a href="#"
+                               class="open-modal text-zinc-50 cursor-pointer hover:text-zinc-100 transition bg-sky-500 hover:bg-sky-600 px-3 py-1 text-xs rounded-md"
+                               data-modal="editAddress{{ address.pk }}">
+                                ویرایش آدرس
+                            </a>
+                        </div>
+                        <div class="px-5 py-4 text-zinc-600 fill-zinc-600 space-y-4 text-sm">
+                            <div class="flex gap-x-1 items-center">
+                                <svg fill="" height="20" viewbox="0 0 256 256" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"></path>
+                                </svg>
+                                {{ address.address_details }}
+                            </div>
+                            <div class="flex gap-x-1 items-center">
+                                <svg fill="" height="20" viewbox="0 0 256 256" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M228.44,89.34l-96-64a8,8,0,0,0-8.88,0l-96,64A8,8,0,0,0,24,96V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V96A8,8,0,0,0,228.44,89.34ZM96.72,152,40,192V111.53Zm16.37,8h29.82l56.63,40H56.46Zm46.19-8L216,111.53V192ZM128,41.61l81.91,54.61-67,47.78H113.11l-67-47.78Z"></path>
+                                </svg>
+                                {{ address.postal_code }}
+                            </div>
+                            <div class="flex gap-x-1 items-center">
+                                <svg fill="" height="20" viewbox="0 0 256 256" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"></path>
+                                </svg>
+                                {{ address.phone_number }}
+                            </div>
+                            <div class="flex gap-x-1 items-center">
+                                <svg fill="" height="20" viewbox="0 0 256 256" width="20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path>
+                                </svg>
+                                {{ address.first_name }} {{ address.last_name }}
+                            </div>
+                        </div>
+                        <a class="text-zinc-50 hover:text-zinc-100 transition bg-red-500 hover:bg-red-600 px-3 py-1 block w-fit mb-2 mr-5 text-xs rounded-md"
+                           href="{% url 'delete_address' address.pk %}">
+                            حذف آدرس
+                        </a>
+                    </div>
+
+                    <!-- modal edit address -->
+                    <div class="modal fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center transition-opacity duration-300 z-50 hidden"
+                         id="editAddress{{ address.pk }}">
+                        <div class="modal-box bg-white p-2 rounded-xl shadow-lg w-11/12 md:w-6/12 transition-transform duration-300 opacity-0 scale-90 max-h-[90vh] overflow-y-auto">
+                            <div class="flex justify-between items-center p-4 border-b border-zinc-300">
+                                <h3 class="text-gray-700">ویرایش آدرس</h3>
+                                <button class="close-modal text-gray-400 hover:text-gray-600">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <form class="space-y-6 px-2 lg:px-8 pb-4 sm:pb-6 pt-4 text-xs md:text-base"
+                                  data-form-id="{{ address.pk }}" action='{% url 'edit_address' address.pk %}'
+
+                                  method="post">
+                                {% csrf_token %}
+                                <div class="mt-0">
+                                    <div class="flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            عنوان آدرس
+                                        </label>
+                                        <input type="text" name="subject" value="{{ address.subject|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="عنوان آدرس (مثلا: منزل، محل کار)">
+                                    </div>
+                                </div>
+                                <div class="sm:flex gap-x-5">
+                                    <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            نام
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="first_name" value="{{ address.first_name|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="نام">
+                                    </div>
+                                    <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            نام خانوادگی
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="last_name" value="{{ address.last_name|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="نام خانوادگی">
+                                    </div>
+                                </div>
+                                <div class="sm:flex gap-x-5 mt-7">
+                                    <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            استان
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="province" value="{{ address.province|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="استان">
+                                    </div>
+                                    <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            شهر
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="city" value="{{ address.city|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="شهر">
+                                    </div>
+                                </div>
+                                <div class="mt-7">
+                                    <div class="flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            خیابان و کوچه و شماره پلاک و واحد
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="address_details" value="{{ address.address_details|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="خیابان و کوچه و شماره پلاک و واحد">
+                                    </div>
+                                </div>
+                                <div class="sm:flex gap-x-5 mt-5">
+                                    <div class="sm:w-1/2 mb-2 sm:mb-0 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            تلفن
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="phone_number" value="{{ address.phone_number|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="تلفن همراه">
+                                    </div>
+                                    <div class="sm:w-1/2 flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            کد پستی
+                                            <svg class="fill-red-500" fill="#4d4d4d" height="10" viewbox="0 0 256 256"
+                                                 width="10" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M210.23,101.57l-72.6,29,51.11,65.71a6,6,0,0,1-9.48,7.36L128,137.77,76.74,203.68a6,6,0,1,1-9.48-7.36l51.11-65.71-72.6-29a6,6,0,1,1,4.46-11.14L122,119.14V40a6,6,0,0,1,12,0v79.14l71.77-28.71a6,6,0,1,1,4.46,11.14Z"></path>
+                                            </svg>
+                                        </label>
+                                        <input type="text" name="postal_code" value="{{ address.postal_code|default:'' }}" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="کد پستی محل تحویل">
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <div class="flex flex-col gap-y-1">
+                                        <label class="text-zinc-700 flex">
+                                            توضیحات اضافه
+                                        </label>
+                                        <textarea name="additional_info" class="rounded-2xl rounded-tr-sm text-sm text-zinc-600 w-full bg-[#f0f0f0] px-5 py-3.5 placeholder:text-zinc-400 placeholder:text-xs focus:outline-1 focus:outline-zinc-300" placeholder="نکات مهم درباره تحویل محصول" rows="7">{{ address.additional_info|default:'' }}</textarea>
+                                    </div>
+                                </div>
+                                <button class="block bg-primary-500 hover:bg-primary-400 text-white text-center w-8/12 mx-auto mt-10 px-5 py-3 rounded-xl shadow-lg transition-all font-yekanBakhBold"
+                                        href="#" type="submit">
+                                    ویرایش آدرس
+                                </button>
+
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // باز کردن مودال
+        document.querySelectorAll('.open-modal').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                const modal = document.getElementById(btn.dataset.modal);
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    setTimeout(() => modal.querySelector('.modal-box').classList.remove('opacity-0', 'scale-90'), 10);
+                }
+            });
+        });
+
+        // بستن مودال
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', e => {
+                if (e.target === modal) {
+                    modal.querySelector('.modal-box').classList.add('opacity-0', 'scale-90');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            });
+        });
+
+        // بستن مودال با دکمه X
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                const modal = btn.closest('.modal');
+                modal.querySelector('.modal-box').classList.add('opacity-0', 'scale-90');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            });
+        });
+
+        // ارسال فرم اضافه کردن آدرس
+        document.addEventListener('submit', function (e) {
+            if (e.target.id === 'add-address-form') {
+                e.preventDefault();
+                const form = e.target;
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("آدرس با موفقیت اضافه شد");
+                            form.reset();
+                            document.getElementById('addAddress').classList.add('hidden');
+                            location.reload(); // برای نمایش آدرس جدید
+                        } else {
+                            // نمایش خطاها
+                            console.log(data.errors);
+                            alert("خطا در ثبت آدرس");
+                        }
+                    });
+            }
+        });
+
+        // ارسال فرم ویرایش آدرس
+        document.addEventListener('submit', function (e) {
+            const form = e.target;
+            // بررسی اینکه آیا فرم ویرایش است (دارای data-form-id است)
+            if (form.hasAttribute('data-form-id') && form.action.includes('edit')) {
+                e.preventDefault();
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("آدرس با موفقیت ویرایش شد");
+                            form.closest('.modal').classList.add('hidden');
+                            location.reload(); // برای نمایش تغییرات
+                        } else {
+                            console.log(data.errors);
+                            alert("خطا در ویرایش آدرس");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("خطا در ارتباط با سرور");
+                    });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main class="mt-0 md:mt-8">
+<div class="mx-4 md:mx-16 mb-8 md:my-12 border border-zinc-200 rounded-2xl p-4 md:p-8">
+        <p class="text-2xl md:text-3xl font-yekanBakhRegular text-zinc-800 text-center mb-10">
+            سوالات متداول
+        </p>
+        <div class="space-y-2">
+            <div class="border border-zinc-200 px-2 py-4 rounded-xl">
+                <button class="w-full cursor-pointer text-right leading-7 md:leading-8 text-zinc-800 py-1 text-sm md:text-base md:py-2 px-3 md:px-4 flex justify-between items-center focus:outline-none"
+                        onclick="toggleFAQ(1)">
+<span>
+                  چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟
+                </span>
+                    <span class="icon text-zinc-600">+</span>
+                </button>
+                <div class="faq-content bg-gray-50 text-zinc-700 rounded-md text-xs md:text-sm leading-7 md:leading-8"
+                     id="faq1">برای ثبت سفارش، به صفحه تماس با ما مراجعه کنید و اطلاعات خود را ارسال کنید.
+                </div>
+            </div>
+            <div class="border border-zinc-200 px-2 py-4 rounded-xl">
+                <button class="w-full cursor-pointer text-right leading-7 md:leading-8 text-zinc-800 py-1 text-sm md:text-base md:py-2 px-3 md:px-4 flex justify-between items-center focus:outline-none"
+                        onclick="toggleFAQ(2)">
+<span>
+                چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟
+              </span>
+                    <span class="icon text-zinc-600">+</span>
+                </button>
+                <div class="faq-content bg-gray-50 text-zinc-700 rounded-md text-xs md:text-sm leading-7 md:leading-8"
+                     id="faq2">برای ثبت سفارش، به صفحه تماس با ما مراجعه کنید و اطلاعات خود را ارسال کنید.
+                </div>
+            </div>
+            <div class="border border-zinc-200 px-2 py-4 rounded-xl">
+                <button class="w-full cursor-pointer text-right leading-7 md:leading-8 text-zinc-800 py-1 text-sm md:text-base md:py-2 px-3 md:px-4 flex justify-between items-center focus:outline-none"
+                        onclick="toggleFAQ(3)">
+<span>
+                چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟ چگونه سفارش ثبت کنم؟
+              </span>
+                    <span class="icon text-zinc-600">+</span>
+                </button>
+                <div class="faq-content bg-gray-50 text-zinc-700 rounded-md text-xs md:text-sm leading-7 md:leading-8"
+                     id="faq3">برای ثبت سفارش، به صفحه تماس با ما مراجعه کنید و اطلاعات خود را ارسال کنید.
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

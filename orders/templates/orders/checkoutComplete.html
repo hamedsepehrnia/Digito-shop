@@ -1,0 +1,198 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<main class="mt-0 md:mt-8">
+    <nav class="flex items-center gap-1 md:gap-5 w-full md:w-10/12 md:mx-auto">
+        <a class="flex flex-col md:flex-row items-center w-fit min-w-24 md:min-w-32 gap-1 text-green-500 text-sm"
+           href="./cart.html">
+            <svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path class="fill-green-600" clip-rule="evenodd"
+                      d="M3.03998 2.292C2.85221 2.22609 2.64595 2.23748 2.46657 2.32365C2.28719 2.40982 2.14939 2.56373 2.08348 2.7515C2.01758 2.93927 2.02896 3.14554 2.11513 3.32491C2.20131 3.50429 2.35521 3.64209 2.54298 3.708L2.80398 3.799C3.47198 4.034 3.91098 4.189 4.23398 4.348C4.53698 4.497 4.66998 4.618 4.75798 4.746C4.84798 4.878 4.91798 5.06 4.95798 5.423C4.99798 5.803 4.99998 6.298 4.99998 7.038V9.64C4.99998 12.582 5.06298 13.552 5.92998 14.466C6.79598 15.38 8.18998 15.38 10.98 15.38H16.282C17.843 15.38 18.624 15.38 19.175 14.93C19.727 14.48 19.885 13.716 20.2 12.188L20.7 9.763C21.047 8.023 21.22 7.154 20.776 6.577C20.332 6 18.816 6 17.131 6H6.49198C6.48776 5.75351 6.47342 5.50731 6.44898 5.262C6.39498 4.765 6.27898 4.312 5.99698 3.9C5.71298 3.484 5.33498 3.218 4.89398 3.001C4.48198 2.799 3.95798 2.615 3.34198 2.398L3.03998 2.292ZM15.517 8.457C15.817 8.743 15.829 9.217 15.543 9.517L12.686 12.517C12.6159 12.5905 12.5317 12.649 12.4384 12.689C12.345 12.729 12.2445 12.7496 12.143 12.7496C12.0414 12.7496 11.9409 12.729 11.8476 12.689C11.7543 12.649 11.67 12.5905 11.6 12.517L10.457 11.317C10.3861 11.2463 10.3302 11.1621 10.2924 11.0694C10.2546 10.9767 10.2357 10.8774 10.2369 10.7773C10.2381 10.6773 10.2593 10.5784 10.2993 10.4867C10.3393 10.3949 10.3972 10.3121 10.4697 10.243C10.5422 10.174 10.6278 10.1202 10.7214 10.0848C10.815 10.0494 10.9147 10.033 11.0148 10.0367C11.1148 10.0405 11.2131 10.0642 11.3038 10.1065C11.3945 10.1488 11.4758 10.2088 11.543 10.283L12.143 10.913L14.457 8.483C14.5941 8.33904 14.7828 8.25544 14.9816 8.25057C15.1804 8.24569 15.3729 8.31994 15.517 8.457Z"
+                      fill="black" fill-rule="evenodd"></path>
+                <path class="fill-green-600"
+                      d="M7.5 18C7.89782 18 8.27936 18.158 8.56066 18.4393C8.84196 18.7206 9 19.1022 9 19.5C9 19.8978 8.84196 20.2794 8.56066 20.5607C8.27936 20.842 7.89782 21 7.5 21C7.10218 21 6.72064 20.842 6.43934 20.5607C6.15804 20.2794 6 19.8978 6 19.5C6 19.1022 6.15804 18.7206 6.43934 18.4393C6.72064 18.158 7.10218 18 7.5 18ZM16.5 18C16.8978 18 17.2794 18.158 17.5607 18.4393C17.842 18.7206 18 19.1022 18 19.5C18 19.8978 17.842 20.2794 17.5607 20.5607C17.2794 20.842 16.8978 21 16.5 21C16.1022 21 15.7206 20.842 15.4393 20.5607C15.158 20.2794 15 19.8978 15 19.5C15 19.1022 15.158 18.7206 15.4393 18.4393C15.7206 18.158 16.1022 18 16.5 18Z"
+                      fill="black"></path>
+            </svg>
+            سبدخرید
+        </a>
+        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white"></div>
+        <a class="flex flex-col md:flex-row items-center w-fit min-w-24 md:min-w-32 gap-1 text-green-500 text-sm"
+           href="./cart.html">
+            <svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path class="fill-green-600"
+                      d="M16 6C16 7.06087 15.5786 8.07828 14.8284 8.82843C14.0783 9.57857 13.0609 10 12 10C10.9391 10 9.92172 9.57857 9.17157 8.82843C8.42143 8.07828 8 7.06087 8 6C8 4.93913 8.42143 3.92172 9.17157 3.17157C9.92172 2.42143 10.9391 2 12 2C13.0609 2 14.0783 2.42143 14.8284 3.17157C15.5786 3.92172 16 4.93913 16 6ZM15.678 13.503C15.205 13.508 14.764 13.526 14.38 13.577C13.737 13.664 13.033 13.87 12.452 14.452C11.87 15.033 11.664 15.737 11.578 16.38C11.5 16.958 11.5 17.664 11.5 18.414V18.586C11.5 19.336 11.5 20.042 11.578 20.62C11.638 21.071 11.758 21.552 12.025 22H12C4 22 4 19.985 4 17.5C4 15.015 7.582 13 12 13C13.326 13 14.577 13.181 15.678 13.503Z"
+                      fill="black"></path>
+                <path class="fill-green-600" clip-rule="evenodd"
+                      d="M16.5 22C14.85 22 14.025 22 13.513 21.487C13 20.975 13 20.15 13 18.5C13 16.85 13 16.025 13.513 15.513C14.025 15 14.85 15 16.5 15C18.15 15 18.975 15 19.487 15.513C20 16.025 20 16.85 20 18.5C20 20.15 20 20.975 19.487 21.487C18.975 22 18.15 22 16.5 22ZM18.468 17.746C18.5774 17.6366 18.6389 17.4882 18.6389 17.3335C18.6389 17.1788 18.5774 17.0304 18.468 16.921C18.3586 16.8116 18.2102 16.7501 18.0555 16.7501C17.9008 16.7501 17.7524 16.8116 17.643 16.921L15.723 18.841L15.357 18.476C15.3028 18.4218 15.2385 18.3789 15.1677 18.3495C15.097 18.3202 15.0211 18.3051 14.9445 18.3051C14.8679 18.3051 14.792 18.3202 14.7213 18.3495C14.6505 18.3789 14.5862 18.4218 14.532 18.476C14.4778 18.5302 14.4349 18.5945 14.4055 18.6653C14.3762 18.736 14.3611 18.8119 14.3611 18.8885C14.3611 18.9651 14.3762 19.041 14.4055 19.1117C14.4349 19.1825 14.4778 19.2468 14.532 19.301L15.31 20.079C15.3641 20.1332 15.4284 20.1762 15.4992 20.2056C15.57 20.2349 15.6459 20.25 15.7225 20.25C15.7991 20.25 15.875 20.2349 15.9458 20.2056C16.0166 20.1762 16.0809 20.1332 16.135 20.079L18.468 17.746Z"
+                      fill="black" fill-rule="evenodd"></path>
+            </svg>
+            اطلاعات پرداخت
+        </a>
+        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white"></div>
+        <a class="flex flex-col md:flex-row items-center w-fit min-w-24 md:min-w-32 gap-1 text-green-500 text-sm"
+           href="./cart.html">
+            <svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path class="stroke-green-600"
+                      d="M11 20H10.5C6.741 20 4.862 20 3.607 19.01C3.40756 18.852 3.2222 18.677 3.053 18.487C2 17.307 2 15.537 2 12C2 8.463 2 6.694 3.053 5.513C3.22167 5.32367 3.40633 5.14967 3.607 4.991C4.862 4 6.741 4 10.5 4H13.5C17.259 4 19.138 4 20.392 4.99C20.5933 5.15 20.7783 5.32433 20.947 5.513C21.896 6.577 21.99 8.118 22 11M2 9H22M14 18C14 18 15 18 16 20C16 20 19.177 15 22 14"
+                      stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+            </svg>
+            اتمام خرید
+        </a>
+    </nav>
+    <div class="mt-10 pb-20">
+        <div class="bg-zinc-100 text-green-600 text-base md:text-xl py-5 text-center leading-8">
+            با تشکر از خرید شما
+            <br/>
+            خرید با موفقیت انجام شد
+        </div>
+        <div class="bg-zinc-100 grid grid-cols-2 gap-y-7 md:grid-cols-4 justify-items-center px-4 md:px-20 py-5 mt-8">
+            <div class="flex flex-col justify-start gap-1">
+                <div class="text-xs text-zinc-800 font-yekanBakhRegular">
+                    شماره سفارش:
+                </div>
+                <div class="text-sm text-zinc-800 font-yekanBakhBold">
+                    4587425
+                </div>
+            </div>
+            <div class="flex flex-col justify-start gap-1">
+                <div class="text-xs text-zinc-800 font-yekanBakhRegular">
+                    تاریخ:
+                </div>
+                <div class="text-sm text-zinc-800 font-yekanBakhBold">
+                    1403/12/10
+                </div>
+            </div>
+            <div class="flex flex-col justify-start gap-1">
+                <div class="text-xs text-zinc-800 font-yekanBakhRegular">
+                    قیمت تمام شده:
+                </div>
+                <div class="text-sm text-zinc-800 font-yekanBakhBold">
+                    17,000,000 تومان
+                </div>
+            </div>
+            <div class="flex flex-col justify-start gap-1">
+                <div class="text-xs text-zinc-800 font-yekanBakhRegular">
+                    روش پرداخت محصولات:
+                </div>
+                <div class="text-sm text-zinc-800 font-yekanBakhBold">
+                    درگاه شاپرک
+                </div>
+            </div>
+        </div>
+        <div class="bg-zinc-100 py-5 mt-10 px-4 md:px-10">
+            <p class="text-zinc-800 text-lg mb-8">
+                جزئیات پرداخت
+            </p>
+            <table class="text-zinc-700 bg-white text-xs rounded-lg w-full md:w-10/12 mx-auto">
+                <tbody class="divide-y divide-zinc-300">
+                <tr>
+                    <td class="px-4 py-3">
+                        کنسول بازی سونی مدل PlayStation 5 Slim
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        15,000,000 تومان
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        کنسول بازی سونی مدل PlayStation 5 Slim
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        15,000,000 تومان
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        حمل و نقل:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        32,000 تومان (پیشتاز)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        روش پرداخت:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        درگاه شاپرک
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        مجموع:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        15,000,000 تومان
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bg-zinc-100 py-5 mt-8 px-4 md:px-10">
+            <p class="text-zinc-800 text-lg mb-8">
+                جزئیات ارسال
+            </p>
+            <table class="text-zinc-700 bg-white text-xs rounded-lg w-full md:w-10/12 mx-auto">
+                <tbody class="divide-y divide-zinc-300">
+                <tr>
+                    <td class="px-4 py-3">
+                        نام و نام خانوادگی:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        امیررضا کریمی
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        استان:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        خراسان رضوی
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        شهر:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        مشهد
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        خیابان و کوچه و شماره پلاک و واحد:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        خیابان اصلی - کوچه دوم - پلاک 128 - واحد 2
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        تلفن:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        09300000000
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        کد پستی:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        9666666666
+                    </td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-3">
+                        توضیحات اضافه:
+                    </td>
+                    <td class="font-yekanBakhRegular">
+                        لطفا مراقب شکستن باشید
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+{% endblock %}
