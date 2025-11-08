@@ -7,13 +7,13 @@ class CoreConfig(AppConfig):
     verbose_name = "تنظیمات اصلی"
     
     def ready(self):
-        """اتصال signal handler برای به‌روزرسانی مدل‌های پنهان"""
+        """Connect signal handler for updating hidden models"""
         from django.db.models.signals import post_save
         from core.models import AdminSettings
         from Digito.admin import update_hidden_models
         
         def refresh_hidden_models(sender, instance, **kwargs):
-            """به‌روزرسانی مدل‌های پنهان پس از ذخیره AdminSettings"""
+            """Update hidden models after saving AdminSettings"""
             if isinstance(instance, AdminSettings):
                 update_hidden_models()
         

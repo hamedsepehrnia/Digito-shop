@@ -13,28 +13,28 @@ class HomePageView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # پرفروش‌ترین محصولات (بر اساس sales)
+        # Best-selling products (based on sales)
         context['bestseller_products'] = Product.objects.order_by('-sales')[:10]
-        # محصولات شگفت‌انگیز
+        # Amazing products
         context['amazing_products'] = Product.objects.filter(is_amazing=True)[:10]
-        # جدیدترین محصولات
+        # Latest products
         context['latest_products'] = Product.objects.order_by('-created_at')[:10]
-        # جدیدترین پست‌های بلاگ
+        # Latest blog posts
         context['latest_posts'] = Post.objects.filter(status='published').order_by('-created_at')[:6]
-        # دسته‌بندی‌ها - از context processor استفاده می‌شود، نیازی به override نیست
-        # اگر نیاز به محدود کردن دارید، می‌توانید از context['categories'][:7] در template استفاده کنید
+        # Categories - using context processor, no need to override
+        # If you need to limit, you can use context['categories'][:7] in template
         
-        # بنرهای اصلی (Hero Slider)
+        # Hero banners (Hero Slider)
         context['hero_banners'] = Banner.objects.filter(banner_type='hero', is_active=True).order_by('order', 'id')
-        # بنرهای پایین صفحه
+        # Bottom banners
         context['bottom_banners'] = Banner.objects.filter(banner_type='bottom', is_active=True).order_by('order', 'id')[:2]
-        # بنر کناری (برای نمایش در کنار محصولات شگفت‌انگیز)
+        # Sidebar banner (for display next to amazing products)
         context['sidebar_banner'] = Banner.objects.filter(banner_type='sidebar', is_active=True).order_by('order', 'id').first()
         
-        # برندها (برای نمایش در بخش برندها)
+        # Brands (for display in brands section)
         context['brands'] = Brand.objects.filter(is_active=True).order_by('order', 'name')
         
-        # بررسی favorite برای کاربران لاگین شده
+        # Check favorites for logged-in users
         user_favorites = set()
         if self.request.user.is_authenticated:
             user_favorites = set(Favorite.objects.filter(user=self.request.user).values_list('product_id', flat=True))
@@ -47,7 +47,7 @@ class AboutPageView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # دریافت محتوای درباره ما (اولین رکورد فعال)
+        # Get about us content (first active record)
         about = About.objects.filter(is_active=True).first()
         if about:
             context['about'] = about
@@ -61,7 +61,7 @@ class FaqPageView(TemplateView):
     template_name = 'core/faq.html'
 
 def contact_us(request):
-    """صفحه تماس با ما"""
+    """Contact us page"""
     contact_info = ContactInfo.objects.filter(is_active=True).first()
     form = ContactMessageForm()
     
@@ -75,7 +75,7 @@ def contact_us(request):
             except Exception as e:
                 messages.error(request, f'خطا در ارسال پیام: {str(e)}')
         else:
-            # نمایش خطاهای فرم
+            # Display form errors
             error_messages = []
             for field, errors in form.errors.items():
                 for error in errors:

@@ -24,36 +24,36 @@ def user_logout(request):
     return redirect('/')
 @login_required
 def dashboard(request):
-    """صفحه اصلی داشبورد کاربر"""
+    """User dashboard main page"""
     from products.models import Product
     from django.db.models import Sum
     
-    # آمار سریع
+    # Quick statistics
     orders_count = Order.objects.filter(user=request.user).count()
     favorites_count = Favorite.objects.filter(user=request.user).count()
     addresses_count = Address.objects.filter(user=request.user).count()
     
-    # تعداد سفارش‌های تحویل داده شده
+    # Number of delivered orders
     delivered_count = Order.objects.filter(user=request.user, status='delivered').count()
     
-    # موجودی حساب (جمع سفارش‌های پرداخت شده)
+    # Account balance (sum of paid orders)
     account_balance = Order.objects.filter(
         user=request.user, 
         payment_status=True
     ).aggregate(total=Sum('total_price'))['total'] or 0
     
-    # امتیاز (می‌تواند بر اساس خریدها باشد)
-    points = orders_count * 10  # هر سفارش 10 امتیاز
+    # Points (can be based on purchases)
+    points = orders_count * 10  # 10 points per order
     
-    # آخرین سفارش‌ها
+    # Recent orders
     recent_orders = Order.objects.filter(user=request.user).order_by('-created_at')[:5]
     
-    # محصولات پیشنهادی (محصولات شگفت‌انگیز یا پرفروش‌ترین)
+    # Recommended products (featured or best-selling products)
     recommended_products = Product.objects.filter(
         stock__gt=0
     ).order_by('-sales', '-created_at')[:8]
     
-    # بررسی علاقه‌مندی‌ها برای هر محصول
+    # Check favorites for each product
     user_favorites = set(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
     
     context = {
@@ -124,7 +124,7 @@ class UserDetailsView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def dashboard_favorites(request):
-    """صفحه علاقه‌مندی‌های کاربر"""
+    """User favorites page"""
     favorites = Favorite.objects.filter(user=request.user).select_related('product')
     products = [fav.product for fav in favorites]
     return render(request, 'accounts/dashboardFavorites.html', {'products': products, 'favorites': favorites})
@@ -133,7 +133,7 @@ def dashboard_favorites(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def toggle_favorite(request):
-    """افزودن یا حذف از علاقه‌مندی‌ها"""
+    """Add or remove from favorites"""
     if not request.user.is_authenticated:
         return JsonResponse({
             'success': False,
@@ -171,14 +171,14 @@ def toggle_favorite(request):
 
 @login_required
 def dashboard_orders(request):
-    """لیست سفارش‌های کاربر"""
+    """User orders list"""
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'accounts/dashboardOrders.html', {'orders': orders})
 
 
 @login_required
 def dashboard_order_details(request, order_id):
-    """جزئیات یک سفارش"""
+    """Order details"""
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'accounts/dashboardOrdersDetails.html', {
         'order': order,
@@ -194,18 +194,18 @@ def send_otp_ajax(request):
     if not phone:
         return JsonResponse({"success": False, "error": "شماره تلفن الزامی است"}, status=400)
     
-    # بررسی محدودیت تعداد درخواست
+    # Check rate limit
     rate_limit_ok, rate_limit_error = check_otp_rate_limit(phone)
     if not rate_limit_ok:
         return JsonResponse({"success": False, "error": rate_limit_error}, status=429)
     
-    # تولید OTP
+    # Generate OTP
     otp = f"{random.randint(100000, 999999)}"
     
-    # حذف OTP های قبلی
+    # Delete previous OTPs
     PhoneOTP.objects.filter(phone_number=phone).delete()
     
-    # ایجاد OTP جدید
+    # Create new OTP
     expiry_minutes = settings.OTP_EXPIRY_MINUTES
     otp_record = PhoneOTP.objects.create(
         phone_number=phone,
@@ -213,25 +213,25 @@ def send_otp_ajax(request):
         expires_at=timezone.now() + timedelta(minutes=expiry_minutes)
     )
     
-    # ارسال OTP
+    # Send OTP
     use_kavenegar = settings.OTP_USE_KAVENEGAR
     is_debug = settings.DEBUG
     
-    # اگر DEBUG=True و OTP_USE_KAVENEGAR=False باشد، OTP را در پاسخ برمی‌گردانیم
+    # If DEBUG=True and OTP_USE_KAVENEGAR=False, return OTP in response
     if is_debug and not use_kavenegar:
         return JsonResponse({"success": True, "otp": otp, "message": "کد تایید در حالت توسعه نمایش داده می‌شود"})
     
-    # در حالت production یا اگر OTP_USE_KAVENEGAR=True باشد، از کاوه نگار استفاده می‌کنیم
+    # In production or if OTP_USE_KAVENEGAR=True, use Kavenegar
     if use_kavenegar:
         success, message = send_otp_via_kavenegar(phone, otp)
         if success:
             return JsonResponse({"success": True, "message": "کد تایید به شماره شما ارسال شد"})
         else:
-            # در صورت خطا در ارسال، OTP را حذف می‌کنیم
+            # Delete OTP if sending fails
             otp_record.delete()
             return JsonResponse({"success": False, "error": message}, status=500)
     
-    # اگر هیچ کدام از شرایط بالا برقرار نبود، OTP را در پاسخ برمی‌گردانیم
+    # If none of the above conditions are met, return OTP in response
     return JsonResponse({"success": True, "otp": otp})
 
 
@@ -251,10 +251,10 @@ def verify_otp_ajax(request):
     user, created = MyUser.objects.get_or_create(phone=phone)
     login(request, user)
 
-    # همگام‌سازی سبد خرید session با سبد خرید کاربر
+    # Sync session cart with user cart
     from cart.views import sync_session_cart_to_user_cart
     sync_session_cart_to_user_cart(request)
 
-    # فقط همین قسمت مهمه
+    # Redirect based on whether user was just created
     redirect_url = reverse("dashboard-details") if created else reverse("home_page")
     return JsonResponse({"success": True, "redirect": redirect_url})

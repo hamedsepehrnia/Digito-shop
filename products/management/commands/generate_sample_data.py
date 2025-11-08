@@ -12,7 +12,7 @@ from core.models import Banner, ContactInfo, FooterSettings, AdminSettings, Abou
 
 User = get_user_model()
 
-# متن‌های نمونه فارسی
+# Sample Persian texts
 SAMPLE_TEXTS = [
     "این محصول با کیفیت بالا و طراحی مدرن تولید شده است. مناسب برای استفاده روزمره و دارای گارانتی معتبر می‌باشد.",
     "با خرید این محصول می‌توانید از مزایای بی‌نظیر آن بهره‌مند شوید. این محصول با آخرین تکنولوژی روز دنیا ساخته شده است.",
@@ -42,37 +42,37 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS('در حال ایجاد داده‌های نمونه...'))
         
-        # ایجاد تنظیمات پایه
+        # Create base settings
         self.create_base_settings()
         
-        # ایجاد رنگ‌ها
+        # Create colors
         colors = self.create_colors()
         
-        # ایجاد برندها
+        # Create brands
         brands = self.create_brands()
         
-        # ایجاد دسته‌بندی‌های محصولات
+        # Create product categories
         categories = self.create_product_categories()
         
-        # ایجاد محصولات
+        # Create products
         self.create_products(categories, colors, brands)
         
-        # ایجاد بنرها
+        # Create banners
         self.create_banners()
         
-        # ایجاد دسته‌بندی‌های بلاگ
+        # Create blog categories
         blog_categories = self.create_blog_categories()
         
-        # ایجاد پست‌های بلاگ
+        # Create blog posts
         self.create_blog_posts(blog_categories)
         
-        # ایجاد صفحه درباره ما
+        # Create about page
         self.create_about_page()
         
         self.stdout.write(self.style.SUCCESS('✓ تمام داده‌های نمونه با موفقیت ایجاد شدند!'))
 
     def clear_data(self):
-        """پاک کردن تمام داده‌ها"""
+        """Clear all data"""
         ProductImage.objects.all().delete()
         ProductSpecification.objects.all().delete()
         Product.objects.all().delete()
@@ -91,7 +91,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('✓ تمام داده‌ها پاک شدند'))
     
     def create_base_settings(self):
-        """ایجاد تنظیمات پایه"""
+        """Create base settings"""
         # AdminSettings
         AdminSettings.objects.get_or_create(
             id=1,
@@ -123,7 +123,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('✓ تنظیمات پایه ایجاد شد'))
 
     def create_colors(self):
-        """ایجاد رنگ‌ها"""
+        """Create colors"""
         colors_data = [
             ('قرمز', '#FF0000'),
             ('آبی', '#0000FF'),
@@ -149,7 +149,7 @@ class Command(BaseCommand):
         return colors
     
     def create_brands(self):
-        """ایجاد برندها"""
+        """Create brands"""
         brands_data = [
             ('سامسونگ', 1),
             ('اپل', 2),
@@ -175,7 +175,7 @@ class Command(BaseCommand):
                 }
             )
             
-            # ایجاد لوگوی ساده برای برند
+            # Create simple logo for brand
             if created:
                 logo_image = self.create_simple_image(200, 200, name)
                 brand.logo.save(f'{name}_logo.png', ContentFile(logo_image), save=True)
@@ -186,18 +186,18 @@ class Command(BaseCommand):
         return brands
     
     def create_simple_image(self, width, height, text=''):
-        """ایجاد تصویر ساده با متن"""
+        """Create simple image with text"""
         img = Image.new('RGB', (width, height), color=(240, 240, 240))
         
-        # اگر PIL با text support نصب باشد، می‌توان متن اضافه کرد
-        # در غیر این صورت فقط یک تصویر رنگی ساده ایجاد می‌شود
+        # If PIL with text support is installed, text can be added
+        # Otherwise, only a simple colored image is created
         buffer = io.BytesIO()
         img.save(buffer, format='PNG')
         return buffer.getvalue()
     
     def create_product_image(self, width=800, height=800):
-        """ایجاد تصویر محصول"""
-        # ایجاد تصویر با رنگ تصادفی
+        """Create product image"""
+        # Create image with random color
         r = random.randint(200, 255)
         g = random.randint(200, 255)
         b = random.randint(200, 255)
@@ -208,14 +208,14 @@ class Command(BaseCommand):
         return buffer.getvalue()
     
     def create_banner_image(self, width, height, banner_type='hero'):
-        """ایجاد تصویر بنر"""
-        # رنگ‌های مختلف برای انواع بنر
+        """Create banner image"""
+        # Different colors for different banner types
         if banner_type == 'hero':
-            color = (70, 130, 180)  # آبی فولادی
+            color = (70, 130, 180)  # Steel blue
         elif banner_type == 'sidebar':
-            color = (255, 140, 0)  # نارنجی
+            color = (255, 140, 0)  # Orange
         else:
-            color = (50, 205, 50)  # سبز
+            color = (50, 205, 50)  # Green
         
         img = Image.new('RGB', (width, height), color=color)
         buffer = io.BytesIO()
@@ -223,8 +223,8 @@ class Command(BaseCommand):
         return buffer.getvalue()
     
     def create_blog_image(self, width=1200, height=600):
-        """ایجاد تصویر بلاگ"""
-        # رنگ‌های ملایم برای بلاگ
+        """Create blog image"""
+        # Soft colors for blog
         r = random.randint(180, 220)
         g = random.randint(180, 220)
         b = random.randint(180, 220)
@@ -235,7 +235,7 @@ class Command(BaseCommand):
         return buffer.getvalue()
 
     def create_product_categories(self):
-        """ایجاد دسته‌بندی‌های محصولات با ساختار درختی"""
+        """Create product categories with tree structure"""
         categories_data = {
             'الکترونیک': {
                 'موبایل': ['گوشی هوشمند', 'گوشی معمولی', 'لوازم جانبی موبایل'],
@@ -260,7 +260,7 @@ class Command(BaseCommand):
         
         categories = {}
         
-        # ایجاد دسته‌بندی‌های اصلی
+        # Create main categories
         for main_name in categories_data.keys():
             main_cat, _ = Category.objects.get_or_create(
                 name=main_name,
@@ -268,7 +268,7 @@ class Command(BaseCommand):
             )
             categories[main_name] = {'obj': main_cat, 'children': {}}
             
-            # ایجاد دسته‌بندی‌های فرعی
+            # Create subcategories
             for sub_name, sub_children in categories_data[main_name].items():
                 sub_cat, _ = Category.objects.get_or_create(
                     name=sub_name,
@@ -276,7 +276,7 @@ class Command(BaseCommand):
                 )
                 categories[main_name]['children'][sub_name] = {'obj': sub_cat, 'children': []}
                 
-                # ایجاد دسته‌بندی‌های سطح سوم
+                # Create third-level categories
                 for child_name in sub_children:
                     child_cat, _ = Category.objects.get_or_create(
                         name=child_name,
@@ -292,7 +292,7 @@ class Command(BaseCommand):
         return categories
 
     def create_products(self, categories, colors, brands):
-        """ایجاد محصولات"""
+        """Create products"""
         product_titles = [
             'گوشی موبایل سامسونگ گلکسی S24',
             'لپ تاپ ایسوس ROG Strix',
@@ -324,7 +324,7 @@ class Command(BaseCommand):
         products = []
         all_categories = []
         
-        # جمع‌آوری تمام دسته‌بندی‌ها
+        # Collect all categories
         for main_cat in categories.values():
             all_categories.append(main_cat['obj'])
             for sub_cat in main_cat['children'].values():
@@ -333,13 +333,13 @@ class Command(BaseCommand):
                     all_categories.append(child_cat)
         
         for i, title in enumerate(product_titles):
-            # انتخاب دسته‌بندی تصادفی
+            # Select random category
             category = random.choice(all_categories)
             
-            # انتخاب برند تصادفی (70% احتمال داشتن برند)
+            # Select random brand (70% chance of having a brand)
             brand = random.choice(brands) if random.random() < 0.7 and brands else None
             
-            # ایجاد محصول
+            # Create product
             product = Product.objects.create(
                 title=title,
                 english_title=f"Product {i+1}",
@@ -356,11 +356,11 @@ class Command(BaseCommand):
                 delivery_date=random.randint(1, 7),
             )
             
-            # افزودن رنگ‌های تصادفی
+            # Add random colors
             selected_colors = random.sample(colors, random.randint(1, min(3, len(colors))))
             product.colors.set(selected_colors)
             
-            # ایجاد تصاویر محصول (2-4 تصویر)
+            # Create product images (2-4 images)
             num_images = random.randint(2, 4)
             for img_num in range(num_images):
                 image_data = self.create_product_image()
@@ -374,7 +374,7 @@ class Command(BaseCommand):
                     save=True
                 )
             
-            # ایجاد مشخصات محصول
+            # Create product specifications
             specs = [
                 ('وزن', f'{random.randint(100, 5000)} گرم'),
                 ('ابعاد', f'{random.randint(10, 100)}x{random.randint(10, 100)}x{random.randint(5, 50)} سانتی‌متر'),
@@ -398,7 +398,7 @@ class Command(BaseCommand):
         return products
 
     def create_blog_categories(self):
-        """ایجاد دسته‌بندی‌های بلاگ"""
+        """Create blog categories"""
         from django.utils.text import slugify
         
         categories_data = [
@@ -423,7 +423,7 @@ class Command(BaseCommand):
         return categories
 
     def create_blog_posts(self, categories):
-        """ایجاد پست‌های بلاگ"""
+        """Create blog posts"""
         post_titles = [
             'راهنمای خرید گوشی موبایل در سال 1403',
             'بهترین لپ تاپ‌های گیمینگ 2024',
@@ -442,7 +442,7 @@ class Command(BaseCommand):
             'راهنمای خرید دوربین عکاسی',
         ]
         
-        # دریافت یا ایجاد یک کاربر برای نویسنده
+        # Get or create a user for author
         user, _ = User.objects.get_or_create(
             phone='09123456789',
             defaults={
@@ -454,7 +454,7 @@ class Command(BaseCommand):
         
         posts = []
         for i, title in enumerate(post_titles):
-            # ایجاد slug منحصر به فرد
+            # Create unique slug
             base_slug = slugify(title)
             slug = base_slug
             counter = 1
@@ -474,7 +474,7 @@ class Command(BaseCommand):
                 published_at=timezone.now(),
             )
             
-            # ایجاد تصویر برای پست بلاگ
+            # Create image for blog post
             image_data = self.create_blog_image()
             post.image.save(
                 f'blog_{post.id}.jpg',
@@ -488,8 +488,8 @@ class Command(BaseCommand):
         return posts
     
     def create_banners(self):
-        """ایجاد بنرها"""
-        # بنرهای Hero
+        """Create banners"""
+        # Hero banners
         hero_titles = [
             'فروش ویژه محصولات دیجیتال',
             'جدیدترین محصولات با بهترین قیمت',
@@ -511,7 +511,7 @@ class Command(BaseCommand):
                 save=True
             )
         
-        # بنر کناری
+        # Sidebar banner
         sidebar_image = self.create_banner_image(300, 600, 'sidebar')
         sidebar_banner = Banner.objects.create(
             title='محصولات جدید',
@@ -526,7 +526,7 @@ class Command(BaseCommand):
             save=True
         )
         
-        # بنرهای پایین صفحه
+        # Bottom banners
         bottom_titles = [
             'ارسال رایگان برای خرید بالای 500 هزار تومان',
             'گارانتی 18 ماهه برای تمام محصولات',
@@ -550,8 +550,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS('✓ بنرها ایجاد شدند'))
     
     def create_about_page(self):
-        """ایجاد صفحه درباره ما"""
-        # ایجاد صفحه اصلی درباره ما
+        """Create about page"""
+        # Create main about page
         about_content = """
         <h2>درباره دیجیتو</h2>
         <p>فروشگاه اینترنتی دیجیتو در سال 1400 با هدف ارائه بهترین محصولات دیجیتال به مشتریان عزیز تاسیس شد. ما با بیش از 3 سال تجربه در زمینه فروش آنلاین، همواره تلاش کرده‌ایم تا رضایت مشتریان را در اولویت اول قرار دهیم.</p>
@@ -589,7 +589,7 @@ class Command(BaseCommand):
                 save=True
             )
         
-        # ایجاد بخش‌های درباره ما
+        # Create about sections
         about_sections = [
             {
                 'title': 'تاریخچه ما',

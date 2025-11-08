@@ -8,7 +8,7 @@ from slugify import slugify as slugify_persian
 
 
 class Category(MPTTModel):
-    """مدل دسته‌بندی با ساختار درختی با استفاده از django-mptt"""
+    """Category model with tree structure using django-mptt"""
     name = models.CharField(max_length=100, verbose_name="نام دسته‌بندی")
     slug = models.SlugField(unique=True, blank=True, allow_unicode=True, verbose_name="اسلاگ")
     image = models.ImageField(
@@ -35,7 +35,7 @@ class Category(MPTTModel):
         verbose_name_plural = "دسته‌بندی‌ها"
     
     def get_full_slug(self):
-        """تولید مسیر کامل slug از ریشه تا دسته‌بندی فعلی"""
+        """Generate full slug path from root to current category"""
         slugs = []
         current = self
         while current:
@@ -45,7 +45,7 @@ class Category(MPTTModel):
         return '/'.join(slugs)
     
     def save(self, *args, **kwargs):
-        """تولید خودکار slug در صورت عدم وجود"""
+        """Auto-generate slug if not provided"""
         if not self.slug:
             base_slug = slugify_persian(self.name, allow_unicode=True)
             slug = base_slug
@@ -61,7 +61,7 @@ class Category(MPTTModel):
 
 
 class Brand(models.Model):
-    """مدل برند محصولات"""
+    """Product brand model"""
     name = models.CharField(max_length=100, verbose_name="نام برند")
     slug = models.SlugField(unique=True, blank=True, allow_unicode=True, verbose_name="اسلاگ")
     logo = models.ImageField(
@@ -82,7 +82,7 @@ class Brand(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        """تولید خودکار slug در صورت عدم وجود"""
+        """Auto-generate slug if not provided"""
         if not self.slug:
             base_slug = slugify_persian(self.name, allow_unicode=True)
             slug = base_slug
@@ -96,7 +96,7 @@ class Brand(models.Model):
 
 class Color(models.Model):
     name = models.CharField(max_length=100, verbose_name="نام رنگ")
-    hex_code = models.CharField(max_length=7, verbose_name="کد رنگ")  # مثلا '#000000'
+    hex_code = models.CharField(max_length=7, verbose_name="کد رنگ")  # e.g., '#000000'
 
     class Meta:
         verbose_name = "رنگ"
@@ -138,13 +138,13 @@ class Product(models.Model):
         ordering = ['-created_at']
 
     def get_full_slug(self):
-        """تولید مسیر کامل slug دسته‌بندی محصول"""
+        """Generate full slug path of product category"""
         if self.category:
             return self.category.get_full_slug()
         return ''
     
     def save(self, *args, **kwargs):
-        """تولید خودکار slug در صورت عدم وجود"""
+        """Auto-generate slug if not provided"""
         if not self.slug:
             base_slug = slugify_persian(self.title, allow_unicode=True)
             slug = base_slug

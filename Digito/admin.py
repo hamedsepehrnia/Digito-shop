@@ -1,5 +1,5 @@
 """
-سفارشی‌سازی پنل ادمین Django
+Django Admin Panel Customization
 """
 from django.contrib import admin
 from django.contrib.admin import AdminSite
@@ -9,18 +9,18 @@ from core.models import AdminSettings
 
 
 class DigitoAdminSite(AdminSite):
-    """سایت ادمین سفارشی برای دیجیتو"""
+    """Custom admin site for Digito"""
     site_header = settings.ADMIN_SITE_HEADER
     site_title = settings.ADMIN_SITE_TITLE
     index_title = settings.ADMIN_SITE_INDEX_TITLE
     
     def each_context(self, request):
-        """افزودن تنظیمات به context تمام صفحات admin"""
+        """Add settings to context for all admin pages"""
         context = super().each_context(request)
         try:
             settings = AdminSettings.get_settings()
             context['admin_settings'] = settings
-            # اعمال تنظیمات به site_header و site_title
+            # Apply settings to site_header and site_title
             if settings.site_header:
                 self.site_header = settings.site_header
             if settings.site_title:
@@ -32,10 +32,10 @@ class DigitoAdminSite(AdminSite):
         return context
 
 
-# ایجاد instance سفارشی از AdminSite
+# Create custom AdminSite instance
 admin_site = DigitoAdminSite(name='digito_admin')
 
-# Import مدل‌ها و Admin classes
+# Import models and Admin classes
 from products.admin import CategoryAdmin, ColorAdmin, ProductAdmin, CommentAdmin, ProductImageAdmin, ProductSpecificationAdmin, BrandAdmin
 from products.models import Category, Color, Product, Comment, ProductImage, ProductSpecification, Brand
 from accounts.admin import MyUserAdmin, AddressAdmin, FavoriteAdmin, PhoneOTPAdmin
@@ -50,16 +50,16 @@ from cart.admin import CartAdmin, CartItemAdmin
 from cart.models import Cart, CartItem
 
 
-# تابع برای ثبت/لغو ثبت مدل‌های پنهان
+# Function to register/unregister hidden models
 def update_hidden_models():
-    """به‌روزرسانی مدل‌های پنهان بر اساس تنظیمات"""
+    """Update hidden models based on settings"""
     try:
         settings = AdminSettings.get_settings()
         show_hidden = settings.show_hidden_models
     except Exception:
         show_hidden = False
     
-    # لیست مدل‌های پنهان و admin classes آنها
+    # List of hidden models and their admin classes
     hidden_models = [
         (ProductImage, ProductImageAdmin),
         (ProductSpecification, ProductSpecificationAdmin),
@@ -69,21 +69,21 @@ def update_hidden_models():
         (CartItem, CartItemAdmin),
     ]
     
-    # ثبت یا لغو ثبت مدل‌های پنهان
+    # Register or unregister hidden models
     for model, admin_class in hidden_models:
         if show_hidden:
-            # اگر قبلاً ثبت نشده، ثبت کن
+            # Register if not already registered
             if not admin_site.is_registered(model):
                 admin_site.register(model, admin_class)
         else:
-            # اگر ثبت شده، لغو ثبت کن
+            # Unregister if already registered
             if admin_site.is_registered(model):
                 admin_site.unregister(model)
 
 
-# تابع برای ثبت مدل‌های اصلی (همیشه نمایش داده می‌شوند)
+# Function to register main models (always displayed)
 def register_main_models():
-    """ثبت مدل‌های اصلی در admin_site"""
+    """Register main models in admin_site"""
     # Products
     admin_site.register(Category, CategoryAdmin)
     admin_site.register(Brand, BrandAdmin)
@@ -119,9 +119,9 @@ def register_main_models():
     admin_site.register(Cart, CartAdmin)
 
 
-# ثبت مدل‌های اصلی
+# Register main models
 register_main_models()
 
-# به‌روزرسانی مدل‌های پنهان
+# Update hidden models
 update_hidden_models()
 

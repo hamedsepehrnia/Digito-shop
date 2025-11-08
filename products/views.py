@@ -13,25 +13,25 @@ from accounts.models import Favorite
 
 
 def shop(request):
-    """صفحه فروشگاه با فیلتر و جستجو"""
+    """Shop page with filters and search"""
     products = Product.objects.all()
     
-    # فیلتر بر اساس دسته‌بندی
+    # Filter by category
     category_slug = request.GET.get('category')
     if category_slug:
         products = products.filter(category__slug=category_slug)
     
-    # فیلتر بر اساس برند
+    # Filter by brand
     brand_slug = request.GET.get('brand')
     if brand_slug:
         products = products.filter(brand__slug=brand_slug)
     
-    # فیلتر بر اساس رنگ
+    # Filter by color
     color_id = request.GET.get('color')
     if color_id:
         products = products.filter(colors__id=color_id)
     
-    # فیلتر بر اساس قیمت
+    # Filter by price
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     if min_price:
@@ -45,17 +45,17 @@ def shop(request):
         except ValueError:
             pass
     
-    # فیلتر محصولات شگفت‌انگیز
+    # Filter amazing products
     is_amazing = request.GET.get('is_amazing')
     if is_amazing == 'true':
         products = products.filter(is_amazing=True)
     
-    # فیلتر فقط کالاهای موجود
+    # Filter only available products
     only_available = request.GET.get('only_available')
     if only_available == 'true':
         products = products.filter(stock__gt=0)
     
-    # جستجو
+    # Search
     search_query = request.GET.get('search')
     if search_query:
         products = products.filter(
@@ -64,7 +64,7 @@ def shop(request):
             Q(english_title__icontains=search_query)
         )
     
-    # مرتب‌سازی
+    # Sorting
     sort_by = request.GET.get('sort', 'created_at')
     if sort_by == 'price_asc':
         products = products.order_by('price')
@@ -77,43 +77,43 @@ def shop(request):
     else:
         products = products.order_by('-created_at')
     
-    # محاسبه محدوده قیمت برای فیلتر
+    # Calculate price range for filter
     price_range = products.aggregate(
         min_price=Min('price'),
         max_price=Max('price')
     )
     
-    # صفحه‌بندی
-    paginator = Paginator(products, 12)  # 12 محصول در هر صفحه
+    # Pagination
+    paginator = Paginator(products, 12)  # 12 products per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # دریافت دسته‌بندی‌های مناسب برای فیلتر (نه برای منوی اصلی)
-    # اگر دسته‌بندی انتخاب شده، فرزندان آن را نمایش می‌دهیم
-    # در غیر این صورت، دسته‌بندی‌های ریشه را نمایش می‌دهیم
+    # Get categories suitable for filter (not for main menu)
+    # If category is selected, show its children
+    # Otherwise, show root categories
     selected_category_obj = None
     if category_slug:
         try:
             selected_category_obj = Category.objects.get(slug=category_slug)
-            # نمایش فرزندان دسته‌بندی انتخاب شده
+            # Show children of selected category
             filter_categories = selected_category_obj.get_children().order_by('name')
         except Category.DoesNotExist:
             filter_categories = Category.objects.filter(parent__isnull=True).exclude(slug='').order_by('name')
     else:
-        # نمایش دسته‌بندی‌های ریشه
+        # Show root categories
         filter_categories = Category.objects.filter(parent__isnull=True).exclude(slug='').order_by('name')
     colors = Color.objects.distinct()
     brands = Brand.objects.filter(is_active=True).order_by('order', 'name')
     
-    # بررسی favorite برای کاربران لاگین شده
+    # Check favorites for logged-in users
     user_favorites = set()
     if request.user.is_authenticated:
         user_favorites = set(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
     
     context = {
         'products': page_obj,
-        'filter_categories': filter_categories,  # فقط برای فیلتر سمت راست
-        'selected_category_obj': selected_category_obj,  # برای نمایش مسیر دسته‌بندی
+        'filter_categories': filter_categories,  # Only for right sidebar filter
+        'selected_category_obj': selected_category_obj,  # For displaying category path
         'colors': colors,
         'brands': brands,
         'selected_category': category_slug,
@@ -130,32 +130,32 @@ def shop(request):
 
 
 def single_product(request, slug):
-    """صفحه جزئیات محصول"""
+    """Product details page"""
     product = get_object_or_404(Product, slug=slug)
     
-    # افزایش تعداد بازدید
+    # Increment view count
     product.views += 1
     product.save(update_fields=['views'])
     
-    # محصولات مرتبط (از همان دسته‌بندی)
+    # Related products (from same category)
     related_products = Product.objects.filter(
         category=product.category
     ).exclude(pk=product.pk)[:4]
     
-    # نظرات تایید شده
+    # Approved comments
     comments = product.comments.all().order_by('-created_at')
     
-    # فرم نظر
+    # Comment form
     comment_form = CommentForm()
     
-    # بررسی علاقه‌مندی
+    # Check favorite
     is_favorite = False
     user_favorites = set()
     if request.user.is_authenticated:
         is_favorite = Favorite.objects.filter(user=request.user, product=product).exists()
         user_favorites = set(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
     
-    # رنگ‌های محصول
+    # Product colors
     colors = product.colors.all()
     
     context = {
@@ -175,7 +175,7 @@ def single_product(request, slug):
 @require_http_methods(["POST"])
 @csrf_exempt
 def add_comment(request, slug):
-    """افزودن نظر به محصول"""
+    """Add comment to product"""
     product = get_object_or_404(Product, slug=slug)
     form = CommentForm(request.POST)
     
@@ -193,7 +193,7 @@ def add_comment(request, slug):
 
 
 def search_products(request):
-    """جستجوی محصولات با فیلتر و مرتب‌سازی"""
+    """Search products with filters and sorting"""
     query = request.GET.get('q', '')
     
     if query:
@@ -205,22 +205,22 @@ def search_products(request):
     else:
         products = Product.objects.none()
     
-    # فیلتر بر اساس دسته‌بندی
+    # Filter by category
     category_slug = request.GET.get('category')
     if category_slug:
         products = products.filter(category__slug=category_slug)
     
-    # فیلتر بر اساس برند
+    # Filter by brand
     brand_slug = request.GET.get('brand')
     if brand_slug:
         products = products.filter(brand__slug=brand_slug)
     
-    # فیلتر بر اساس رنگ
+    # Filter by color
     color_id = request.GET.get('color')
     if color_id:
         products = products.filter(colors__id=color_id)
     
-    # فیلتر بر اساس قیمت
+    # Filter by price
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     if min_price:
@@ -234,12 +234,12 @@ def search_products(request):
         except ValueError:
             pass
     
-    # فیلتر فقط کالاهای موجود
+    # Filter only available products
     only_available = request.GET.get('only_available')
     if only_available == 'true':
         products = products.filter(stock__gt=0)
     
-    # مرتب‌سازی
+    # Sorting
     sort_by = request.GET.get('sort', '')
     if sort_by == 'price_asc':
         products = products.order_by('price')
@@ -252,9 +252,9 @@ def search_products(request):
     elif sort_by == 'created_at':
         products = products.order_by('-created_at')
     else:
-        products = products.order_by('-created_at')  # پیش‌فرض
+        products = products.order_by('-created_at')  # Default
     
-    # محاسبه محدوده قیمت
+    # Calculate price range
     if products.exists():
         price_range = products.aggregate(
             min_price=Min('price'),
@@ -263,7 +263,7 @@ def search_products(request):
     else:
         price_range = {'min_price': 0, 'max_price': 0}
     
-    # دریافت دسته‌بندی‌های مناسب برای فیلتر (نه برای منوی اصلی)
+    # Get categories suitable for filter (not for main menu)
     selected_category_obj = None
     if category_slug:
         try:
@@ -274,16 +274,16 @@ def search_products(request):
     else:
         filter_categories = Category.objects.filter(parent__isnull=True).exclude(slug='').order_by('name')
     
-    # رنگ‌ها
+    # Colors
     colors = Color.objects.all().order_by('name')
     brands = Brand.objects.filter(is_active=True).order_by('order', 'name')
     
     # Pagination
-    paginator = Paginator(products, 12)  # 12 محصول در هر صفحه
+    paginator = Paginator(products, 12)  # 12 products per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # بررسی favorite برای کاربران لاگین شده
+    # Check favorites for logged-in users
     user_favorites = set()
     if request.user.is_authenticated:
         user_favorites = set(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
@@ -292,7 +292,7 @@ def search_products(request):
         'products': page_obj,
         'query': query,
         'user_favorites': user_favorites,
-        'filter_categories': filter_categories,  # فقط برای فیلتر سمت راست
+        'filter_categories': filter_categories,  # Only for right sidebar filter
         'selected_category_obj': selected_category_obj,
         'colors': colors,
         'brands': brands,
@@ -308,25 +308,25 @@ def search_products(request):
 
 
 def bestseller_products(request):
-    """صفحه محصولات پرفروش‌ترین"""
+    """Best-selling products page"""
     products = Product.objects.filter(sales__gt=0).order_by('-sales')
     
-    # فیلتر بر اساس دسته‌بندی
+    # Filter by category
     category_slug = request.GET.get('category')
     if category_slug:
         products = products.filter(category__slug=category_slug)
     
-    # فیلتر بر اساس برند
+    # Filter by brand
     brand_slug = request.GET.get('brand')
     if brand_slug:
         products = products.filter(brand__slug=brand_slug)
     
-    # فیلتر بر اساس رنگ
+    # Filter by color
     color_id = request.GET.get('color')
     if color_id:
         products = products.filter(colors__id=color_id)
     
-    # فیلتر بر اساس قیمت
+    # Filter by price
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
     if min_price:
@@ -340,12 +340,12 @@ def bestseller_products(request):
         except ValueError:
             pass
     
-    # فیلتر فقط کالاهای موجود
+    # Filter only available products
     only_available = request.GET.get('only_available')
     if only_available == 'true':
         products = products.filter(stock__gt=0)
     
-    # جستجو
+    # Search
     search_query = request.GET.get('search')
     if search_query:
         products = products.filter(
@@ -354,18 +354,18 @@ def bestseller_products(request):
             Q(english_title__icontains=search_query)
         )
     
-    # محاسبه محدوده قیمت برای فیلتر
+    # Calculate price range for filter
     price_range = products.aggregate(
         min_price=Min('price'),
         max_price=Max('price')
     )
     
-    # صفحه‌بندی
-    paginator = Paginator(products, 12)  # 12 محصول در هر صفحه
+    # Pagination
+    paginator = Paginator(products, 12)  # 12 products per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    # دریافت دسته‌بندی‌های مناسب برای فیلتر (نه برای منوی اصلی)
+    # Get categories suitable for filter (not for main menu)
     selected_category_obj = None
     if category_slug:
         try:
@@ -378,14 +378,14 @@ def bestseller_products(request):
     colors = Color.objects.distinct()
     brands = Brand.objects.filter(is_active=True).order_by('order', 'name')
     
-    # بررسی favorite برای کاربران لاگین شده
+    # Check favorites for logged-in users
     user_favorites = set()
     if request.user.is_authenticated:
         user_favorites = set(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
     
     context = {
         'products': page_obj,
-        'filter_categories': filter_categories,  # فقط برای فیلتر سمت راست
+        'filter_categories': filter_categories,  # Only for right sidebar filter
         'selected_category_obj': selected_category_obj,
         'colors': colors,
         'brands': brands,
@@ -394,7 +394,7 @@ def bestseller_products(request):
         'selected_color': color_id,
         'search_query': search_query,
         'price_range': price_range,
-        'sort_by': 'sales',  # مرتب‌سازی بر اساس فروش
+        'sort_by': 'sales',  # Sort by sales
         'user_favorites': user_favorites,
         'only_available': only_available == 'true',
         'page_title': 'پرفروش‌ترین محصولات',

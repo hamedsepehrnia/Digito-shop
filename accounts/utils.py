@@ -9,7 +9,7 @@ from .models import PhoneOTP
 
 
 def send_otp_via_kavenegar(phone, otp):
-    """ارسال OTP از طریق کاوه نگار"""
+    """Send OTP via Kavenegar SMS service"""
     try:
         api_key = settings.KAVENEGAR_API_KEY
         sender = settings.KAVENEGAR_SENDER
@@ -42,18 +42,18 @@ def send_otp_via_kavenegar(phone, otp):
 
 
 def check_otp_rate_limit(phone):
-    """بررسی محدودیت تعداد درخواست OTP"""
+    """Check OTP request rate limit"""
     now = timezone.now()
     one_hour_ago = now - timedelta(hours=1)
     one_day_ago = now - timedelta(days=1)
     
-    # تعداد درخواست‌های یک ساعت گذشته
+    # Number of requests in the last hour
     requests_last_hour = PhoneOTP.objects.filter(
         phone_number=phone,
         created_at__gte=one_hour_ago
     ).count()
     
-    # تعداد درخواست‌های یک روز گذشته
+    # Number of requests in the last day
     requests_last_day = PhoneOTP.objects.filter(
         phone_number=phone,
         created_at__gte=one_day_ago

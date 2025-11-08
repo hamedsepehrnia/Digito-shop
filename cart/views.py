@@ -10,20 +10,20 @@ from products.models import Product, Color
 
 
 def get_session_cart(request):
-    """دریافت سبد خرید از session"""
+    """Get cart from session"""
     if 'cart' not in request.session:
         request.session['cart'] = {}
     return request.session['cart']
 
 
 def get_cart_total_from_session(request):
-    """محاسبه تعداد کل آیتم‌های سبد خرید از session"""
+    """Calculate total cart items count from session"""
     cart = get_session_cart(request)
     return sum(item.get('quantity', 0) for item in cart.values())
 
 
 def sync_session_cart_to_user_cart(request):
-    """همگام‌سازی سبد خرید session با سبد خرید کاربر بعد از لاگین"""
+    """Sync session cart with user cart after login"""
     if not request.user.is_authenticated:
         return
     
@@ -59,12 +59,12 @@ def sync_session_cart_to_user_cart(request):
         except (Product.DoesNotExist, Color.DoesNotExist):
             continue
     
-    # پاک کردن session cart بعد از همگام‌سازی
+    # Clear session cart after sync
     request.session['cart'] = {}
 
 
 def cart(request):
-    """نمایش سبد خرید - برای کاربران لاگین شده و غیرلاگین"""
+    """Display cart - for logged-in and guest users"""
     if request.user.is_authenticated:
         cart_obj, created = Cart.objects.get_or_create(user=request.user)
         cart_items = cart_obj.items.all()
@@ -77,7 +77,7 @@ def cart(request):
             'is_authenticated': True,
         })
     else:
-        # نمایش سبد خرید از session
+        # Display cart from session
         session_cart = get_session_cart(request)
         cart_items = []
         total_price = 0
@@ -120,14 +120,14 @@ def add_to_cart(request):
     try:
         product = Product.objects.get(id=product_id)
         
-        # بررسی موجودی
+        # Check stock
         if product.stock < quantity:
             return JsonResponse({
                 'success': False,
                 'error': 'موجودی کافی نیست'
             }, status=400)
 
-        # اگر کاربر لاگین شده است
+        # If user is logged in
         if request.user.is_authenticated:
             cart_obj, created = Cart.objects.get_or_create(user=request.user)
             
@@ -135,7 +135,7 @@ def add_to_cart(request):
             if color_id:
                 color = Color.objects.get(id=color_id)
 
-            # افزودن یا به‌روزرسانی آیتم
+            # Add or update item
             cart_item, created = CartItem.objects.get_or_create(
                 cart=cart_obj,
                 product=product,
@@ -151,19 +151,19 @@ def add_to_cart(request):
 
             cart_total = cart_obj.get_total_items()
         else:
-            # استفاده از session برای کاربران غیرلاگین
+            # Use session for guest users
             session_cart = get_session_cart(request)
             
-            # ایجاد کلید منحصر به فرد برای آیتم
+            # Create unique key for item
             item_key = f"{product_id}_{color_id or 'none'}"
             
             if item_key in session_cart:
-                # به‌روزرسانی تعداد
+                # Update quantity
                 session_cart[item_key]['quantity'] += quantity
                 if session_cart[item_key]['quantity'] > product.stock:
                     session_cart[item_key]['quantity'] = product.stock
             else:
-                # افزودن آیتم جدید
+                # Add new item
                 session_cart[item_key] = {
                     'product_id': product_id,
                     'color_id': color_id,
@@ -276,7 +276,7 @@ def clear_cart(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def update_session_cart_item(request, item_key):
-    """به‌روزرسانی تعداد آیتم در session cart"""
+    """Update item quantity in session cart"""
     quantity = int(request.POST.get('quantity', 1))
     
     session_cart = get_session_cart(request)
@@ -309,7 +309,7 @@ def update_session_cart_item(request, item_key):
         session_cart[item_key]['quantity'] = quantity
         request.session.modified = True
         
-        # محاسبه قیمت کل
+        # Calculate total price
         total_price = 0
         for item_data in session_cart.values():
             try:
@@ -319,7 +319,7 @@ def update_session_cart_item(request, item_key):
             except Product.DoesNotExist:
                 continue
         
-        # محاسبه قیمت این آیتم
+        # Calculate item price
         item_total = product.price * quantity
         
         return JsonResponse({
@@ -339,7 +339,7 @@ def update_session_cart_item(request, item_key):
 @require_http_methods(["POST"])
 @csrf_exempt
 def remove_session_cart_item(request, item_key):
-    """حذف آیتم از session cart"""
+    """Remove item from session cart"""
     session_cart = get_session_cart(request)
     
     if item_key not in session_cart:
@@ -351,7 +351,7 @@ def remove_session_cart_item(request, item_key):
     del session_cart[item_key]
     request.session.modified = True
     
-    # محاسبه قیمت کل
+    # Calculate total price
     total_price = 0
     for item_data in session_cart.values():
         try:

@@ -6,7 +6,7 @@ from .models import Product, ProductSpecification, ProductImage, Category, Color
 
 
 class CategoryAdmin(DraggableMPTTAdmin):
-    """مدیریت دسته‌بندی‌ها با قابلیت drag & drop"""
+    """Category management with drag & drop capability"""
     list_display = ['tree_actions', 'indented_title', 'get_image_preview', 'slug']
     list_display_links = ['indented_title']
     search_fields = ['name', 'slug']
@@ -83,7 +83,7 @@ class ProductImageInline(admin.TabularInline):
     readonly_fields = ['get_image_preview']
     verbose_name = "تصویر محصول"
     verbose_name_plural = "تصاویر محصولات"
-    classes = ['collapse']  # برای نمایش بهتر
+    classes = ['collapse']  # For better display
     
     def get_image_preview(self, obj):
         if obj and obj.image:
@@ -98,7 +98,7 @@ class ProductSpecificationInline(admin.TabularInline):
     fields = ['key', 'value']
 
 
-# Admin classes برای مدل‌های پنهان (فقط در حالت پیشرفته نمایش داده می‌شوند)
+# Admin classes for hidden models (only displayed in advanced mode)
 class ProductImageAdmin(admin.ModelAdmin):
     list_display = ['product', 'get_image_preview', 'alt', 'id']
     list_filter = ['product__category']

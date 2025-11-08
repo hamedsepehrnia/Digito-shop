@@ -3,7 +3,7 @@ from .models import ContactMessage
 
 
 class ContactMessageForm(forms.ModelForm):
-    """فرم تماس با ما"""
+    """Contact us form"""
     class Meta:
         model = ContactMessage
         fields = ['name', 'phone', 'message']

@@ -17,7 +17,7 @@ class OrderItemInline(admin.TabularInline):
     get_total_price.short_description = 'جمع'
 
 
-# Admin class برای مدل پنهان OrderItem (فقط در حالت پیشرفته نمایش داده می‌شود)
+# Admin class for hidden model OrderItem (only displayed in advanced mode)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ['order', 'product', 'color', 'quantity', 'price', 'get_total_price', 'jalali_created']
     list_filter = ['order__status', 'created_at']
@@ -95,15 +95,15 @@ class OrderAdmin(admin.ModelAdmin):
     jalali_updated.short_description = 'آخرین بروزرسانی'
     
     def get_full_address(self, obj):
-        """نمایش کامل آدرس با تمام جزئیات"""
+        """Display full address with all details"""
         if obj.address:
             address_text = obj.address.get_full_address()
-            # تبدیل خطوط جدید به <br> برای نمایش در HTML
+            # Convert newlines to <br> for HTML display
             address_html = address_text.replace('\n', '<br>')
             return format_html(address_html)
         return "آدرسی ثبت نشده است"
     get_full_address.short_description = 'جزئیات آدرس'
 
 
-# OrderItem از منوی ادمین پنهان شده است
-# برای مشاهده آیتم‌های سفارش، از طریق Order می‌توانید به آنها دسترسی داشته باشید
+# OrderItem is hidden from admin menu
+# To view order items, access them through Order

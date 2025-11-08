@@ -15,7 +15,7 @@ from accounts.models import Address
 
 @login_required
 def checkout(request):
-    """صفحه تسویه حساب"""
+    """Checkout page"""
     cart = Cart.objects.filter(user=request.user).first()
     
     if not cart or cart.items.count() == 0:
@@ -24,7 +24,7 @@ def checkout(request):
     
     addresses = Address.objects.filter(user=request.user)
     
-    # محاسبه هزینه ارسال (مثال: 50000 تومان)
+    # Calculate shipping cost (example: 50000 Rials)
     shipping_cost = 50000
     
     context = {
@@ -42,7 +42,7 @@ def checkout(request):
 @login_required
 @require_http_methods(["POST"])
 def create_order(request):
-    """ایجاد سفارش از سبد خرید"""
+    """Create order from cart"""
     try:
         cart = Cart.objects.get(user=request.user)
         
@@ -64,17 +64,17 @@ def create_order(request):
             messages.error(request, 'آدرس یافت نشد')
             return redirect('checkout')
         
-        # بررسی موجودی محصولات
+        # Check product stock
         for item in cart.items.all():
             if item.product.stock < item.quantity:
                 messages.error(request, f'موجودی محصول {item.product.title} کافی نیست')
                 return redirect('cart')
         
-        # محاسبه هزینه ارسال بر اساس نوع ارسال
+        # Calculate shipping cost based on shipping type
         shipping_type = request.POST.get('send', '4')
         shipping_cost = 19000 if shipping_type == '4' else 32000
         
-        # ایجاد سفارش
+        # Create order
         order = Order.objects.create(
             user=request.user,
             address=address,
@@ -85,7 +85,7 @@ def create_order(request):
             status='pending'
         )
         
-        # ایجاد آیتم‌های سفارش و کاهش موجودی
+        # Create order items and reduce stock
         for cart_item in cart.items.all():
             OrderItem.objects.create(
                 order=order,
@@ -95,19 +95,19 @@ def create_order(request):
                 price=cart_item.product.price
             )
             
-            # کاهش موجودی
+            # Reduce stock
             cart_item.product.stock -= cart_item.quantity
             cart_item.product.sales += cart_item.quantity
             cart_item.product.save()
         
-        # خالی کردن سبد خرید
+        # Clear cart
         cart.items.all().delete()
         
-        # پرداخت
+        # Process payment
         if payment_method == 'online':
-            # بررسی فعال بودن زرین‌پال
+            # Check if Zarinpal is active
             if settings.ZARINPAL_ACTIVE:
-                # استفاده از زرین‌پال
+                # Use Zarinpal payment gateway
                 final_price = order.get_final_price()
                 description = f"پرداخت سفارش {order.order_number}"
                 callback_url = request.build_absolute_uri(reverse('zarinpal_callback'))
@@ -120,7 +120,7 @@ def create_order(request):
                 )
                 
                 if payment_url:
-                    # ذخیره authority در session برای استفاده در callback
+                    # Store authority in session for use in callback
                     request.session['zarinpal_authority'] = authority
                     request.session['zarinpal_order_id'] = order.id
                     return redirect(payment_url)
@@ -128,14 +128,14 @@ def create_order(request):
                     messages.error(request, f'خطا در اتصال به درگاه پرداخت: {authority}')
                     return redirect('checkout')
             else:
-                # پرداخت خودکار (برای تست)
+                # Auto payment (for testing)
                 order.payment_status = True
                 order.status = 'paid'
                 order.save()
                 messages.success(request, 'سفارش شما با موفقیت ثبت و پرداخت شد')
                 return redirect('checkout_complete', order_id=order.id)
         else:
-            # پرداخت در محل
+            # Cash on delivery payment
             messages.success(request, 'سفارش شما با موفقیت ثبت شد')
             return redirect('checkout_complete', order_id=order.id)
         
@@ -149,7 +149,7 @@ def create_order(request):
 
 @login_required
 def checkout_complete(request, order_id):
-    """صفحه تکمیل سفارش"""
+    """Order completion page"""
     order = get_object_or_404(Order, id=order_id, user=request.user)
     
     return render(request, 'orders/checkoutComplete.html', {
@@ -160,7 +160,7 @@ def checkout_complete(request, order_id):
 
 @login_required
 def order_list(request):
-    """لیست سفارش‌های کاربر"""
+    """User orders list"""
     orders = Order.objects.filter(user=request.user)
     return render(request, 'orders/order_list.html', {
         'orders': orders
@@ -169,7 +169,7 @@ def order_list(request):
 
 @login_required
 def order_detail(request, order_id):
-    """جزئیات یک سفارش"""
+    """Order details"""
     order = get_object_or_404(Order, id=order_id, user=request.user)
     return render(request, 'orders/order_detail.html', {
         'order': order,
@@ -179,11 +179,11 @@ def order_detail(request, order_id):
 
 @login_required
 def zarinpal_callback(request):
-    """Callback زرین‌پال بعد از پرداخت"""
+    """Zarinpal payment callback after payment"""
     authority = request.GET.get('Authority')
     status = request.GET.get('Status')
     
-    # دریافت اطلاعات از session
+    # Get data from session
     session_authority = request.session.get('zarinpal_authority')
     order_id = request.session.get('zarinpal_order_id')
     
@@ -193,21 +193,21 @@ def zarinpal_callback(request):
     
     order = get_object_or_404(Order, id=order_id, user=request.user)
     
-    # پاک کردن session
+    # Clear session
     if 'zarinpal_authority' in request.session:
         del request.session['zarinpal_authority']
     if 'zarinpal_order_id' in request.session:
         del request.session['zarinpal_order_id']
     
     if status == 'OK' and authority == session_authority:
-        # تایید پرداخت
+        # Verify payment
         final_price = order.get_final_price()
         success, ref_id, message = verify_zarinpal_payment(authority, final_price)
         
         if success:
             order.payment_status = True
             order.status = 'paid'
-            # می‌توانید ref_id را در یک فیلد ذخیره کنید
+            # You can store ref_id in a field if needed
             order.save()
             messages.success(request, f'پرداخت با موفقیت انجام شد. کد پیگیری: {ref_id}')
             return redirect('checkout_complete', order_id=order.id)

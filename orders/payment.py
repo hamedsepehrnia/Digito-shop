@@ -7,14 +7,14 @@ from django.urls import reverse
 
 
 def get_zarinpal_payment_url(amount, description, callback_url, order_id=None):
-    """دریافت لینک پرداخت از زرین‌پال"""
+    """Get payment URL from Zarinpal gateway"""
     merchant_id = settings.ZARINPAL_MERCHANT_ID
     sandbox = settings.ZARINPAL_SANDBOX
     
     if not merchant_id:
-        return None, "Merchant ID تنظیم نشده است"
+        return None, "Merchant ID is not configured"
     
-    # URL بر اساس sandbox یا production
+    # URL based on sandbox or production
     if sandbox:
         url = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
     else:
@@ -22,7 +22,7 @@ def get_zarinpal_payment_url(amount, description, callback_url, order_id=None):
     
     payload = {
         'merchant_id': merchant_id,
-        'amount': amount,  # به ریال
+        'amount': amount,  # Amount in Rials
         'description': description,
         'callback_url': callback_url,
         'metadata': {
@@ -43,25 +43,25 @@ def get_zarinpal_payment_url(amount, description, callback_url, order_id=None):
                     payment_url = f"https://www.zarinpal.com/pg/StartPay/{authority}"
                 return payment_url, authority
             else:
-                return None, result.get('errors', {}).get('message', 'خطا در ایجاد درخواست پرداخت')
+                return None, result.get('errors', {}).get('message', 'Error creating payment request')
         else:
-            return None, f"خطا در ارتباط با زرین‌پال: {response.status_code}"
+            return None, f"Error connecting to Zarinpal: {response.status_code}"
             
     except requests.exceptions.RequestException as e:
-        return None, f"خطا در ارتباط با زرین‌پال: {str(e)}"
+        return None, f"Error connecting to Zarinpal: {str(e)}"
     except Exception as e:
-        return None, f"خطای غیرمنتظره: {str(e)}"
+        return None, f"Unexpected error: {str(e)}"
 
 
 def verify_zarinpal_payment(authority, amount):
-    """تایید پرداخت زرین‌پال"""
+    """Verify Zarinpal payment"""
     merchant_id = settings.ZARINPAL_MERCHANT_ID
     sandbox = settings.ZARINPAL_SANDBOX
     
     if not merchant_id:
-        return False, None, "Merchant ID تنظیم نشده است"
+        return False, None, "Merchant ID is not configured"
     
-    # URL بر اساس sandbox یا production
+    # URL based on sandbox or production
     if sandbox:
         url = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
     else:
@@ -69,7 +69,7 @@ def verify_zarinpal_payment(authority, amount):
     
     payload = {
         'merchant_id': merchant_id,
-        'amount': amount,  # به ریال
+        'amount': amount,  # Amount in Rials
         'authority': authority
     }
     
@@ -81,20 +81,20 @@ def verify_zarinpal_payment(authority, amount):
             data = result.get('data', {})
             
             if data.get('code') == 100:
-                # پرداخت موفق
+                # Payment successful
                 ref_id = data.get('ref_id')
-                return True, ref_id, "پرداخت با موفقیت انجام شد"
+                return True, ref_id, "Payment completed successfully"
             elif data.get('code') == 101:
-                # پرداخت قبلا تایید شده
+                # Payment already verified
                 ref_id = data.get('ref_id')
-                return True, ref_id, "پرداخت قبلا تایید شده است"
+                return True, ref_id, "Payment already verified"
             else:
-                return False, None, data.get('message', 'پرداخت ناموفق بود')
+                return False, None, data.get('message', 'Payment failed')
         else:
-            return False, None, f"خطا در ارتباط با زرین‌پال: {response.status_code}"
+            return False, None, f"Error connecting to Zarinpal: {response.status_code}"
             
     except requests.exceptions.RequestException as e:
-        return False, None, f"خطا در ارتباط با زرین‌پال: {str(e)}"
+        return False, None, f"Error connecting to Zarinpal: {str(e)}"
     except Exception as e:
-        return False, None, f"خطای غیرمنتظره: {str(e)}"
+        return False, None, f"Unexpected error: {str(e)}"
 

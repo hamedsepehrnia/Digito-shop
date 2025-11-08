@@ -41,14 +41,14 @@ class PostAdmin(admin.ModelAdmin):
     jalali_created.short_description = 'تاریخ ایجاد'
     
     def publish_posts(self, request, queryset):
-        """انتشار پست‌های انتخاب شده"""
+        """Publish selected posts"""
         from django.utils import timezone
         updated = queryset.update(status='published', published_at=timezone.now())
         self.message_user(request, f'{updated} پست با موفقیت منتشر شد.')
     publish_posts.short_description = 'انتشار پست‌های انتخاب شده'
     
     def draft_posts(self, request, queryset):
-        """برگرداندن پست‌های انتخاب شده به پیش‌نویس"""
+        """Return selected posts to draft"""
         updated = queryset.update(status='draft')
         self.message_user(request, f'{updated} پست به پیش‌نویس برگردانده شد.')
     draft_posts.short_description = 'برگرداندن به پیش‌نویس'
@@ -66,13 +66,13 @@ class CommentAdmin(admin.ModelAdmin):
     jalali_created.short_description = 'تاریخ ثبت'
     
     def approve_comments(self, request, queryset):
-        """تایید گروهی کامنت‌های انتخاب شده"""
+        """Approve selected comments"""
         updated = queryset.update(is_approved=True)
         self.message_user(request, f'{updated} دیدگاه با موفقیت تایید شد.')
     approve_comments.short_description = 'تایید دیدگاه‌های انتخاب شده'
     
     def disapprove_comments(self, request, queryset):
-        """رد گروهی کامنت‌های انتخاب شده"""
+        """Disapprove selected comments"""
         updated = queryset.update(is_approved=False)
         self.message_user(request, f'{updated} دیدگاه رد شد.')
     disapprove_comments.short_description = 'رد دیدگاه‌های انتخاب شده'

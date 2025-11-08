@@ -1,5 +1,5 @@
 """
-ابزارهای کمکی برای پنل ادمین
+Admin panel utility functions
 """
 from persiantools.jdatetime import JalaliDateTime
 from .models import AdminSettings
@@ -7,14 +7,14 @@ from .models import AdminSettings
 
 def format_date_for_admin(datetime_obj, include_time=False):
     """
-    تبدیل تاریخ به شمسی یا میلادی بر اساس تنظیمات پنل ادمین
+    Convert date to Jalali or Gregorian based on admin panel settings
     
     Args:
-        datetime_obj: شیء datetime
-        include_time: آیا زمان هم نمایش داده شود
+        datetime_obj: datetime object
+        include_time: whether to include time in display
     
     Returns:
-        رشته تاریخ فرمت شده
+        formatted date string
     """
     if not datetime_obj:
         return "-"
@@ -23,7 +23,7 @@ def format_date_for_admin(datetime_obj, include_time=False):
         settings = AdminSettings.get_settings()
         use_jalali = settings.use_jalali_date
     except:
-        use_jalali = True  # پیش‌فرض شمسی
+        use_jalali = True  # Default to Jalali
     
     if use_jalali:
         if include_time:

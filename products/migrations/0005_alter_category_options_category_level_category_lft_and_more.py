@@ -6,23 +6,23 @@ from django.db import migrations, models
 
 
 def rebuild_mptt_tree(apps, schema_editor):
-    """Rebuild کردن درخت MPTT برای دسته‌بندی‌های موجود بعد از اضافه شدن فیلدهای MPTT"""
+    """Rebuild MPTT tree for existing categories after adding MPTT fields"""
     Category = apps.get_model('products', 'Category')
     
-    # استفاده از mptt.utils.rebuild_tree برای rebuild کردن درخت
+    # Use mptt.utils.rebuild_tree to rebuild the tree
     try:
         from mptt.utils import rebuild_tree
         rebuild_tree(Category, order_insertion_by=['name'])
     except Exception:
-        # اگر rebuild_tree کار نکرد، از روش دستی استفاده می‌کنیم
-        # تمام دسته‌بندی‌ها را به‌روزرسانی می‌کنیم
+        # If rebuild_tree doesn't work, use manual method
+        # Update all categories
         categories = Category.objects.all()
         for category in categories:
             category.save()
 
 
 def reverse_rebuild(apps, schema_editor):
-    """Reverse migration - هیچ کاری انجام نمی‌دهد"""
+    """Reverse migration - does nothing"""
     pass
 
 
@@ -86,6 +86,6 @@ class Migration(migrations.Migration):
             name='slug',
             field=models.SlugField(allow_unicode=True, blank=True, unique=True, verbose_name='اسلاگ'),
         ),
-        # Rebuild کردن درخت MPTT بعد از اضافه شدن فیلدها
+        # Rebuild MPTT tree after adding fields
         migrations.RunPython(rebuild_mptt_tree, reverse_rebuild),
     ]

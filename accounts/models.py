@@ -12,7 +12,7 @@ from django.db import models
 class MyUserManager(BaseUserManager):
     def create_user(self, phone=None, password=None, fullname="", age=None, province="", city="", date_of_birth=None, gender=""):
         if not phone:
-            phone = "unknown" + str(random.randint(100000, 999999))  # مقدار جایگزین موقت
+            phone = "unknown" + str(random.randint(100000, 999999))  # Temporary replacement value
         user = self.model(
             phone=phone,
             fullname=fullname,
@@ -72,11 +72,11 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
         return self.phone
     
     def get_full_name(self):
-        """برگرداندن نام کامل کاربر"""
+        """Return user's full name"""
         return self.fullname if self.fullname else self.phone
     
     def get_short_name(self):
-        """برگرداندن نام کوتاه کاربر"""
+        """Return user's short name"""
         return self.fullname if self.fullname else self.phone
 
     def has_perm(self, perm, obj=None):
@@ -131,7 +131,7 @@ class Address(models.Model):
         return " | ".join(address_parts)
     
     def get_full_address(self):
-        """نمایش کامل آدرس با تمام جزئیات"""
+        """Display full address with all details"""
         parts = []
         if self.subject:
             parts.append(f"عنوان: {self.subject}")
@@ -145,7 +145,7 @@ class Address(models.Model):
 
 
 class Favorite(models.Model):
-    """علاقه‌مندی‌های کاربر"""
+    """User favorites"""
     user = models.ForeignKey(MyUser, on_delete=models.CASCADE, related_name='favorites')
     product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='favorited_by')
     created_at = models.DateTimeField(auto_now_add=True)

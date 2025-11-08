@@ -3,7 +3,7 @@ from persiantools.jdatetime import JalaliDateTime
 
 
 class About(models.Model):
-    """مدل برای صفحه درباره ما"""
+    """Model for about us page"""
     title = models.CharField(max_length=255, verbose_name="عنوان")
     content = models.TextField(verbose_name="محتوا")
     image = models.ImageField(
@@ -30,7 +30,7 @@ class About(models.Model):
 
 
 class AboutSection(models.Model):
-    """بخش‌های مختلف صفحه درباره ما"""
+    """Different sections of about us page"""
     about = models.ForeignKey(About, on_delete=models.CASCADE, related_name='sections', verbose_name="درباره ما")
     title = models.CharField(max_length=255, verbose_name="عنوان بخش")
     content = models.TextField(verbose_name="محتوا")
@@ -46,7 +46,7 @@ class AboutSection(models.Model):
 
 
 class ContactInfo(models.Model):
-    """اطلاعات تماس با ما"""
+    """Contact information"""
     email = models.EmailField(verbose_name="ایمیل")
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="تلفن")
     address = models.TextField(verbose_name="آدرس")
@@ -65,14 +65,14 @@ class ContactInfo(models.Model):
         return f"اطلاعات تماس - {self.email}"
     
     def save(self, *args, **kwargs):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if not self.pk and ContactInfo.objects.exists():
             return
         super().save(*args, **kwargs)
 
 
 class ContactMessage(models.Model):
-    """پیام‌های ارسالی از فرم تماس با ما"""
+    """Messages sent from contact form"""
     name = models.CharField(max_length=255, verbose_name="نام و نام خانوادگی")
     phone = models.CharField(max_length=20, verbose_name="شماره تلفن")
     message = models.TextField(verbose_name="پیام")
@@ -92,7 +92,7 @@ class ContactMessage(models.Model):
 
 
 class FooterLink(models.Model):
-    """لینک‌های فوتر"""
+    """Footer links"""
     title = models.CharField(max_length=255, verbose_name="عنوان")
     url = models.CharField(max_length=500, verbose_name="لینک")
     order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
@@ -109,7 +109,7 @@ class FooterLink(models.Model):
 
 
 class FooterLinkGroup(models.Model):
-    """گروه‌های لینک فوتر"""
+    """Footer link groups"""
     title = models.CharField(max_length=255, verbose_name="عنوان گروه")
     order = models.PositiveIntegerField(default=0, verbose_name="ترتیب نمایش")
     is_active = models.BooleanField(default=True, verbose_name="فعال است")
@@ -126,7 +126,7 @@ class FooterLinkGroup(models.Model):
 
 
 class SocialMedia(models.Model):
-    """شبکه‌های اجتماعی"""
+    """Social media"""
     SOCIAL_CHOICES = [
         ('telegram', 'تلگرام'),
         ('whatsapp', 'واتساپ'),
@@ -153,7 +153,7 @@ class SocialMedia(models.Model):
 
 
 class FooterSettings(models.Model):
-    """تنظیمات فوتر"""
+    """Footer settings"""
     description = models.TextField(verbose_name="توضیحات فوتر", blank=True, null=True)
     copyright_text = models.CharField(max_length=500, default="تمامی حقوق توسط تیم برنامه نویسی امیران محفوظ است.", verbose_name="متن کپی‌رایت")
     is_active = models.BooleanField(default=True, verbose_name="فعال است")
@@ -168,14 +168,14 @@ class FooterSettings(models.Model):
         return "تنظیمات فوتر"
     
     def save(self, *args, **kwargs):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if not self.pk and FooterSettings.objects.exists():
             return
         super().save(*args, **kwargs)
 
 
 class Banner(models.Model):
-    """مدل برای بنرهای سایت"""
+    """Model for site banners"""
     BANNER_TYPE_CHOICES = [
         ('hero', 'بنر اصلی (Hero Slider)'),
         ('sidebar', 'بنر کناری'),
@@ -205,7 +205,7 @@ class Banner(models.Model):
 
 
 class AdminSettings(models.Model):
-    """تنظیمات پنل ادمین"""
+    """Admin panel settings"""
     use_jalali_date = models.BooleanField(default=True, verbose_name="استفاده از تاریخ شمسی")
     site_title = models.CharField(max_length=100, default="پنل مدیریت دیجیتو", verbose_name="عنوان سایت")
     site_header = models.CharField(max_length=100, default="مدیریت دیجیتو", verbose_name="هدر سایت")
@@ -220,14 +220,14 @@ class AdminSettings(models.Model):
         return "تنظیمات پنل ادمین"
     
     def save(self, *args, **kwargs):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if not self.pk and AdminSettings.objects.exists():
             return
         super().save(*args, **kwargs)
     
     @classmethod
     def get_settings(cls):
-        """دریافت تنظیمات یا ایجاد تنظیمات پیش‌فرض"""
+        """Get settings or create default settings"""
         settings, created = cls.objects.get_or_create(
             pk=1,
             defaults={

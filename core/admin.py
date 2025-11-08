@@ -5,13 +5,13 @@ from .models import About, AboutSection, ContactInfo, ContactMessage, FooterLink
 
 
 class AboutSectionInline(admin.TabularInline):
-    """Inline برای بخش‌های درباره ما"""
+    """Inline for about us sections"""
     model = AboutSection
     extra = 1
     fields = ['title', 'content', 'order']
 
 
-# Admin class برای مدل پنهان AboutSection (فقط در حالت پیشرفته نمایش داده می‌شود)
+# Admin class for hidden model AboutSection (only displayed in advanced mode)
 class AboutSectionAdmin(admin.ModelAdmin):
     list_display = ['about', 'title', 'order']
     list_filter = ['about']
@@ -21,7 +21,7 @@ class AboutSectionAdmin(admin.ModelAdmin):
 
 
 class AboutAdmin(admin.ModelAdmin):
-    """مدیریت صفحه درباره ما"""
+    """About us page management"""
     list_display = ['title', 'is_active', 'jalali_created']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'content']
@@ -43,7 +43,7 @@ class AboutAdmin(admin.ModelAdmin):
 
 
 class ContactInfoAdmin(admin.ModelAdmin):
-    """مدیریت اطلاعات تماس"""
+    """Contact information management"""
     list_display = ['email', 'phone', 'is_active', 'created_at']
     list_filter = ['is_active', 'created_at']
     search_fields = ['email', 'phone', 'address']
@@ -58,7 +58,7 @@ class ContactInfoAdmin(admin.ModelAdmin):
     )
     
     def has_add_permission(self, request):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if ContactInfo.objects.exists():
             return False
         return super().has_add_permission(request)
@@ -68,7 +68,7 @@ class ContactInfoAdmin(admin.ModelAdmin):
 
 
 class ContactMessageAdmin(admin.ModelAdmin):
-    """مدیریت پیام‌های تماس"""
+    """Contact messages management"""
     list_display = ['name', 'phone', 'is_read', 'jalali_created']
     list_filter = ['is_read', 'created_at']
     search_fields = ['name', 'phone', 'message']
@@ -89,20 +89,20 @@ class ContactMessageAdmin(admin.ModelAdmin):
     actions = ['mark_as_read', 'mark_as_unread']
     
     def mark_as_read(self, request, queryset):
-        """علامت‌گذاری پیام‌ها به عنوان خوانده شده"""
+        """Mark messages as read"""
         updated = queryset.update(is_read=True)
         self.message_user(request, f'{updated} پیام به عنوان خوانده شده علامت‌گذاری شد.')
     mark_as_read.short_description = 'علامت‌گذاری به عنوان خوانده شده'
     
     def mark_as_unread(self, request, queryset):
-        """علامت‌گذاری پیام‌ها به عنوان خوانده نشده"""
+        """Mark messages as unread"""
         updated = queryset.update(is_read=False)
         self.message_user(request, f'{updated} پیام به عنوان خوانده نشده علامت‌گذاری شد.')
     mark_as_unread.short_description = 'علامت‌گذاری به عنوان خوانده نشده'
 
 
 class FooterLinkAdmin(admin.ModelAdmin):
-    """مدیریت لینک‌های فوتر"""
+    """Footer links management"""
     list_display = ['title', 'url', 'order', 'is_active', 'created_at']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title', 'url']
@@ -111,7 +111,7 @@ class FooterLinkAdmin(admin.ModelAdmin):
 
 
 class FooterLinkInline(admin.TabularInline):
-    """Inline برای لینک‌های گروه فوتر"""
+    """Inline for footer link group links"""
     model = FooterLinkGroup.links.through
     extra = 1
     verbose_name = "لینک"
@@ -119,7 +119,7 @@ class FooterLinkInline(admin.TabularInline):
 
 
 class FooterLinkGroupAdmin(admin.ModelAdmin):
-    """مدیریت گروه‌های لینک فوتر"""
+    """Footer link groups management"""
     list_display = ['title', 'order', 'is_active', 'get_links_count', 'created_at']
     list_filter = ['is_active', 'created_at']
     search_fields = ['title']
@@ -133,7 +133,7 @@ class FooterLinkGroupAdmin(admin.ModelAdmin):
 
 
 class SocialMediaAdmin(admin.ModelAdmin):
-    """مدیریت شبکه‌های اجتماعی"""
+    """Social media management"""
     list_display = ['platform', 'url', 'order', 'is_active', 'created_at']
     list_filter = ['platform', 'is_active', 'created_at']
     search_fields = ['url']
@@ -142,7 +142,7 @@ class SocialMediaAdmin(admin.ModelAdmin):
 
 
 class FooterSettingsAdmin(admin.ModelAdmin):
-    """مدیریت تنظیمات فوتر"""
+    """Footer settings management"""
     list_display = ['is_active', 'created_at', 'updated_at']
     list_filter = ['is_active', 'created_at']
     readonly_fields = ['created_at', 'updated_at']
@@ -156,7 +156,7 @@ class FooterSettingsAdmin(admin.ModelAdmin):
     )
     
     def has_add_permission(self, request):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if FooterSettings.objects.exists():
             return False
         return super().has_add_permission(request)
@@ -166,7 +166,7 @@ class FooterSettingsAdmin(admin.ModelAdmin):
 
 
 class BannerAdmin(admin.ModelAdmin):
-    """مدیریت بنرهای سایت"""
+    """Site banners management"""
     list_display = ['get_image_preview', 'title', 'banner_type', 'order', 'is_active', 'jalali_created']
     list_filter = ['banner_type', 'is_active', 'created_at']
     search_fields = ['title']
@@ -201,7 +201,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 
 class AdminSettingsAdmin(admin.ModelAdmin):
-    """مدیریت تنظیمات پنل ادمین"""
+    """Admin panel settings management"""
     list_display = ['use_jalali_date', 'show_hidden_models', 'site_title', 'site_header', 'site_index_title']
     list_filter = ['use_jalali_date', 'show_hidden_models']
     readonly_fields = []
@@ -216,7 +216,7 @@ class AdminSettingsAdmin(admin.ModelAdmin):
     )
     
     def has_add_permission(self, request):
-        # فقط یک رکورد می‌تواند وجود داشته باشد
+        # Only one record can exist
         if AdminSettings.objects.exists():
             return False
         return super().has_add_permission(request)

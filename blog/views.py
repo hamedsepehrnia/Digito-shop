@@ -9,15 +9,15 @@ from .forms import CommentForm
 
 
 def blog(request):
-    """لیست پست‌های بلاگ"""
+    """Blog posts list"""
     posts = Post.objects.filter(status='published')
     
-    # فیلتر بر اساس دسته‌بندی
+    # Filter by category
     category_slug = request.GET.get('category')
     if category_slug:
         posts = posts.filter(category__slug=category_slug)
     
-    # جستجو
+    # Search
     search_query = request.GET.get('search')
     if search_query:
         posts = posts.filter(
@@ -26,8 +26,8 @@ def blog(request):
             Q(excerpt__icontains=search_query)
         )
     
-    # صفحه‌بندی
-    paginator = Paginator(posts, 9)  # 9 پست در هر صفحه
+    # Pagination
+    paginator = Paginator(posts, 9)  # 9 posts per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
@@ -44,22 +44,22 @@ def blog(request):
 
 
 def blog_detail(request, pk):
-    """جزئیات یک پست بلاگ"""
+    """Blog post details"""
     post = get_object_or_404(Post, pk=pk, status='published')
     
-    # پست‌های مرتبط (از همان دسته‌بندی)
+    # Related posts (from same category)
     related_posts = Post.objects.filter(
         category=post.category,
         status='published'
     ).exclude(pk=post.pk)[:3]
     
-    # نظرات تایید شده
+    # Approved comments
     comments = post.comments.filter(is_approved=True)
     
-    # فرم نظر
+    # Comment form
     comment_form = CommentForm()
     
-    # ثبت نظر جدید
+    # Add new comment
     if request.method == 'POST':
         if not request.user.is_authenticated:
             messages.error(request, 'برای ثبت دیدگاه باید وارد شوید.')
@@ -71,21 +71,21 @@ def blog_detail(request, pk):
                 comment = comment_form.save(commit=False)
                 comment.post = post
                 comment.author = request.user
-                comment.is_approved = False  # نیاز به تایید ادمین
+                comment.is_approved = False  # Requires admin approval
                 comment.save()
                 messages.success(request, 'دیدگاه شما با موفقیت ثبت شد و پس از تایید نمایش داده خواهد شد.')
                 return redirect('blog_detail', pk=post.pk)
             except Exception as e:
                 messages.error(request, f'خطا در ثبت دیدگاه: {str(e)}')
         else:
-            # نمایش خطاهای فرم
+            # Display form errors
             error_messages = []
             for field, errors in comment_form.errors.items():
                 for error in errors:
                     error_messages.append(f'{field}: {error}')
             messages.error(request, f'خطا در ثبت دیدگاه: {" ".join(error_messages)}')
     
-    # افزایش تعداد بازدید (فقط برای GET request)
+    # Increment view count (only for GET request)
     if request.method == 'GET':
         post.views += 1
         post.save(update_fields=['views'])
