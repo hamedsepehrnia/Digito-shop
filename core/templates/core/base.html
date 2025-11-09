@@ -1,7 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 
-<html class="scroll-smooth" dir="rtl" lang="fa">
+<html class="scroll-smooth" dir="rtl" lang="fa" id="html-root">
 
 <head>
     <meta charset="utf-8"/>
@@ -10,8 +10,20 @@
     <link href='{% static "./assets/image/fav.png" %}' rel="icon" type="image/x-icon"/>
     <link href='{% static "./assets/css/main.css" %}' rel="stylesheet"/>
     <title>فروشگاه آنلاین دیجیتو</title>
+    <script>
+        // اعمال dark mode قبل از لود کامل صفحه برای جلوگیری از فلاش
+        (function() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.style.backgroundColor = '#111111';
+                document.body.style.backgroundColor = '#111111';
+                document.body.style.color = '#ffffff';
+            }
+        })();
+    </script>
 </head>
-<body class="max-w-[1700px] mx-auto">
+<body class="max-w-[1700px] mx-auto bg-white dark:bg-black transition-colors duration-300">
 <!-- loading -->
 <div class="z-50 fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-bl from-zinc-50 to-zinc-100 transition-opacity duration-700"
      id="loading">
@@ -25,14 +37,14 @@
     </div>
     <div class="flex items-center gap-6 mt-10">
         <img alt="" class="max-w-20 md:max-w-36" src='{% static "./assets/image/logo.png" %}'/>
-        <div class="text-xl md:text-3xl font-yekanBakhExtraBold text-zinc-800">فروشگاه آنلاین دیجیتو</div>
+        <div class="text-xl md:text-3xl font-yekanBakhExtraBold text-zinc-800 dark:text-primary-500">فروشگاه آنلاین دیجیتو</div>
     </div>
 </div>
 <!-- progress bar -->
 <div id="progressBar"></div>
 <header>
     <!-- top header -->
-    <div class="flex justify-between bg-white shadow-lg px-4 md:px-8 lg:px-14 py-5 relative">
+    <div class="flex justify-between bg-white dark:bg-zinc-900 shadow-lg dark:shadow-zinc-800/50 px-4 md:px-8 lg:px-14 py-5 relative transition-colors duration-300">
         <div class="flex justify-between items-center gap-x-5 w-full md:w-auto">
             <!-- btn menu mobile -->
             <svg class="md:hidden menu-mobile" fill="#000000" height="32" viewbox="0 0 256 256" width="32"
@@ -42,7 +54,7 @@
             <!-- bg blur mobile -->
             <div class="fixed z-10 inset-0 bg-black/35 hidden transition-opacity duration-300" id="overlay"></div>
             <!-- Sidebar mobile -->
-            <div class="z-20 fixed top-0 right-0 w-10/12 h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out"
+            <div class="z-20 fixed top-0 right-0 w-10/12 h-full bg-white dark:bg-zinc-900 shadow-lg dark:shadow-zinc-800/50 transform translate-x-full transition-all duration-300 ease-in-out"
                  id="mobile-menu">
                 <div class="p-5 flex flex-col gap-y-3 justify-center items-center">
                     <!-- logo -->
@@ -51,7 +63,7 @@
                     </a>
                     <!-- seacrh -->
                     <form method="get" action="{% url 'search_products' %}" class="relative block">
-                        <input name="q" class="rounded-full text-zinc-600 bg-[#f0f0f0] px-5 py-2.5 w-64 text-sm placeholder:text-zinc-400 placeholder:text-sm focus:outline-0"
+                        <input name="q" class="search-input rounded-full text-zinc-600 dark:text-zinc-100 bg-[#f0f0f0] dark:bg-zinc-800 px-5 py-2.5 w-64 text-sm placeholder:text-zinc-400 dark:placeholder:text-zinc-400 placeholder:text-sm focus:outline-0"
                                placeholder="جستجو..." type="text" required/>
                         <button type="submit" class="absolute left-3 top-3">
                             <img alt="" class="size-4"
@@ -59,7 +71,7 @@
                         </button>
                     </form>
                 </div>
-                <ul class="p-5 space-y-1 text-sm text-zinc-800 h-screen overflow-y-auto pb-48">
+                <ul class="p-5 space-y-1 text-sm text-zinc-800 dark:text-white h-screen overflow-y-auto pb-48">
                     <li>
                         <a class="py-3 px-4 hover:bg-gray-100 rounded-lg flex gap-x-2" href="#">
                             <svg fill="none" height="18" viewbox="0 0 24 24" width="18"
@@ -156,17 +168,17 @@
                         </a>
                     </li>
                 </ul>
-                <div class="bg-zinc-100 w-full h-16 px-2 py-4 flex justify-between items-center fixed bottom-0">
-                    <div class="text-zinc-600 text-xs lg:text-sm">
+                <div class="bg-zinc-100 dark:bg-zinc-800 w-full h-16 px-2 py-4 flex justify-between items-center fixed bottom-0">
+                    <div class="text-zinc-600 dark:text-white text-xs lg:text-sm">
                         همین حالا با پشتیبانی تماس بگیر
                     </div>
                     {% if contact_info and contact_info.phone %}
-                    <a class="text-primary-500 flex text-xs lg:text-base gap-x-1 items-start" href="tel:{{ contact_info.phone }}">
+                    <a class="text-primary-500 dark:text-primary-300 flex text-xs lg:text-base gap-x-1 items-start" href="tel:{{ contact_info.phone }}">
                         {{ contact_info.phone }}
                         <img alt="" class="w-3 lg:w-5" src='{% static "./assets/image/icons/headphones.svg" %}'/>
                     </a>
                     {% else %}
-                    <a class="text-primary-500 flex text-xs lg:text-base gap-x-1 items-start" href="tel:05144556677">
+                    <a class="text-primary-500 dark:text-primary-300 flex text-xs lg:text-base gap-x-1 items-start" href="tel:05144556677">
                         051-44556677
                         <img alt="" class="w-3 lg:w-5" src='{% static "./assets/image/icons/headphones.svg" %}'/>
                     </a>
@@ -182,7 +194,7 @@
             </div>
             <!-- seacrh -->
             <form method="get" action="{% url 'search_products' %}" class="relative hidden md:block">
-                <input name="q" class="rounded-full text-zinc-600 bg-[#f0f0f0] px-5 py-2.5 w-80 placeholder:text-zinc-400 placeholder:text-sm focus:outline-0"
+                <input name="q" class="search-input rounded-full text-zinc-600 dark:text-zinc-100 bg-[#f0f0f0] dark:bg-zinc-800 px-5 py-2.5 w-80 placeholder:text-zinc-400 dark:placeholder:text-zinc-400 placeholder:text-sm focus:outline-0"
                        placeholder="جستجو..." type="text" required/>
                 <button type="submit" class="absolute left-3 top-2.5">
                     <img alt="" class="size-5"
@@ -191,25 +203,25 @@
             </form>
         </div>
         <div class="hidden md:flex items-center gap-x-2 lg:gap-x-3">
-            <div class="text-zinc-600 text-xs lg:text-sm">
+            <div class="text-zinc-600 dark:text-white text-xs lg:text-sm">
                 همین حالا با پشتیبانی تماس بگیر
             </div>
-            <div class="text-zinc-300">
+            <div class="text-zinc-300 dark:text-zinc-600">
                 |
             </div>
             {% if contact_info and contact_info.phone %}
-            <a class="text-primary-500 flex text-xs lg:text-base gap-x-1 items-start" href="tel:{{ contact_info.phone }}">
+            <a class="text-primary-500 dark:text-primary-300 flex text-xs lg:text-base gap-x-1 items-start" href="tel:{{ contact_info.phone }}">
                 {{ contact_info.phone }}
                 <img alt="" class="w-3 lg:w-5" src='{% static "./assets/image/icons/headphones.svg" %}'/>
             </a>
             {% else %}
-            <a class="text-primary-500 flex text-xs lg:text-base gap-x-1 items-start" href="tel:05144556677">
+            <a class="text-primary-500 dark:text-primary-300 flex text-xs lg:text-base gap-x-1 items-start" href="tel:05144556677">
                 051-44556677
                 <img alt="" class="w-3 lg:w-5" src='{% static "./assets/image/icons/headphones.svg" %}'/>
             </a>
             {% endif %}
         </div>
-        <svg class="hidden md:block absolute top-full md:right-4 lg:right-10" fill="white" height="19"
+        <svg class="hidden md:block absolute top-full md:right-4 lg:right-10 header-wave" fill="white" height="19"
              viewbox="0 0 158 19" width="158" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_4623_10410)">
                 <path clip-rule="evenodd"
@@ -224,7 +236,7 @@
         </svg>
     </div>
     <!-- bottom header -->
-    <div class="md:bg-zinc-50 py-6 px-6 lg:px-14 justify-between flex">
+    <div class="md:bg-zinc-50 dark:md:bg-zinc-900 py-6 px-6 lg:px-14 justify-between flex transition-colors duration-300">
         <!-- menu -->
         <ul class="hidden md:flex gap-x-5 xl:gap-x-8">
             <!-- Mega Menu Container -->
@@ -233,7 +245,7 @@
           <div class="relative inline-block group">
             <a href="#" class="pt-1 flex gap-x-2 items-center group relative">
               <img class="mb-2 size-4" src='{% static "./assets/image/icons/category.svg" %}' alt="">
-              <div class="relative text-zinc-600 text-sm group-hover:text-primary-500 transition pb-2
+              <div class="main-menu-link relative text-zinc-600 dark:text-white text-sm group-hover:text-primary-500 dark:group-hover:text-primary-500 transition pb-2
                 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] 
                 after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 
                 group-hover:after:scale-x-100">
@@ -244,11 +256,11 @@
               </svg>
             </a>
           
-            <div id="dropdown-menu" class="absolute z-10 right-0 mt-2 md:w-2xl lg:w-4xl xl:w-7xl h-fit bg-white p-5 shadow-lg rounded-3xl flex opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+            <div id="dropdown-menu" class="absolute z-10 right-0 mt-2 md:w-2xl lg:w-4xl xl:w-7xl h-fit bg-white dark:bg-zinc-900 p-5 shadow-lg dark:shadow-zinc-800/50 rounded-3xl flex opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
               <ul class="w-1/4 rounded-2xl bg-white drop-shadow-custom flex flex-col gap-y-3 p-3">
                 {% for category in categories %}
                 <li class="category-item group/cat" data-category="cat{{ category.id }}">
-                  <a href="{% url 'shop' %}?category={{ category.slug }}" class="flex items-center gap-x-1 text-sm rounded-lg px-4 py-3 {% if forloop.first %}text-gray-600 active-category{% else %}text-gray-700{% endif %} hover:text-primary-500 cursor-pointer hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent hover:transition-all transition-all">
+                  <a href="{% url 'shop' %}?category={{ category.slug }}" class="flex items-center gap-x-1 text-sm rounded-lg px-4 py-3 {% if forloop.first %}text-gray-600 active-category{% else %}text-gray-700{% endif %} dark:text-white hover:text-primary-500 dark:hover:text-primary-400 cursor-pointer hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent hover:transition-all transition-all">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path class="stroke-gray-600 group-hover/cat:stroke-primary-500 transition" d="M15.25 2.75H8.75C7.09315 2.75 5.75 4.09315 5.75 5.75V18.25C5.75 19.9069 7.09315 21.25 8.75 21.25H15.25C16.9069 21.25 18.25 19.9069 18.25 18.25V5.75C18.25 4.09315 16.9069 2.75 15.25 2.75Z" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     <path class="stroke-gray-600 group-hover/cat:stroke-primary-500 transition" d="M11 17.75H13" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -369,28 +381,28 @@
             <li>
             <a class="pt-1 flex gap-x-1 items-center group relative" href="{% url 'bestseller_products' %}">
                 <img alt="" class="mb-2 size-4.5" src='{% static "./assets/image/icons/award.svg" %}'/>
-                    <span class="relative text-zinc-600 text-sm group-hover:text-primary-500 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span class="main-menu-link relative text-zinc-600 dark:text-white text-sm group-hover:text-primary-500 dark:group-hover:text-primary-600 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                     پرفروش ترین‌ها
                     </span>
             </a>
             </li>
             <li>
             <a class="pt-1 flex gap-x-2 items-center group relative" href="{% url 'blog' %}">
-                    <span class="relative text-zinc-600 text-sm group-hover:text-primary-500 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span class="main-menu-link relative text-zinc-600 dark:text-white text-sm group-hover:text-primary-500 dark:group-hover:text-primary-600 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                     وبلاگ
                     </span>
             </a>
             </li>
             <li>
             <a class="pt-1 flex gap-x-2 items-center group relative" href="{% url 'about' %}">
-                    <span class="relative text-zinc-600 text-sm group-hover:text-primary-500 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span class="main-menu-link relative text-zinc-600 dark:text-white text-sm group-hover:text-primary-500 dark:group-hover:text-primary-600 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                     درباره ما
                     </span>
             </a>
             </li>
             <li>
             <a class="pt-1 flex gap-x-2 items-center group relative" href="{% url 'contact' %}">
-                    <span class="relative text-zinc-600 text-sm group-hover:text-primary-500 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                    <span class="main-menu-link relative text-zinc-600 dark:text-white text-sm group-hover:text-primary-500 dark:group-hover:text-primary-600 transition pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-primary-500 after:scale-x-0 after:origin-right after:transition-transform after:duration-300 group-hover:after:scale-x-100">
                     تماس با ما
                     </span>
             </a>
@@ -398,6 +410,15 @@
         </ul>
         <!-- buttons -->
         <div class="flex gap-x-5">
+            <!-- Dark Mode Toggle -->
+            <button id="dark-mode-toggle" class="flex items-center justify-center p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors" title="تغییر تم">
+                <svg id="dark-mode-icon" class="w-5 h-5 fill-zinc-700 dark:fill-primary-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Moon icon (for dark mode) -->
+                    <path id="moon-icon" d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" style="display: none;"/>
+                    <!-- Sun icon (for light mode) -->
+                    <path id="sun-icon" d="M12,2a1,1,0,0,0,1-1V1a1,1,0,0,0-2,0V1A1,1,0,0,0,12,2ZM4.22,5.64a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.42L4.93,3.52a1,1,0,0,0-1.42,1.42ZM2,12a1,1,0,0,0-1,1H1a1,1,0,0,0,0,2H1A1,1,0,0,0,2,12ZM4.22,18.36a1,1,0,0,0,0,1.42,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29L7.05,19.36a1,1,0,0,0-1.42-1.42ZM12,22a1,1,0,0,0-1,1V23a1,1,0,0,0,2,0V23A1,1,0,0,0,12,22ZM18.36,4.22a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L19.36,2.29a1,1,0,0,0-1.42,1.42ZM22,12a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0V11A1,1,0,0,0,22,12ZM18.36,19.78a1,1,0,0,0-.71.29,1,1,0,0,0,0,1.42l.71.71a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42ZM12,6a6,6,0,1,0,6,6A6,6,0,0,0,12,6ZM12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16Z"/>
+                </svg>
+            </button>
             <!-- cart -->
             <div class="absolute top-3 left-16 md:top-0 md:left-0 md:relative group cursor-pointer border-2 border-primary-500 hover:shadow-lg hover:bg-zinc-200 transition rounded-xl p-2.5">
                 <a href="{% url 'cart' %}">
@@ -406,7 +427,7 @@
                 <span class="absolute -right-2 -top-2 flex size-6 drop-shadow-lg items-center justify-center rounded-full bg-white text-sm font-semibold text-primary-500 cart-count" {% if cart_items_count == 0 %}style="display: none;"{% endif %}>
                     {{ cart_items_count }}
           </span>
-                <div class="z-50 hidden group-hover:block absolute -left-16 sm:left-0 top-11 w-96 md:w-[400px] rounded-2xl border border-zinc-300 bg-white shadow-lg">
+                <div class="z-50 hidden group-hover:block absolute -left-16 sm:left-0 top-11 w-96 md:w-[400px] rounded-2xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-lg dark:shadow-zinc-800/50">
                     <!-- Items -->
                     {% if cart and cart.items.count > 0 %}
                     <div class="h-72 md:h-64">
@@ -456,7 +477,7 @@
                                                 <path d="M222,128a6,6,0,0,1-6,6H134v82a6,6,0,0,1-12,0V134H40a6,6,0,0,1,0-12h82V40a6,6,0,0,1,12,0v82h82A6,6,0,0,1,222,128Z"></path>
                                             </svg>
                                         </button>
-                                        <input class="flex h-5 w-full grow select-none items-center justify-center bg-transparent text-center text-sm text-zinc-700 outline-none header-cart-quantity"
+                                        <input class="flex h-5 w-full grow select-none items-center justify-center bg-transparent dark:bg-transparent text-center text-sm text-zinc-700 dark:text-zinc-100 outline-none header-cart-quantity"
                                                data-item-id="{{ item.id }}"
                                                disabled="" type="number" value="{{ item.quantity }}"/>
                                         <button class="cursor-pointer header-update-quantity" data-item-id="{{ item.id }}" data-action="decrement" type="button">
@@ -467,7 +488,7 @@
                                         </button>
                                     </div>
                                     <!-- Price -->
-                                    <div class="text-gray-700 header-cart-item-total" data-item-id="{{ item.id }}">
+                                    <div class="text-gray-700 dark:text-zinc-100 header-cart-item-total" data-item-id="{{ item.id }}">
                                         <span class="text-lg font-bold">{{ item.get_total_price|floatformat:0 }}</span>
                                         <span class="text-sm">تومان</span>
                                     </div>
@@ -478,16 +499,16 @@
                     </div>
                     <div class="p-5 border-t border-zinc-200">
                         <div class="flex justify-between items-center mb-3">
-                            <span class="text-zinc-600">جمع کل:</span>
-                            <span class="text-primary-500 font-bold header-cart-total-price">{{ cart_total_price|floatformat:0 }}</span>
-                            <span class="text-primary-500 font-bold"> تومان</span>
+                            <span class="text-zinc-600 dark:text-zinc-200">جمع کل:</span>
+                            <span class="text-primary-500 dark:text-primary-300 font-bold header-cart-total-price">{{ cart_total_price|floatformat:0 }}</span>
+                            <span class="text-primary-500 dark:text-primary-300 font-bold"> تومان</span>
                             </div>
                         <a href="{% url 'cart' %}" class="block w-full bg-primary-500 hover:bg-primary-400 text-white text-center py-2 rounded-lg transition">
                             مشاهده سبد خرید
                         </a>
                     </div>
                     {% else %}
-                    <div class="text-zinc-600 text-center py-10 font-yekanBakhRegular flex justify-center items-center gap-x-1">
+            <div class="text-zinc-600 dark:text-zinc-300 text-center py-10 font-yekanBakhRegular flex justify-center items-center gap-x-1">
                         <img src='{% static "./assets/image/icons/cancel.svg" %}' alt="">
                         سبد خرید خالی است !
                     </div>
@@ -496,17 +517,17 @@
             </div>
             <!-- login / register -->
             {% if user.is_authenticated %}
-                <a class="open-modal absolute md:static top-3.5 left-3 md:flex bg-gradient-to-bl from-primary-500 to-primary-400 hover:opacity-90 hover:shadow-lg transition rounded-xl p-2.5 items-center gap-x-2 text-sm text-white"
+                <a class="open-modal absolute md:static top-3.5 left-3 md:flex bg-gradient-to-bl from-primary-500 to-primary-400 dark:from-primary-500 dark:to-primary-500 hover:opacity-90 hover:shadow-lg transition rounded-xl p-2.5 items-center gap-x-2 text-sm text-white"
                    href={% url 'dashboard' %}>
-                    <p class="hidden lg:block">
+                    <p class="hidden lg:block text-white dark:text-white">
                         ناحیه کاربری
                     </p>
                     <img alt="" src='{% static "./assets/image/icons/user.svg" %}'/>
                 </a>
             {% else %}
-                <a class="open-modal absolute md:static top-3.5 left-3 md:flex bg-gradient-to-bl from-primary-500 to-primary-400 hover:opacity-90 hover:shadow-lg transition rounded-xl p-2.5 items-center gap-x-2 text-sm text-white"
+                <a class="open-modal absolute md:static top-3.5 left-3 md:flex bg-gradient-to-bl from-primary-500 to-primary-400 dark:from-primary-500 dark:to-primary-500 hover:opacity-90 hover:shadow-lg transition rounded-xl p-2.5 items-center gap-x-2 text-sm text-white"
                    data-modal="modal1" href="#">
-                    <p class="hidden lg:block">
+                    <p class="hidden lg:block text-white dark:text-white">
                         ورود | ثبت نام
                     </p>
                     <img alt="" src='{% static "./assets/image/icons/user.svg" %}'/>
@@ -517,14 +538,14 @@
     <!-- modal login -->
     <div class="modal fixed inset-0 bg-black/20 bg-opacity-50 hidden flex items-center justify-center transition-opacity duration-300 z-50"
          id="modal1">
-        <div class="modal-box bg-white p-6 rounded-3xl shadow-lg w-10/12 md:w-6/12 lg:w-5/12 xl:w-3/12 opacity-0 scale-90 transition-transform duration-300">
+        <div class="modal-box bg-white dark:bg-zinc-900 p-6 rounded-3xl shadow-lg dark:shadow-zinc-800/50 w-10/12 md:w-6/12 lg:w-5/12 xl:w-3/12 opacity-0 scale-90 transition-all duration-300">
             <!-- logo -->
             <img alt="" class="max-w-32 h-fit mx-auto" src='{% static "./assets/image/logo.png" %}'/>
 
             <!-- login -->
             <div class="pt-5">
-                <p class="text-lg text-zinc-800">ورود / عضویت</p>
-                <p class="text-sm text-zinc-500 mt-8">شماره موبایل خود را وارد کنید:</p>
+                <p class="text-lg text-zinc-800 dark:text-primary-500">ورود / عضویت</p>
+                <p class="text-sm text-zinc-500 dark:text-primary-400 mt-8">شماره موبایل خود را وارد کنید:</p>
 
                 <form id="otp-form" class="relative mt-2">
                     {% csrf_token %}
@@ -1072,7 +1093,7 @@
             </div>
         </div>
         <!-- copyright -->
-        <div class="mt-10 pt-5 text-xs text-zinc-400 border-t border-zinc-200">
+        <div class="mt-10 pt-5 text-xs text-zinc-400 dark:text-primary-500 border-t border-zinc-200 dark:border-zinc-800">
             {% if footer_settings and footer_settings.copyright_text %}
                 {{ footer_settings.copyright_text }}
             {% else %}
@@ -1082,6 +1103,67 @@
     </footer>
 {% block extra_js %}{% endblock %}
 <script>
+// Dark Mode Toggle - باید قبل از سایر اسکریپت‌ها اجرا شود
+(function() {
+    const html = document.documentElement;
+    const body = document.body;
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const moonIcon = document.getElementById('moon-icon');
+    const sunIcon = document.getElementById('sun-icon');
+    
+    // بررسی وضعیت ذخیره شده در localStorage
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    // اعمال وضعیت اولیه (قبل از لود کامل صفحه)
+    if (isDarkMode) {
+        html.classList.add('dark');
+        html.style.backgroundColor = '#111111';
+        body.style.backgroundColor = '#111111';
+        body.style.color = '#ffffff';
+    } else {
+        html.classList.remove('dark');
+        html.style.backgroundColor = '';
+        body.style.backgroundColor = '';
+        body.style.color = '';
+    }
+    
+    // مدیریت کلیک روی دکمه toggle (بعد از لود کامل)
+    if (darkModeToggle && moonIcon && sunIcon) {
+        // تنظیم آیکون اولیه
+        if (isDarkMode) {
+            moonIcon.style.display = 'none';
+            sunIcon.style.display = 'block';
+        } else {
+            moonIcon.style.display = 'block';
+            sunIcon.style.display = 'none';
+        }
+        
+        darkModeToggle.addEventListener('click', function() {
+            const isDark = html.classList.contains('dark');
+            
+            if (isDark) {
+                // تغییر به حالت روشن
+                html.classList.remove('dark');
+                html.style.backgroundColor = '';
+                body.style.backgroundColor = '';
+                body.style.color = '';
+                localStorage.setItem('darkMode', 'false');
+                moonIcon.style.display = 'block';
+                sunIcon.style.display = 'none';
+            } else {
+                // تغییر به حالت تاریک
+                html.classList.add('dark');
+                html.style.backgroundColor = '#111111';
+                body.style.backgroundColor = '#111111';
+                body.style.color = '#ffffff';
+                localStorage.setItem('darkMode', 'true');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'block';
+            }
+        });
+    }
+})();
+
 // افزودن به سبد خرید - برای تمام صفحات
 // جلوگیری از ثبت چندباره event listener
 if (!window.cartEventListenersAttached) {

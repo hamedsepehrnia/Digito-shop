@@ -9,9 +9,15 @@
 ::-webkit-scrollbar-track {
   background-color: #fcfcfc;
 }
+.dark ::-webkit-scrollbar-track {
+  background-color: #1f1f1f;
+}
 ::-webkit-scrollbar-thumb {
   background: #ed1944; 
   border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #ed1944;
 }
 #modal.active {
   opacity: 1;
@@ -183,6 +189,34 @@
 .shiny:hover::after {
   left: 100%;
 }
+
+.add-to-cart-btn {
+  background: linear-gradient(135deg, #ed1944, #d40032) !important;
+  color: #ffffff !important;
+  border: none;
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #ff2f5e, #ed1944) !important;
+  color: #ffffff !important;
+}
+
+.add-to-cart-btn:disabled {
+  background: #bb0c2a !important;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.header-wave path,
+.hero-slider-wave path {
+  transition: fill 0.3s ease-in-out;
+}
+
+.dark .header-wave path,
+.dark .hero-slider-wave path {
+  fill: #111111 !important;
+}
+
 .faq-content {
   max-height: 0;
   overflow: hidden;
@@ -202,4 +236,455 @@
 .rules-content.open {
   max-height: 200px;
   padding: 1rem;
+}
+
+/* Dark Mode Styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body {
+  background-color: #000000 !important;
+  color: var(--color-primary-500);
+}
+
+.dark .bg-white {
+  background-color: #18181b !important;
+}
+
+.dark .bg-zinc-50 {
+  background-color: #18181b !important;
+}
+
+.dark .bg-zinc-100 {
+  background-color: #27272a !important;
+}
+
+/* رنگ‌های zinc و gray را به رنگ اصلی primary تغییر می‌دهیم */
+.dark .text-zinc-600,
+.dark .text-zinc-700,
+.dark .text-zinc-800,
+.dark .text-gray-600,
+.dark .text-gray-700,
+.dark .text-gray-800 {
+  color: var(--color-primary-600) !important;
+}
+
+.dark .text-zinc-400,
+.dark .text-zinc-500,
+.dark .text-gray-400,
+.dark .text-gray-500 {
+  color: var(--color-primary-500) !important;
+}
+
+.dark .border-zinc-200,
+.dark .border-zinc-300 {
+  border-color: #3f3f46 !important;
+}
+
+.dark .shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark header,
+.dark .bg-white {
+  background-color: #18181b !important;
+}
+
+.dark .bg-zinc-900 {
+  background-color: #18181b !important;
+}
+
+.dark .bg-zinc-800 {
+  background-color: #27272a !important;
+}
+
+/* رنگ‌های primary باید همان رنگ اصلی Tailwind باشند */
+.dark .text-primary-500 {
+  color: var(--color-primary-500) !important;
+}
+
+.dark .text-primary-400 {
+  color: var(--color-primary-400) !important;
+}
+
+.dark .text-primary-600 {
+  color: var(--color-primary-600) !important;
+}
+
+.dark .fill-primary-500 {
+  fill: var(--color-primary-500) !important;
+}
+
+.dark .border-primary-500 {
+  border-color: var(--color-primary-500) !important;
+}
+
+/* Dark mode fine tuning */
+.dark .bg-gradient-to-r {
+  background-image: linear-gradient(90deg, #191919, #202020) !important;
+}
+
+.dark .border-zinc-200,
+.dark .border-zinc-300,
+.dark .border-gray-200,
+.dark .border-gray-300,
+.dark .divide-zinc-200 > *,
+.dark .divide-gray-200 > * {
+  border-color: #2a2a2a !important;
+}
+
+.dark .divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-color: #2a2a2a !important;
+}
+
+.dark .bg-zinc-100,
+.dark .bg-gray-100,
+.dark .bg-white {
+  background-color: #121212 !important;
+}
+
+.dark .bg-zinc-200,
+.dark .bg-gray-200 {
+  background-color: #1a1a1a !important;
+}
+
+.dark .text-zinc-700,
+.dark .text-gray-700 {
+  color: #e6e6e6 !important;
+}
+
+.dark .text-zinc-500,
+.dark .text-gray-500 {
+  color: #c8c8c8 !important;
+}
+
+.dark .product-card-title {
+  color: #ffffff !important;
+}
+
+.dark hr,
+.dark .border-t,
+.dark .border-b,
+.dark .border-l,
+.dark .border-r {
+  border-color: #2a2a2a !important;
+}
+
+.dark a:not(.text-primary-500):not(.text-primary-400):not(.text-primary-600) {
+  color: var(--color-primary-500) !important;
+}
+
+.dark a:hover {
+  color: var(--color-primary-600) !important;
+}
+
+.dark button:not(.bg-primary-500):not(.bg-primary-400) {
+  background-color: #27272a !important;
+  color: #ffffff !important;
+}
+
+.dark table {
+  background-color: #18181b !important;
+  color: #ffffff !important;
+}
+
+.dark th,
+.dark td {
+  border-color: #3f3f46 !important;
+  color: #ffffff !important;
+}
+
+.dark .even\:bg-zinc-100:nth-child(even) {
+  background-color: #27272a !important;
+}
+
+.dark .hover\:bg-zinc-200:hover {
+  background-color: #3f3f46 !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #27272a !important;
+}
+
+.search-input {
+  background-color: #f0f0f0;
+}
+
+.search-input:focus {
+  background-color: #ffffff;
+}
+
+.dark .search-input {
+  background-color: #1f1f1f !important;
+  color: #f9fafb !important;
+  border: 1px solid #27272a !important;
+}
+
+.dark .search-input::placeholder {
+  color: #a1a1aa !important;
+}
+
+.dark .search-input:focus {
+  background-color: #1a1a1a !important;
+  border-color: #3f3f46 !important;
+}
+
+.dark .main-menu-link {
+  color: #ffffff !important;
+}
+
+.dark .group:hover .main-menu-link {
+  color: var(--color-primary-400) !important;
+}
+
+/* Dark Mode - پوشش کامل تمام المان‌های سفید */
+.dark html {
+  background-color: #111111 !important;
+}
+
+.dark body {
+  background-color: #111111 !important;
+}
+
+.dark [class*="bg-white"],
+.dark [class*="bg-zinc-50"],
+.dark [class*="bg-zinc-100"],
+.dark [class*="bg-gray-50"],
+.dark [class*="bg-gray-100"] {
+  background-color: #111111 !important;
+}
+
+.dark header {
+  background-color: #111111 !important;
+}
+
+.dark footer {
+  background-color: #111111 !important;
+}
+
+/* حذف selector div:not چون خیلی قوی است */
+
+.dark .bg-white,
+.dark .bg-zinc-50,
+.dark .bg-zinc-100,
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-zinc-200 {
+  background-color: #111111 !important;
+}
+
+.dark section,
+.dark article,
+.dark aside,
+.dark nav {
+  background-color: #111111 !important;
+}
+
+.dark .container,
+.dark .max-w-\[1700px\] {
+  background-color: #111111 !important;
+}
+
+.dark main {
+  background-color: #111111 !important;
+}
+
+.dark .modal-box,
+.dark .modal {
+  background-color: #111111 !important;
+}
+
+.dark .rounded-xl,
+.dark .rounded-2xl,
+.dark .rounded-3xl {
+  background-color: #111111 !important;
+}
+
+.dark .shadow-lg,
+.dark .shadow-custom {
+  background-color: #111111 !important;
+}
+
+/* استثنا برای دکمه‌ها و المان‌های خاص */
+.dark .bg-primary-500,
+.dark .bg-primary-400,
+.dark .bg-primary-600,
+.dark .bg-gradient-to-bl {
+  background-color: inherit !important;
+}
+
+.dark .bg-gradient-to-bl.from-primary-500.to-primary-400 {
+  background: linear-gradient(to bottom left, var(--color-primary-500), var(--color-primary-400)) !important;
+}
+
+/* Dark Mode - پوشش کامل با selectorهای قوی‌تر */
+.dark [class*="bg-white"]:not([class*="text-white"]):not([class*="border-white"]) {
+  background-color: #111111 !important;
+}
+
+.dark [class*="bg-zinc"]:not([class*="text-zinc"]):not([class*="border-zinc"]) {
+  background-color: #111111 !important;
+}
+
+.dark [class*="bg-gray"]:not([class*="text-gray"]):not([class*="border-gray"]) {
+  background-color: #111111 !important;
+}
+
+/* پوشش loading screen */
+.dark #loading {
+  background: linear-gradient(to bottom left, #111111, #0d0d0d) !important;
+}
+
+.dark #loading * {
+  background-color: transparent !important;
+}
+
+/* Filter panel refinements */
+.filter-card {
+  background-color: #ffffff;
+  border-color: #e4e4e7;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-card:hover {
+  background-color: #f8f8f8;
+  border-color: #d4d4d8;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+}
+
+.filter-card__header {
+  color: #27272a;
+}
+
+.filter-card__header img {
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0.65;
+}
+
+.filter-card__body {
+  padding-bottom: 0.5rem;
+}
+
+.filter-card__body a,
+.filter-card__body label {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filter-card__body a:hover,
+.filter-card__body label:hover {
+  background-color: rgba(17, 17, 17, 0.04);
+}
+
+.filter-card__selected {
+  border: 1px solid rgba(237, 25, 68, 0.2);
+}
+
+.filter-card--toggle .peer + div {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-color-chip {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dark .filter-panel {
+  background-color: transparent !important;
+}
+
+.dark .filter-card {
+  background-color: #18181b !important;
+  border-color: #2f2f33 !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark .filter-card:hover {
+  background-color: #202026 !important;
+  border-color: #3a3a40 !important;
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.45) !important;
+}
+
+.dark .filter-card__header,
+.dark .filter-card__header span {
+  color: #f4f4f5 !important;
+}
+
+.dark .filter-card__header img {
+  filter: brightness(1.1);
+  opacity: 0.85;
+}
+
+.dark .filter-card__body {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dark .filter-card__body a,
+.dark .filter-card__body label {
+  color: #d4d4d8 !important;
+}
+
+.dark .filter-card__body a:hover,
+.dark .filter-card__body label:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff !important;
+}
+
+.dark .filter-card__selected {
+  background-color: rgba(237, 25, 68, 0.18) !important;
+  border-color: rgba(237, 25, 68, 0.45) !important;
+  color: var(--color-primary-400) !important;
+}
+
+.dark .filter-card--toggle {
+  background-color: #18181b !important;
+  border-color: #2f2f33 !important;
+}
+
+.dark .filter-card--toggle .peer + div {
+  background-color: #27272a !important;
+  border: 1px solid #3a3a40 !important;
+}
+
+.dark .filter-card--toggle .peer + div::after {
+  background-color: #0f0f10 !important;
+}
+
+.dark .filter-color-chip {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5) inset;
+}
+
+.filter-sort {
+  border-color: #e5e7eb;
+  background-color: #ffffff;
+}
+
+.filter-sort > a {
+  color: #71717a;
+}
+
+.filter-sort > a.text-primary-500 {
+  color: var(--color-primary-500) !important;
+}
+
+.dark .filter-sort {
+  background-color: #18181b !important;
+  border-color: #323236 !important;
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark .filter-sort > div {
+  color: #e4e4e7 !important;
+}
+
+.dark .filter-sort > a {
+  color: #a1a1aa !important;
+}
+
+.dark .filter-sort > a:hover {
+  color: var(--color-primary-400) !important;
+}
+
+.dark .filter-sort > a.text-primary-500 {
+  color: var(--color-primary-300) !important;
 }

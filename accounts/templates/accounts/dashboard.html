@@ -3,9 +3,9 @@
 {% load humanize %}
 {% block content %}
     <main class="p-6 flex-1 overflow-y-auto">
-        <div class="bg-white rounded-2xl min-h-80 h-auto shadow-custom p-4">
-            <div class="px-2 md:px-3 pt-3 pb-5 mb-3 text-zinc-700 text-sm md:text-base flex items-center gap-x-2 border-b border-zinc-200">
-                <svg class="fill-primary-500" fill="" height="20" viewbox="0 0 256 256" width="20"
+        <div class="bg-white dark:bg-zinc-900 rounded-2xl min-h-80 h-auto shadow-custom p-4 transition-colors duration-300">
+            <div class="px-2 md:px-3 pt-3 pb-5 mb-3 text-zinc-700 dark:text-zinc-200 text-sm md:text-base flex items-center gap-x-2 border-b border-zinc-200 dark:border-zinc-700">
+                <svg class="fill-primary-500" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"></path>
                 </svg>
@@ -13,7 +13,7 @@
             </div>
             <div class="grid grid-cols-2 md:flex gap-5 text-xs md:text-sm">
                 <div class="flex md:w-1/4 gap-x-2 items-center bg-gradient-to-bl from-red-500 to-red-700 rounded-2xl p-3">
-                    <svg class="fill-zinc-100 bg-red-600 rounded-xl p-1" fill="" height="44" viewbox="0 0 256 256"
+                    <svg class="fill-zinc-100 bg-red-600 rounded-xl p-1" fill="currentColor" height="44" viewbox="0 0 256 256"
                          width="44" xmlns="http://www.w3.org/2000/svg">
                         <path d="M232,96v96a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V96Z" opacity="0.2"></path>
                         <path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="flex md:w-1/4 gap-x-2 items-center bg-gradient-to-bl from-yellow-500 to-yellow-700 rounded-2xl p-3">
-                    <svg class="fill-zinc-100 bg-yellow-600 rounded-xl p-1" fill="#000000" height="44"
+                    <svg class="fill-zinc-100 bg-yellow-600 rounded-xl p-1" fill="currentColor" height="44"
                          viewbox="0 0 256 256" width="44" xmlns="http://www.w3.org/2000/svg">
                         <path d="M240,104,128,224,80,104l48-64h56Z" opacity="0.2"></path>
                         <path d="M246,98.73l-56-64A8,8,0,0,0,184,32H72a8,8,0,0,0-6,2.73l-56,64a8,8,0,0,0,.17,10.73l112,120a8,8,0,0,0,11.7,0l112-120A8,8,0,0,0,246,98.73ZM222.37,96H180L144,48h36.37ZM74.58,112l30.13,75.33L34.41,112Zm89.6,0L128,202.46,91.82,112ZM96,96l32-42.67L160,96Zm85.42,16h40.17l-70.3,75.33ZM75.63,48H112L76,96H33.63Z"></path>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="flex md:w-1/4 gap-x-2 items-center bg-gradient-to-bl from-blue-500 to-blue-700 rounded-2xl p-3">
-                    <svg class="fill-zinc-100 bg-blue-600 rounded-xl p-1" fill="#000000" height="44"
+                    <svg class="fill-zinc-100 bg-blue-600 rounded-xl p-1" fill="currentColor" height="44"
                          viewbox="0 0 256 256" width="44" xmlns="http://www.w3.org/2000/svg">
                         <path d="M216,64l-12.16,66.86A16,16,0,0,1,188.1,144H62.55L48,64Z" opacity="0.2"></path>
                         <path d="M222.14,58.87A8,8,0,0,0,216,56H54.68L49.79,29.14A16,16,0,0,0,34.05,16H16a8,8,0,0,0,0,16h18L59.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,152,204a28,28,0,1,0,28-28H83.17a8,8,0,0,1-7.87-6.57L72.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,222.14,58.87ZM96,204a12,12,0,1,1-12-12A12,12,0,0,1,96,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,192,204Zm4-74.57A8,8,0,0,1,188.1,136H69.22L57.59,72H206.41Z"></path>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="flex md:w-1/4 gap-x-2 items-center bg-gradient-to-bl from-green-500 to-green-700 rounded-2xl p-3">
-                    <svg class="fill-zinc-100 bg-green-600 rounded-xl p-1" fill="#000000" height="44"
+                    <svg class="fill-zinc-100 bg-green-600 rounded-xl p-1" fill="currentColor" height="44"
                          viewbox="0 0 256 256" width="44" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16,152H48v56H16a8,8,0,0,1-8-8V160A8,8,0,0,1,16,152ZM204,56a28,28,0,0,0-12,2.71h0A28,28,0,1,0,176,85.29h0A28,28,0,1,0,204,56Z"
                               opacity="0.2"></path>
@@ -74,39 +74,39 @@
                     </div>
                 </div>
             </div>
-            <div class="px-2 md:px-3 pt-16 pb-5 mb-3 text-zinc-700 text-sm md:text-base flex items-center gap-x-2 border-b border-zinc-200">
-                <svg class="fill-primary-500" fill="" height="20" viewbox="0 0 256 256" width="20"
+            <div class="px-2 md:px-3 pt-16 pb-5 mb-3 text-zinc-700 dark:text-zinc-200 text-sm md:text-base flex items-center gap-x-2 border-b border-zinc-200 dark:border-zinc-700">
+                <svg class="fill-primary-500" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M128,16a88.1,88.1,0,0,0-88,88c0,75.3,80,132.17,83.41,134.55a8,8,0,0,0,9.18,0C136,236.17,216,179.3,216,104A88.1,88.1,0,0,0,128,16Zm0,56a32,32,0,1,1-32,32A32,32,0,0,1,128,72Z"></path>
                 </svg>
                 آخرین سفارشات
             </div>
-            <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700">
+            <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 dark:text-zinc-100">
                 <table class="w-full text-right table-auto min-w-max">
                     <thead>
                     <tr>
-                        <th class="p-4 border-b border-b-zinc-400">
-                            <p class="block text-sm opacity-70">
+                        <th class="p-4 border-b border-b-zinc-400 dark:border-b-zinc-700">
+                            <p class="block text-sm opacity-70 dark:text-zinc-300">
                                 شماره سفارش
                             </p>
                         </th>
-                        <th class="p-4 border-b border-b-zinc-400">
-                            <p class="block text-sm opacity-70">
+                        <th class="p-4 border-b border-b-zinc-400 dark:border-b-zinc-700">
+                            <p class="block text-sm opacity-70 dark:text-zinc-300">
                                 تاریخ
                             </p>
                         </th>
-                        <th class="p-4 border-b border-b-zinc-400">
-                            <p class="block text-sm opacity-70">
+                        <th class="p-4 border-b border-b-zinc-400 dark:border-b-zinc-700">
+                            <p class="block text-sm opacity-70 dark:text-zinc-300">
                                 مبلغ
                             </p>
                         </th>
-                        <th class="p-4 border-b border-b-zinc-400">
-                            <p class="block text-sm opacity-70">
+                        <th class="p-4 border-b border-b-zinc-400 dark:border-b-zinc-700">
+                            <p class="block text-sm opacity-70 dark:text-zinc-300">
                                 وضعیت
                             </p>
                         </th>
-                        <th class="p-4 border-b border-b-zinc-400">
-                            <p class="block text-sm opacity-70">
+                        <th class="p-4 border-b border-b-zinc-400 dark:border-b-zinc-700">
+                            <p class="block text-sm opacity-70 dark:text-zinc-300">
                                 جزئیات
                             </p>
                         </th>
@@ -144,12 +144,12 @@
                             </div>
                         </td>
                         <td class="p-4">
-                            <a class="block text-xs" href="{% url 'dashboard-order-details' order.id %}">مشاهده</a>
+                            <a class="block text-xs text-primary-500 dark:text-primary-400" href="{% url 'dashboard-order-details' order.id %}">مشاهده</a>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="p-4 text-center text-zinc-500">
+                        <td colspan="5" class="p-4 text-center text-zinc-500 dark:text-zinc-400">
                             سفارشی ثبت نشده است
                         </td>
                     </tr>
@@ -161,7 +161,7 @@
             <div class="mt-12 md:mt-20 px-4 md:px-14">
                 <!-- top slider -->
                 <div class="flex gap-x-4 justify-between items-center mb-7">
-                    <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
+                    <div class="w-48 min-w-fit text-zinc-700 dark:text-zinc-200 md:font-yekanBakhBold">
                         محصولات پیشنهادی برای شما
                     </div>
                 </div>
@@ -170,10 +170,10 @@
                     <div class="productSliderDashboard">
                         <div class="card-wrapper swiper-wrapper pb-10">
                             {% for product in recommended_products %}
-                            <div class="card swiper-slide shiny my-2 p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-200 relative">
+                            <div class="card swiper-slide shiny my-2 p-2 md:p-4 hover:border-transparent hover:shadow-lg transition-shadow rounded-3xl border border-zinc-200 dark:border-zinc-700 dark:bg-zinc-900 relative">
                                 <a href="#" class="toggle-favorite" data-product-id="{{ product.id }}">
-                                    <svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 size-9 favorite-icon"
-                                         fill="{% if product.id in user_favorites %}#ffffff{% else %}#000000{% endif %}" height="" viewbox="0 0 256 256" width=""
+                                    <svg class="absolute right-2 top-2 {% if product.id in user_favorites %}bg-red-500 fill-white{% else %}bg-white dark:bg-zinc-800 hover:bg-primary-500 hover:fill-white{% endif %} transition-all rounded-full p-2 border border-zinc-300 dark:border-zinc-700 size-9 favorite-icon"
+                                         fill="{% if product.id in user_favorites %}#ffffff{% else %}#111111{% endif %}" height="" viewbox="0 0 256 256" width=""
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
                                     </svg>
@@ -183,17 +183,17 @@
                                     <img alt="{{ product.title }}" class="max-w-40 mx-auto"
                                          src="{{ product.images.first.image.url }}">
                                     {% else %}
-                                    <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100"
+                                    <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100 dark:bg-zinc-800"
                                          src='{% static "./assets/image/placeholder.svg" %}'>
                                     {% endif %}
                                 </a>
-                                <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2"
+                                <a class="text-sm font-semibold text-zinc-700 dark:text-zinc-200 h-10 line-clamp-2"
                                    href="{% url 'product' product.slug %}">
                                     {{ product.title }}
                                 </a>
                                 <div class="flex my-5">
-                                    <div class="text-xl md:text-2xl text-zinc-800">{{ product.price|intcomma }}</div>
-                                    <div class="-rotate-90 text-zinc-400 text-xs">
+                                    <div class="text-xl md:text-2xl text-zinc-800 dark:text-zinc-100">{{ product.price|intcomma }}</div>
+                                    <div class="-rotate-90 text-zinc-400 text-xs dark:text-zinc-500">
                                         تومان
                                     </div>
                                 </div>
@@ -213,12 +213,12 @@
                                         افزودن به سبد خرید
                                     </a>
                                     {% else %}
-                                    <span class="text-zinc-500 text-xs md:text-sm mx-auto">ناموجود</span>
+                                    <span class="text-zinc-500 dark:text-zinc-400 text-xs md:text-sm mx-auto">ناموجود</span>
                                     {% endif %}
                                 </div>
                             </div>
                             {% empty %}
-                            <div class="text-center text-zinc-500 py-8 w-full">
+                            <div class="text-center text-zinc-500 dark:text-zinc-400 py-8 w-full">
                                 محصولی یافت نشد
                             </div>
                             {% endfor %}

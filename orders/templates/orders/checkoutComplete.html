@@ -16,7 +16,7 @@
             </svg>
             سبدخرید
         </a>
-        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white"></div>
+        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white dark:bg-zinc-800 dark:opacity-70"></div>
         <a class="flex flex-col md:flex-row items-center w-fit min-w-24 md:min-w-32 gap-1 text-green-500 text-sm"
            href="{% url 'checkout' %}">
             <svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +29,7 @@
             </svg>
             اطلاعات پرداخت
         </a>
-        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white"></div>
+        <div class="h-0.5 w-full bg-gradient-to-r from-white via-zinc-300 to-white dark:bg-zinc-800 dark:opacity-70"></div>
         <span class="flex flex-col md:flex-row items-center w-fit min-w-24 md:min-w-32 gap-1 text-green-500 text-sm">
             <svg fill="none" height="24" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
                 <path class="stroke-green-600"
@@ -40,12 +40,12 @@
         </span>
     </nav>
     <div class="mt-10 pb-20">
-        <div class="bg-zinc-100 text-green-600 text-base md:text-xl py-5 text-center leading-8">
+        <div class="bg-zinc-100 dark:bg-zinc-900 text-green-600 text-base md:text-xl py-5 text-center leading-8 transition-colors">
             با تشکر از خرید شما
             <br/>
             خرید با موفقیت انجام شد
         </div>
-        <div class="bg-zinc-100 grid grid-cols-2 gap-y-7 md:grid-cols-4 justify-items-center px-4 md:px-20 py-5 mt-8">
+        <div class="bg-zinc-100 dark:bg-zinc-900 grid grid-cols-2 gap-y-7 md:grid-cols-4 justify-items-center px-4 md:px-20 py-5 mt-8 transition-colors">
             <div class="flex flex-col justify-start gap-1">
                 <div class="text-xs text-zinc-800 font-yekanBakhRegular">
                     شماره سفارش:
@@ -79,12 +79,12 @@
                 </div>
             </div>
         </div>
-        <div class="bg-zinc-100 py-5 mt-10 px-4 md:px-10">
-            <p class="text-zinc-800 text-lg mb-8">
+        <div class="bg-zinc-100 dark:bg-zinc-900 py-5 mt-10 px-4 md:px-10 transition-colors">
+            <p class="text-zinc-800 dark:text-zinc-200 text-lg mb-8">
                 جزئیات پرداخت
             </p>
-            <table class="text-zinc-700 bg-white text-xs rounded-lg w-full md:w-10/12 mx-auto">
-                <tbody class="divide-y divide-zinc-300">
+            <table class="text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-900 text-xs rounded-lg w-full md:w-10/12 mx-auto transition-colors">
+                <tbody class="divide-y divide-zinc-300 dark:divide-zinc-700">
                 {% for item in order_items %}
                 <tr>
                     <td class="px-4 py-3">
@@ -124,12 +124,12 @@
                 </tbody>
             </table>
         </div>
-        <div class="bg-zinc-100 py-5 mt-8 px-4 md:px-10">
-            <p class="text-zinc-800 text-lg mb-8">
+        <div class="bg-zinc-100 dark:bg-zinc-900 py-5 mt-8 px-4 md:px-10 transition-colors">
+            <p class="text-zinc-800 dark:text-zinc-200 text-lg mb-8">
                 جزئیات ارسال
             </p>
-            <table class="text-zinc-700 bg-white text-xs rounded-lg w-full md:w-10/12 mx-auto">
-                <tbody class="divide-y divide-zinc-300">
+            <table class="text-zinc-700 dark:text-zinc-200 bg-white dark:bg-zinc-900 text-xs rounded-lg w-full md:w-10/12 mx-auto transition-colors">
+                <tbody class="divide-y divide-zinc-300 dark:divide-zinc-700">
                 {% if order.address %}
                 <tr>
                     <td class="px-4 py-3">

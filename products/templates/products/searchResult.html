@@ -12,13 +12,13 @@
     </div>
 <div class="flex flex-col lg:flex-row px-4 md:px-8 md:mt-10 gap-5 pb-20">
 <!-- filters -->
-<div class="lg:w-3/12 space-y-5">
-<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
-<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<div class="lg:w-3/12 space-y-5 filter-panel">
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all filter-card">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer filter-card__header">
 <span class="text-zinc-700 text-sm">دسته بندی</span>
 <img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
 </button>
-<ul class="submenu hidden mt-2">
+<ul class="submenu hidden mt-2 filter-card__body">
 {% if selected_category_obj %}
 <!-- نمایش دکمه بازگشت به دسته‌بندی والد -->
 {% if selected_category_obj.parent %}
@@ -36,7 +36,7 @@
 {% endif %}
 <!-- نمایش دسته‌بندی فعلی -->
 <li>
-<a class="text-xs flex justify-between w-full py-2 px-4 text-primary-500 font-semibold bg-primary-50 rounded-lg" href="?q={{ query|urlencode }}&category={{ selected_category_obj.slug }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
+<a class="text-xs flex justify-between w-full py-2 px-4 text-primary-500 font-semibold bg-primary-50 rounded-lg filter-card__selected" href="?q={{ query|urlencode }}&category={{ selected_category_obj.slug }}{% if selected_brand %}&brand={{ selected_brand }}{% endif %}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}{% if request.GET.min_price %}&min_price={{ request.GET.min_price }}{% endif %}{% if request.GET.max_price %}&max_price={{ request.GET.max_price }}{% endif %}">
 {{ selected_category_obj.name }} (فعلی)
 </a>
 </li>
@@ -59,12 +59,12 @@
 {% endfor %}
 </ul>
 </div>
-<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
-<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all filter-card">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer filter-card__header">
 <span class="text-zinc-700 text-sm">برند ها</span>
 <img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
 </button>
-<ul class="submenu hidden mt-2">
+<ul class="submenu hidden mt-2 filter-card__body">
 {% for brand in brands %}
 <li>
 <a class="text-xs flex justify-between w-full py-2 px-4 text-zinc-700 hover:text-primary-500 transition {% if selected_brand == brand.slug %}text-primary-500 font-semibold{% endif %}" href="?q={{ query|urlencode }}{% if selected_category %}&category={{ selected_category }}{% endif %}&brand={{ brand.slug }}{% if selected_color %}&color={{ selected_color }}{% endif %}{% if only_available %}&only_available=true{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
@@ -76,18 +76,18 @@
 {% endfor %}
 </ul>
 </div>
-<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
-<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all filter-card">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer filter-card__header">
 <span class="text-zinc-700 text-sm">رنگ ها</span>
 <img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
 </button>
-<ul class="submenu hidden mt-2">
+<ul class="submenu hidden mt-2 filter-card__body">
 {% for color in colors %}
 <li>
 <div class="flex w-full items-center gap-x-2 py-1 px-4">
 <input class="h-4 w-4 accent-primary-500 cursor-pointer rounded-xl border-gray-300 bg-gray-100 color-filter" id="color_{{ color.id }}" type="checkbox" value="{{ color.id }}" {% if selected_color == color.id|stringformat:"s" %}checked{% endif %}/>
 <label class="w-full cursor-pointer py-2 pl-4 text-zinc-600 text-xs flex items-center gap-x-2" for="color_{{ color.id }}">
-<span style="width: 20px; height: 20px; background-color: {{ color.hex_code }}; border-radius: 4px; border: 1px solid #e5e7eb;"></span>
+<span class="filter-color-chip" style="width: 20px; height: 20px; background-color: {{ color.hex_code }}; border-radius: 4px; border: 1px solid #e5e7eb;"></span>
 <span>{{ color.name }}</span>
 </label>
 </div>
@@ -97,12 +97,12 @@
 {% endfor %}
 </ul>
 </div>
-<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all">
-<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer">
+<div class="border border-zinc-100 h-fit rounded-2xl py-2 hover:shadow-sm transition-all filter-card">
+<button class="menu-toggle flex justify-between w-full py-3 px-4 rounded-2xl cursor-pointer filter-card__header">
 <span class="text-zinc-700 text-sm">فیلتر بر اساس قیمت</span>
 <img alt="" class="w-4 transition-transform opacity-80" src='{% static "./assets/image/icons/arrowDown.svg" %}'/>
 </button>
-<ul class="submenu hidden mt-2">
+<ul class="submenu hidden mt-2 filter-card__body">
 <div class="space-y-4 px-6">
 <div id="search-price-slider"></div>
 <div class="flex items-center justify-between">
@@ -122,7 +122,7 @@
 </div>
 </ul>
 </div>
-<label class="border border-zinc-100 h-fit rounded-2xl hover:shadow-sm transition-all flex justify-between w-full py-5 px-4 cursor-pointer" for="onlyAvailableSearch">
+<label class="border border-zinc-100 h-fit rounded-2xl hover:shadow-sm transition-all flex justify-between w-full py-5 px-4 cursor-pointer filter-card filter-card--toggle" for="onlyAvailableSearch">
 <div class="text-zinc-700 text-sm">
             فقط کالا های موجود
           </div>
@@ -134,7 +134,7 @@
 </div>
 <!-- products -->
 <div class="lg:w-9/12">
-<div class="flex flex-wrap gap-3 md:gap-5 justify-start items-center bg-white shadow-box-sm rounded-3xl px-5 py-6 border border-zinc-100 mb-5">
+<div class="flex flex-wrap gap-3 md:gap-5 justify-start items-center bg-white shadow-box-sm rounded-3xl px-5 py-6 border border-zinc-100 mb-5 filter-sort">
 <div class="text-zinc-600 text-sm">
             مرتب سازی:
           </div>
@@ -169,7 +169,7 @@
 <img alt="{{ product.title }}" class="max-w-28 md:max-w-40 mx-auto" src='{% static "./assets/image/placeholder.svg" %}'>
 {% endif %}
 </a>
-<a class="text-xs md:text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+<a class="text-xs md:text-sm font-semibold text-zinc-700 product-card-title h-10 line-clamp-2" href="{% url 'product' product.slug %}">
               {{ product.title }}
             </a>
 <div class="border-b-2 border-dashed border-zinc-200 my-5 w-full h-auto"></div>

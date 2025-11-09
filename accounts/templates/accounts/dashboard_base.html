@@ -10,12 +10,23 @@
     <link href='{% static "./assets/image/fav.png" %}' rel="icon" type="image/x-icon"/>
     <link href='{% static "./assets/css/main.css" %}' rel="stylesheet"/>
     <title>فروشگاه آنلاین دیجیتو</title>
+    <script>
+        (function() {
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                document.documentElement.style.backgroundColor = '#111111';
+                document.body.style.backgroundColor = '#111111';
+                document.body.style.color = '#ffffff';
+            }
+        })();
+    </script>
 </head>
-<body class="max-w-[1700px] mx-auto bg-zinc-100 flex flex-col min-h-screen relative">
+<body class="max-w-[1700px] mx-auto bg-zinc-100 dark:bg-[#111111] text-zinc-800 dark:text-zinc-100 flex flex-col min-h-screen relative transition-colors duration-300">
 <!-- bg blur mobile -->
 <div class="fixed z-10 inset-0 bg-black/35 hidden transition-opacity duration-300" id="overlay"></div>
 <!-- Sidebar -->
-<div class="z-20 fixed top-0 right-0 w-10/12 md:w-6/12 lg:w-[17%] h-screen bg-white shadow-lg transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
+<div class="z-20 fixed top-0 right-0 w-10/12 md:w-6/12 lg:w-[17%] h-screen bg-white dark:bg-zinc-900 shadow-lg dark:shadow-zinc-800/50 transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
      id="mobile-menu">
     <div class="p-5 flex flex-col gap-y-3 justify-center items-center">
         <!-- logo -->
@@ -25,12 +36,12 @@
             </a>
         </div>
     </div>
-    <ul class="p-5 space-y-1 text-sm text-zinc-800 overflow-y-auto pb-48">
+    <ul class="p-5 space-y-1 text-sm text-zinc-800 dark:text-zinc-200 overflow-y-auto pb-48">
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent rounded-lg flex gap-x-2"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent dark:hover:bg-zinc-800 rounded-lg flex gap-x-2 transition-colors"
                href={% url 'dashboard' %}>
-                <svg fill="none" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
-                    <path class="fill-gray-700"
+                <svg class="text-zinc-600 dark:text-zinc-300" fill="currentColor" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
+                    <path
                           d="M11.25 18C11.25 18.1989 11.329 18.3897 11.4697 18.5303C11.6103 18.671 11.8011 18.75 12 18.75C12.1989 18.75 12.3897 18.671 12.5303 18.5303C12.671 18.3897 12.75 18.1989 12.75 18V15C12.75 14.8011 12.671 14.6103 12.5303 14.4697C12.3897 14.329 12.1989 14.25 12 14.25C11.8011 14.25 11.6103 14.329 11.4697 14.4697C11.329 14.6103 11.25 14.8011 11.25 15V18Z"
                           fill=""></path>
                     <path class="fill-gray-700" clip-rule="evenodd"
@@ -41,9 +52,9 @@
             </a>
         </li>
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent rounded-lg flex gap-x-2"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent dark:hover:bg-zinc-800 rounded-lg flex gap-x-2 transition-colors"
                href={% url 'dashboard-orders' %}>
-                <svg class="fill-gray-700" fill="#000000" height="20" viewbox="0 0 256 256" width="20"
+                <svg class="text-zinc-600 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"></path>
                 </svg>
@@ -51,9 +62,9 @@
             </a>
         </li>
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent rounded-lg flex gap-x-2"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent dark:hover:bg-zinc-800 rounded-lg flex gap-x-2 transition-colors"
                href={% url 'dashboard-favorites' %}>
-                <svg class="fill-gray-700" fill="#000000" height="20" viewbox="0 0 256 256" width="20"
+                <svg class="text-zinc-600 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path>
                 </svg>
@@ -61,9 +72,9 @@
             </a>
         </li>
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent rounded-lg flex gap-x-2"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent dark:hover:bg-zinc-800 rounded-lg flex gap-x-2 transition-colors"
                href="{% url 'dashboard-address' %}">
-                <svg class="fill-gray-700" fill="#000000" height="20" viewbox="0 0 256 256" width="20"
+                <svg class="text-zinc-600 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M112,80a16,16,0,1,1,16,16A16,16,0,0,1,112,80ZM64,80a64,64,0,0,1,128,0c0,59.95-57.58,93.54-60,94.95a8,8,0,0,1-7.94,0C121.58,173.54,64,140,64,80Zm16,0c0,42.2,35.84,70.21,48,78.5,12.15-8.28,48-36.3,48-78.5a48,48,0,0,0-96,0Zm122.77,67.63a8,8,0,0,0-5.54,15C213.74,168.74,224,176.92,224,184c0,13.36-36.52,32-96,32s-96-18.64-96-32c0-7.08,10.26-15.26,26.77-21.36a8,8,0,0,0-5.54-15C29.22,156.49,16,169.41,16,184c0,31.18,57.71,48,112,48s112-16.82,112-48C240,169.41,226.78,156.49,202.77,147.63Z"></path>
                 </svg>
@@ -71,9 +82,9 @@
             </a>
         </li>
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent rounded-lg flex gap-x-2"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-zinc-100 hover:to-transparent dark:hover:bg-zinc-800 rounded-lg flex gap-x-2 transition-colors"
                href={% url 'dashboard-details' %}>
-                <svg class="fill-gray-700" fill="#000000" height="20" viewbox="0 0 256 256" width="20"
+                <svg class="text-zinc-600 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"></path>
                 </svg>
@@ -81,9 +92,9 @@
             </a>
         </li>
         <li>
-            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-red-200 text-red-500 hover:text-red-600 hover:to-transparent rounded-lg flex gap-x-2 group"
+            <a class="py-3 px-4 hover:bg-gradient-to-l hover:from-red-200 dark:hover:bg-red-900/40 text-red-500 hover:text-red-600 hover:to-transparent rounded-lg flex gap-x-2 group transition-colors"
                href={% url 'logout' %}>
-                <svg class="fill-gray-700 group-hover:fill-red-600 transition" fill="#000000" height="20"
+                <svg class="text-zinc-600 dark:text-zinc-300 group-hover:text-red-600 transition" fill="currentColor" height="20"
                      viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg">
                     <path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"></path>
                 </svg>
@@ -92,55 +103,55 @@
         </li>
     </ul>
 </div>
-<div class="w-full lg:w-[83%] mr-auto flex flex-col min-h-screen">
+<div class="w-full lg:w-[83%] mr-auto flex flex-col min-h-screen bg-transparent">
     <!-- header -->
-    <header class="bg-white w-full h-14 flex justify-between items-center px-4 shrink-0">
+    <header class="bg-white dark:bg-zinc-900 w-full h-14 flex justify-between items-center px-4 shrink-0 transition-colors duration-300">
         <div class="flex gap-x-3 items-center">
             <!-- btn menu mobile -->
             <svg class="lg:hidden fill-zinc-800 menu-mobile" fill="" height="28" viewbox="0 0 256 256" width="28"
                  xmlns="http://www.w3.org/2000/svg">
                 <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path>
             </svg>
-            <div class="md:text-lg md:font-yekanBakhBold text-zinc-600">
+            <div class="md:text-lg md:font-yekanBakhBold text-zinc-600 dark:text-zinc-100">
                 صفحه اصلی
             </div>
         </div>
-        <div class="flex items-center cursor-pointer group relative hover:bg-zinc-100 transition px-4 py-2 rounded-lg">
+        <div class="flex items-center cursor-pointer group relative hover:bg-zinc-100 dark:hover:bg-zinc-800 transition px-4 py-2 rounded-lg">
 <span class="flex items-center gap-x-1">
-<span class="text-zinc-400 text-xs">
+<span class="text-zinc-400 text-xs dark:text-zinc-400">
             سلام،
           </span>
-<span class="text-zinc-600 text-sm">
+<span class="text-zinc-600 text-sm dark:text-zinc-100">
             {{ request.user.fullname }}
           </span>
 </span>
-            <div class="z-50 group-hover:block left-0 top-[37px] w-60 rounded-lg bg-white drop-shadow-lg hidden absolute">
+            <div class="z-50 group-hover:block left-0 top-[37px] w-60 rounded-lg bg-white dark:bg-zinc-900 drop-shadow-lg hidden absolute transition-colors">
                 <ul class="space-y-1 p-2">
                     <li>
-                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 hover:text-zinc-800 transition hover:bg-gray-100"
+                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 dark:text-zinc-200 hover:text-zinc-800 dark:hover:text-zinc-100 transition hover:bg-gray-100 dark:hover:bg-zinc-800"
                            href={% url 'dashboard-orders' %}>
 <span class="flex items-center gap-x-2">
-<svg fill="#4d4d4d" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
+<svg class="text-zinc-500 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
         d="M237.9,198.36l-14.25-120a14.06,14.06,0,0,0-14-12.36H174V64a46,46,0,0,0-92,0v2H46.33a14.06,14.06,0,0,0-14,12.36l-14.25,120a14,14,0,0,0,14,15.64H223.92a14,14,0,0,0,14-15.64ZM94,64a34,34,0,0,1,68,0v2H94ZM225.5,201.3a2.07,2.07,0,0,1-1.58.7H32.08a2.07,2.07,0,0,1-1.58-.7,1.92,1.92,0,0,1-.49-1.53l14.26-120A2,2,0,0,1,46.33,78H209.67a2,2,0,0,1,2.06,1.77l14.26,120A1.92,1.92,0,0,1,225.5,201.3Z"></path></svg>
 <span class="text-sm">سفارش ها</span>
 </span>
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 hover:text-zinc-800 transition hover:bg-gray-100"
+                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 dark:text-zinc-200 hover:text-zinc-800 dark:hover:text-zinc-100 transition hover:bg-gray-100 dark:hover:bg-zinc-800"
                            href={% url 'dashboard-favorites' %}>
 <span class="flex items-center gap-x-2">
-<svg fill="#4d4d4d" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
+<svg class="text-zinc-500 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
         d="M178,34c-21,0-39.26,9.47-50,25.34C117.26,43.47,99,34,78,34A60.07,60.07,0,0,0,18,94c0,29.2,18.2,59.59,54.1,90.31a334.68,334.68,0,0,0,53.06,37,6,6,0,0,0,5.68,0,334.68,334.68,0,0,0,53.06-37C219.8,153.59,238,123.2,238,94A60.07,60.07,0,0,0,178,34ZM128,209.11C111.59,199.64,30,149.72,30,94A48.05,48.05,0,0,1,78,46c20.28,0,37.31,10.83,44.45,28.27a6,6,0,0,0,11.1,0C140.69,56.83,157.72,46,178,46a48.05,48.05,0,0,1,48,48C226,149.72,144.41,199.64,128,209.11Z"></path></svg>
 <span class="text-sm">علاقه مندی ها</span>
 </span>
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 hover:text-zinc-800 transition hover:bg-gray-100"
+                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-zinc-700 dark:text-zinc-200 hover:text-zinc-800 dark:hover:text-zinc-100 transition hover:bg-gray-100 dark:hover:bg-zinc-800"
                            href="./profile-messages.html">
 <span class="flex items-center gap-x-2">
-<svg fill="#4d4d4d" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
+<svg class="text-zinc-500 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20" xmlns="http://www.w3.org/2000/svg"><path
         d="M227.33,91l-96-64a6,6,0,0,0-6.66,0l-96,64A6,6,0,0,0,26,96V200a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V96A6,6,0,0,0,227.33,91ZM100.18,152,38,195.9V107.65Zm12.27,6h31.1l62.29,44H50.16Zm43.37-6L218,107.65V195.9ZM128,39.21l85.43,57L143.53,146H112.47L42.57,96.17Z"></path></svg>
 <span>پیغام ها</span>
 </span>
@@ -153,10 +164,10 @@
                         </a>
                     </li>
                     <li>
-                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-red-500 hover:text-red-600 transition hover:bg-red-100"
+                        <a class="flex items-center justify-between gap-x-2 rounded-lg p-2 text-red-500 hover:text-red-600 transition hover:bg-red-100 dark:hover:bg-red-900/40"
                            href="{% url 'logout' %}">
                             <div class="flex items-center gap-x-2">
-                                <svg fill="#4d4d4d" height="20" viewbox="0 0 256 256" width="20"
+<svg class="text-zinc-500 dark:text-zinc-300" fill="currentColor" height="20" viewbox="0 0 256 256" width="20"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path d="M110,216a6,6,0,0,1-6,6H48a14,14,0,0,1-14-14V48A14,14,0,0,1,48,34h56a6,6,0,0,1,0,12H48a2,2,0,0,0-2,2V208a2,2,0,0,0,2,2h56A6,6,0,0,1,110,216Zm110.24-92.24-40-40a6,6,0,0,0-8.48,8.48L201.51,122H104a6,6,0,0,0,0,12h97.51l-29.75,29.76a6,6,0,1,0,8.48,8.48l40-40A6,6,0,0,0,220.24,123.76Z"></path>
                                 </svg>
@@ -170,7 +181,7 @@
     </header>
     {% block content %}
     {% endblock %}
-<footer class="bg-white h-12 flex items-center justify-end px-5 w-full text-zinc-500 text-xs shrink-0">
+<footer class="bg-white dark:bg-zinc-900 h-12 flex items-center justify-end px-5 w-full text-zinc-500 dark:text-zinc-400 text-xs shrink-0 transition-colors duration-300">
         {% if footer_settings and footer_settings.copyright_text %}
             {{ footer_settings.copyright_text }}
         {% else %}
@@ -297,7 +308,7 @@
                             }
                         } else {
                             // آیکون مشکی و background سفید
-                            icon.setAttribute('fill', '#000000');
+                            icon.setAttribute('fill', '#111111');
                             Array.from(icon.classList).forEach(cls => {
                                 if (cls.startsWith('fill-')) {
                                     icon.classList.remove(cls);

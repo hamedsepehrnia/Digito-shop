@@ -20,7 +20,7 @@
                 </a>
                 {% endfor %}
             </div>
-            <svg class="absolute -left-2 rotate-180 top-14 z-10 w-auto hidden md:block" fill="none" height="285"
+            <svg class="absolute -left-2 rotate-180 top-14 z-10 w-auto hidden md:block hero-slider-wave" fill="none" height="285"
                  viewbox="0 0 76 285" width="76" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_6_41)">
                     <path d="M70 275V10C70 86 14 91.0878 14 142.752C14 194.416 70 201 70 275Z" fill="white"></path>
@@ -42,7 +42,7 @@
                     </filter>
                 </defs>
             </svg>
-            <svg class="absolute -right-2 top-14 z-10 w-auto hidden md:block" fill="none" height="285"
+            <svg class="absolute -right-2 top-14 z-10 w-auto hidden md:block hero-slider-wave" fill="none" height="285"
                  viewbox="0 0 76 285" width="76" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_d_6_41)">
                     <path d="M70 275V10C70 86 14 91.0878 14 142.752C14 194.416 70 201 70 275Z" fill="white"></path>
@@ -76,7 +76,7 @@
             <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
                 پرفروش ترین محصولات
             </div>
-            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800">
             </div>
             <div class="w-32 min-w-fit text-left">
                 <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
@@ -111,7 +111,7 @@
                                 <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
-                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                        <a class="text-sm font-semibold text-zinc-700 product-card-title h-10 line-clamp-2" href="{% url 'product' product.slug %}">
                             {{ product.title }}
                         </a>
                         <div class="flex my-5">
@@ -169,7 +169,7 @@
                 <div class="card-wrapper swiper-wrapper pb-10">
                     {% for category in categories %}
                     <div class="card swiper-slide">
-                        <a class="flex justify-between items-center shiny w-full border border-zinc-100 rounded-2xl hover:shadow-lg transition py-3 px-5"
+                        <a class="flex justify-between items-center shiny w-full border border-zinc-200 dark:border-zinc-700 rounded-2xl hover:shadow-lg transition py-3 px-5"
                            href="{% url 'shop' %}?category={{ category.slug }}">
                             <p class="text-xs md:text-sm text-zinc-700">
                                 {{ category.name }}
@@ -235,7 +235,7 @@
                                 <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
-                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                        <a class="text-sm font-semibold text-zinc-700 product-card-title h-10 line-clamp-2" href="{% url 'product' product.slug %}">
                             {{ product.title }}
                         </a>
                         <div class="flex my-5">
@@ -309,7 +309,7 @@
             <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
                 جدیدترین محصولات
             </div>
-            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800">
             </div>
             <div class="w-32 min-w-fit text-left">
                 <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
@@ -344,7 +344,7 @@
                                 <img alt="{{ product.title }}" class="max-w-40 mx-auto bg-gray-100" src='{% static "./assets/image/placeholder.svg" %}'>
                             {% endif %}
                         </a>
-                        <a class="text-sm font-semibold text-zinc-700 h-10 line-clamp-2" href="{% url 'product' product.slug %}">
+                        <a class="text-sm font-semibold text-zinc-700 product-card-title h-10 line-clamp-2" href="{% url 'product' product.slug %}">
                             {{ product.title }}
                         </a>
                         <div class="flex my-5">
@@ -402,7 +402,7 @@
                 <div class="card-wrapper swiper-wrapper pb-10">
                     {% for brand in brands %}
                     <div class="card swiper-slide shiny">
-                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-100 rounded-2xl hover:shadow-lg transition"
+                        <a class="flex flex-col justify-between items-center gap-3 w-full h-36 md:h-48 md:px-4 border border-zinc-200 dark:border-zinc-700 rounded-2xl hover:shadow-lg transition"
                            href="{% url 'shop' %}?brand={{ brand.slug }}">
                             <div class="w-full h-44 flex justify-center items-center">
                                 {% if brand.logo %}
@@ -434,7 +434,7 @@
             <div class="w-48 min-w-fit text-zinc-700 md:font-yekanBakhBold">
                 خواندنی ها
             </div>
-            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white">
+            <div class="h-[1px] w-full bg-gradient-to-r from-white via-zinc-300 to-white dark:from-zinc-800 dark:via-zinc-700 dark:to-zinc-800">
             </div>
             <div class="w-32 min-w-fit text-left">
                 <a class="group transition flex items-center justify-center gap-x-1 md:gap-x-2 text-zinc-600 hover:text-primary-500 text-xs md:text-sm text-center"
