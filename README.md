@@ -76,6 +76,7 @@ Digito is a full-featured e-commerce platform designed for selling digital produ
 - Fully Persianized admin interface
 - Vazir font for better Persian text display
 - Automatic date conversion to Jalali (with option to switch to Gregorian)
+- Dark mode support for a comfortable admin experience
 - Image preview in lists
 - Statistics and useful information display
 - Advanced mode: show/hide less-used models
@@ -278,6 +279,7 @@ For more details, see the [LICENSE](LICENSE) file or visit [Creative Commons](ht
 - رابط کاربری کاملاً فارسی‌سازی شده
 - فونت Vazir برای نمایش بهتر متن‌های فارسی
 - تبدیل خودکار تاریخ به شمسی (با امکان تغییر به میلادی)
+- پشتیبانی از حالت تاریک برای تجربه کاربری راحت‌تر
 - پیش‌نمایش تصویر در لیست‌ها
 - نمایش آمار و اطلاعات مفید
 - حالت پیشرفته: نمایش/پنهان کردن مدل‌های کم‌استفاده

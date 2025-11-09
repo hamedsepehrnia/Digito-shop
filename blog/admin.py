@@ -19,7 +19,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ['status', 'category', 'created_at']
     search_fields = ['title', 'content', 'excerpt']
     prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ['views', 'updated_at', 'published_at']
+    readonly_fields = ['views', 'created_at', 'updated_at', 'published_at']
     inlines = [CommentInline]
     actions = ['publish_posts', 'draft_posts']
     
