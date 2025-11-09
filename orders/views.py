@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -11,6 +12,8 @@ from .models import Order, OrderItem
 from .payment import get_zarinpal_payment_url, verify_zarinpal_payment
 from cart.models import Cart, CartItem
 from accounts.models import Address
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -119,13 +122,30 @@ def create_order(request):
                     order_id=order.id
                 )
                 
-                if payment_url:
+                logger.info(
+                    f"ZarinPal Payment URL Result - Order ID: {order.id}, "
+                    f"Payment URL: {payment_url}, Authority: {authority}, "
+                    f"Payment URL Type: {type(payment_url)}, Payment URL Bool: {bool(payment_url)}"
+                )
+                
+                if payment_url and payment_url.strip():
                     # Store authority in session for use in callback
                     request.session['zarinpal_authority'] = authority
                     request.session['zarinpal_order_id'] = order.id
+                    request.session.modified = True  # Ensure session is saved
+                    logger.info(
+                        f"Redirecting to ZarinPal payment - Order ID: {order.id}, "
+                        f"User: {request.user.phone}, Authority: {authority}, "
+                        f"Payment URL: {payment_url}"
+                    )
                     return redirect(payment_url)
                 else:
-                    messages.error(request, f'خطا در اتصال به درگاه پرداخت: {authority}')
+                    error_message = f'خطا در اتصال به درگاه پرداخت: {authority}'
+                    logger.error(
+                        f"ZarinPal Payment URL Creation Failed in View - Order ID: {order.id}, "
+                        f"User: {request.user.phone}, Error: {authority}, Amount: {final_price}"
+                    )
+                    messages.error(request, error_message)
                     return redirect('checkout')
             else:
                 # Auto payment (for testing)
@@ -183,15 +203,33 @@ def zarinpal_callback(request):
     authority = request.GET.get('Authority')
     status = request.GET.get('Status')
     
+    logger.info(
+        f"ZarinPal Callback Received - Authority: {authority}, Status: {status}, "
+        f"User: {request.user.phone}, GET Params: {dict(request.GET)}"
+    )
+    
     # Get data from session
     session_authority = request.session.get('zarinpal_authority')
     order_id = request.session.get('zarinpal_order_id')
     
     if not order_id:
+        logger.error(
+            f"ZarinPal Callback Error: Order ID not found in session - "
+            f"User: {request.user.phone}, Authority: {authority}, Status: {status}"
+        )
         messages.error(request, 'سفارش یافت نشد')
         return redirect('checkout')
     
-    order = get_object_or_404(Order, id=order_id, user=request.user)
+    try:
+        order = get_object_or_404(Order, id=order_id, user=request.user)
+    except Exception as e:
+        logger.error(
+            f"ZarinPal Callback Error: Order not found - Order ID: {order_id}, "
+            f"User: {request.user.phone}, Error: {str(e)}",
+            exc_info=True
+        )
+        messages.error(request, 'سفارش یافت نشد')
+        return redirect('checkout')
     
     # Clear session
     if 'zarinpal_authority' in request.session:
@@ -202,6 +240,11 @@ def zarinpal_callback(request):
     if status == 'OK' and authority == session_authority:
         # Verify payment
         final_price = order.get_final_price()
+        logger.info(
+            f"ZarinPal Callback Verification Started - Order ID: {order.id}, "
+            f"Authority: {authority}, Amount: {final_price}, User: {request.user.phone}"
+        )
+        
         success, ref_id, message = verify_zarinpal_payment(authority, final_price)
         
         if success:
@@ -209,11 +252,25 @@ def zarinpal_callback(request):
             order.status = 'paid'
             # You can store ref_id in a field if needed
             order.save()
+            logger.info(
+                f"ZarinPal Payment Completed Successfully - Order ID: {order.id}, "
+                f"Ref ID: {ref_id}, Authority: {authority}, User: {request.user.phone}"
+            )
             messages.success(request, f'پرداخت با موفقیت انجام شد. کد پیگیری: {ref_id}')
             return redirect('checkout_complete', order_id=order.id)
         else:
+            logger.error(
+                f"ZarinPal Payment Verification Failed in Callback - Order ID: {order.id}, "
+                f"Authority: {authority}, Error Message: {message}, "
+                f"Amount: {final_price}, User: {request.user.phone}"
+            )
             messages.error(request, f'خطا در تایید پرداخت: {message}')
             return redirect('checkout')
     else:
+        logger.warning(
+            f"ZarinPal Payment Cancelled or Invalid - Order ID: {order.id}, "
+            f"Status: {status}, Authority: {authority}, "
+            f"Session Authority: {session_authority}, User: {request.user.phone}"
+        )
         messages.warning(request, 'پرداخت لغو شد')
         return redirect('checkout')
