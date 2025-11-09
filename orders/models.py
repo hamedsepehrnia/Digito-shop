@@ -51,12 +51,42 @@ class Order(models.Model):
     def jalali_created(self):
         return JalaliDateTime(self.created_at).strftime('%Y/%m/%d - %H:%M')
 
+    def is_pending_payment_expired(self):
+        """Check if pending payment order is older than 1 hour"""
+        if self.status != 'pending' or self.payment_status:
+            return False
+        from datetime import timedelta
+        time_diff = timezone.now() - self.created_at
+        return time_diff > timedelta(hours=1)
+    
+    def get_remaining_payment_time(self):
+        """Get remaining time in seconds for payment (max 1 hour)"""
+        if self.status != 'pending' or self.payment_status:
+            return 0
+        from datetime import timedelta
+        time_diff = timezone.now() - self.created_at
+        remaining = timedelta(hours=1) - time_diff
+        return max(0, int(remaining.total_seconds()))
+
     def save(self, *args, **kwargs):
         if not self.order_number:
             import random
             import string
             self.order_number = ''.join(random.choices(string.digits, k=10))
         super().save(*args, **kwargs)
+    
+    @classmethod
+    def cancel_expired_pending_orders(cls):
+        """Cancel orders that are pending payment for more than 1 hour"""
+        from datetime import timedelta
+        expired_time = timezone.now() - timedelta(hours=1)
+        expired_orders = cls.objects.filter(
+            status='pending',
+            payment_status=False,
+            created_at__lt=expired_time
+        )
+        count = expired_orders.update(status='cancelled')
+        return count
 
 
 class OrderItem(models.Model):

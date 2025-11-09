@@ -8,4 +8,5 @@ urlpatterns = [
     path('orders/', views.order_list, name='order_list'),
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
     path('payment/zarinpal/callback/', views.zarinpal_callback, name='zarinpal_callback'),
+    path('orders/<int:order_id>/retry-payment/', views.retry_payment, name='retry_payment'),
 ]

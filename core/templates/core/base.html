@@ -1073,32 +1073,25 @@
         </div>
         <!-- copyright -->
         <div class="mt-10 pt-5 text-xs text-zinc-400 border-t border-zinc-200">
-            تمامی حقوق توسط تیم برنامه نویسی امیران محفوظ است.
+            {% if footer_settings and footer_settings.copyright_text %}
+                {{ footer_settings.copyright_text }}
+            {% else %}
+                ساخته شده توسط حامد سپهرنیا
+            {% endif %}
         </div>
     </footer>
 {% block extra_js %}{% endblock %}
 <script>
 // افزودن به سبد خرید - برای تمام صفحات
-document.addEventListener('DOMContentLoaded', function() {
-    // مدیریت دکمه‌های افزودن به سبد خرید
-    document.querySelectorAll('.add-to-cart-btn, .add-to-cart').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const productId = this.dataset.productId;
-            if (!productId) return;
-            
-            // دریافت رنگ انتخاب شده (اگر وجود دارد)
-            const colorInput = document.querySelector('input[name="color"]:checked');
-            const colorId = colorInput ? colorInput.value : null;
-            
-            addToCart(productId, colorId);
-        });
-    });
+// جلوگیری از ثبت چندباره event listener
+if (!window.cartEventListenersAttached) {
+    window.cartEventListenersAttached = true;
     
-    function addToCart(productId, colorId = null) {
+    // تعریف تابع addToCart به صورت global
+    window.addToCart = function(productId, colorId = null, quantity = 1, buttonElement = null) {
         const formData = new URLSearchParams();
         formData.append('product_id', productId);
-        formData.append('quantity', '1');
+        formData.append('quantity', quantity.toString());
         if (colorId) {
             formData.append('color_id', colorId);
         }
@@ -1117,6 +1110,10 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
+            if (buttonElement) {
+                buttonElement.disabled = false;
+            }
+            
             if (data.success) {
                 // همیشه صفحه را reload کن تا تعداد محصولات در header و سبد خرید به‌روزرسانی شود
                 location.reload();
@@ -1126,11 +1123,54 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error:', error);
+            if (buttonElement) {
+                buttonElement.disabled = false;
+            }
             alert('خطا در ارتباط با سرور');
         });
-    }
+    };
     
-    // مدیریت دکمه‌های علاقه‌مندی - برای تمام صفحات
+    document.addEventListener('DOMContentLoaded', function() {
+        // مدیریت دکمه‌های افزودن به سبد خرید
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn, .add-to-cart');
+        
+        addToCartButtons.forEach(btn => {
+            // بررسی اینکه آیا event listener قبلاً اضافه شده یا نه
+            if (btn.dataset.listenerAttached === 'true') {
+                return;
+            }
+            
+            btn.dataset.listenerAttached = 'true';
+            
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation(); // جلوگیری از انتشار event
+                
+                const productId = this.dataset.productId;
+                if (!productId) return;
+                
+                // غیرفعال کردن دکمه برای جلوگیری از کلیک‌های مکرر
+                if (this.disabled) return;
+                this.disabled = true;
+                
+                // دریافت رنگ انتخاب شده (اگر وجود دارد)
+                const colorInput = document.querySelector('input[name="color"]:checked');
+                const colorId = colorInput ? colorInput.value : null;
+                
+                // دریافت تعداد از input (اگر وجود دارد)
+                const quantityInput = this.closest('.quantity-container')?.querySelector('input[type="number"]') ||
+                                     document.querySelector('.quantity-container input[type="number"]') ||
+                                     document.querySelector('input[name="quantity"]');
+                const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+                
+                window.addToCart(productId, colorId, quantity, this);
+            }, { once: false });
+        });
+    });
+}
+    
+// مدیریت دکمه‌های علاقه‌مندی - برای تمام صفحات
+document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.toggle-favorite').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();

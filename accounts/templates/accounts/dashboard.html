@@ -102,6 +102,11 @@
                         </th>
                         <th class="p-4 border-b border-b-zinc-400">
                             <p class="block text-sm opacity-70">
+                                وضعیت
+                            </p>
+                        </th>
+                        <th class="p-4 border-b border-b-zinc-400">
+                            <p class="block text-sm opacity-70">
                                 جزئیات
                             </p>
                         </th>
@@ -126,12 +131,25 @@
                             </p>
                         </td>
                         <td class="p-4">
+                            <div class="flex items-center gap-2">
+                                <p class="block text-sm">
+                                    {{ order.get_status_display }}
+                                </p>
+                                {% if order.status == 'pending' and not order.payment_status and not order.is_pending_payment_expired %}
+                                <a href="{% url 'retry_payment' order.id %}" 
+                                   class="inline-block bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded transition-colors">
+                                    پرداخت
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="p-4">
                             <a class="block text-xs" href="{% url 'dashboard-order-details' order.id %}">مشاهده</a>
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="4" class="p-4 text-center text-zinc-500">
+                        <td colspan="5" class="p-4 text-center text-zinc-500">
                             سفارشی ثبت نشده است
                         </td>
                     </tr>

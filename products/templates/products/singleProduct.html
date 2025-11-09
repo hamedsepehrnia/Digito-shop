@@ -484,14 +484,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Add to cart
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const productId = this.dataset.productId;
-            addToCart(productId);
-        });
-    });
-    
     // Toggle favorite
     const favoriteBtn = document.querySelector('.toggle-favorite');
     if (favoriteBtn) {
@@ -499,34 +491,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const productId = this.dataset.productId;
             toggleFavorite(productId);
-        });
-    }
-    
-    function addToCart(productId) {
-        fetch('/cart/add/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `product_id=${productId}&quantity=1`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message || 'محصول به سبد خرید اضافه شد');
-                // Update cart count if exists
-                const cartCount = document.querySelector('.cart-count');
-                if (cartCount) {
-                    cartCount.textContent = data.cart_total || 0;
-                }
-            } else {
-                alert(data.error || 'خطا در افزودن به سبد خرید');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('خطا در ارتباط با سرور');
         });
     }
     

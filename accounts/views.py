@@ -45,6 +45,9 @@ def dashboard(request):
     # Points (can be based on purchases)
     points = orders_count * 10  # 10 points per order
     
+    # Cancel expired pending orders
+    Order.cancel_expired_pending_orders()
+    
     # Recent orders
     recent_orders = Order.objects.filter(user=request.user).order_by('-created_at')[:5]
     
@@ -172,6 +175,10 @@ def toggle_favorite(request):
 @login_required
 def dashboard_orders(request):
     """User orders list"""
+    from orders.models import Order
+    # Cancel expired pending orders
+    Order.cancel_expired_pending_orders()
+    
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'accounts/dashboardOrders.html', {'orders': orders})
 

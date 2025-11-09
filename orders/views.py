@@ -274,3 +274,56 @@ def zarinpal_callback(request):
         )
         messages.warning(request, 'پرداخت لغو شد')
         return redirect('checkout')
+
+
+@login_required
+def retry_payment(request, order_id):
+    """Retry payment for a pending order"""
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # Check if order is eligible for payment
+    if order.status != 'pending' or order.payment_status:
+        messages.error(request, 'این سفارش قابل پرداخت نیست')
+        return redirect('dashboard-orders')
+    
+    # Check if order is expired
+    if order.is_pending_payment_expired():
+        order.status = 'cancelled'
+        order.save()
+        messages.error(request, 'زمان پرداخت این سفارش به پایان رسیده است')
+        return redirect('dashboard-orders')
+    
+    # Check if Zarinpal is active
+    if not settings.ZARINPAL_ACTIVE:
+        messages.error(request, 'درگاه پرداخت فعال نیست')
+        return redirect('dashboard-orders')
+    
+    # Create payment URL
+    final_price = order.get_final_price()
+    description = f"پرداخت سفارش {order.order_number}"
+    callback_url = request.build_absolute_uri(reverse('zarinpal_callback'))
+    
+    payment_url, authority = get_zarinpal_payment_url(
+        amount=final_price,
+        description=description,
+        callback_url=callback_url,
+        order_id=order.id
+    )
+    
+    if payment_url:
+        # Store authority in session for use in callback
+        request.session['zarinpal_authority'] = authority
+        request.session['zarinpal_order_id'] = order.id
+        request.session.modified = True
+        logger.info(
+            f"Retry Payment - Redirecting to ZarinPal - Order ID: {order.id}, "
+            f"User: {request.user.phone}, Authority: {authority}"
+        )
+        return redirect(payment_url)
+    else:
+        logger.error(
+            f"Retry Payment Failed - Order ID: {order.id}, "
+            f"User: {request.user.phone}, Error: {authority}"
+        )
+        messages.error(request, f'خطا در اتصال به درگاه پرداخت: {authority}')
+        return redirect('dashboard-orders')
