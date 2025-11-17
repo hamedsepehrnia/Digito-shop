@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from urllib.parse import unquote
 
 from .models import Product, Color, Category, Comment, Brand
 from .forms import CommentForm
@@ -131,6 +132,8 @@ def shop(request):
 
 def single_product(request, slug):
     """Product details page"""
+    # Decode URL-encoded slug to handle Persian characters properly
+    slug = unquote(slug)
     product = get_object_or_404(Product, slug=slug)
     
     # Increment view count
@@ -176,6 +179,8 @@ def single_product(request, slug):
 @csrf_exempt
 def add_comment(request, slug):
     """Add comment to product"""
+    # Decode URL-encoded slug to handle Persian characters properly
+    slug = unquote(slug)
     product = get_object_or_404(Product, slug=slug)
     form = CommentForm(request.POST)
     
