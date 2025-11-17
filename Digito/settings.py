@@ -12,34 +12,30 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config, Csv
-
-# ======================
-# Paths
-# ======================
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# ======================
-# Security
-# ======================
-SECRET_KEY = config('SECRET_KEY', default="django-insecure-f1u+9g&qd+9xu+n+s828bxkrl0w6()uf7_78a+e3hq(9edvzv^")
-DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
-
-# ======================
-# Custom User Model
-# ======================
 AUTH_USER_MODEL = 'accounts.MyUser'
 
-# ======================
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = config('SECRET_KEY', default="django-insecure-f1u+9g&qd+9xu+n+s828bxkrl0w6()uf7_78a+e3hq(9edvzv^")
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = config('DEBUG', default=True, cast=bool)
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+
 # Admin Panel Settings
-# ======================
 ADMIN_SITE_TITLE = config('ADMIN_SITE_TITLE', default='دیجیتو')
 ADMIN_SITE_HEADER = config('ADMIN_SITE_HEADER', default='پنل مدیریت دیجیتو')
 ADMIN_SITE_INDEX_TITLE = config('ADMIN_SITE_INDEX_TITLE', default='خوش آمدید به پنل مدیریت')
 
-# ======================
 # OTP Settings (Kavenegar)
-# ======================
 KAVENEGAR_API_KEY = config('KAVENEGAR_API_KEY', default='')
 KAVENEGAR_SENDER = config('KAVENEGAR_SENDER', default='10001001001')
 OTP_USE_KAVENEGAR = config('OTP_USE_KAVENEGAR', default=False, cast=bool)
@@ -47,18 +43,16 @@ OTP_MAX_REQUESTS_PER_HOUR = config('OTP_MAX_REQUESTS_PER_HOUR', default=5, cast=
 OTP_MAX_REQUESTS_PER_DAY = config('OTP_MAX_REQUESTS_PER_DAY', default=10, cast=int)
 OTP_EXPIRY_MINUTES = config('OTP_EXPIRY_MINUTES', default=5, cast=int)
 
-# ======================
 # Payment Gateway (Zarinpal)
-# ======================
 ZARINPAL_MERCHANT_ID = config('ZARINPAL_MERCHANT_ID', default='')
 ZARINPAL_SANDBOX = config('ZARINPAL_SANDBOX', default=True, cast=bool)
 ZARINPAL_ACTIVE = config('ZARINPAL_ACTIVE', default=False, cast=bool)
 
-# ======================
-# Installed Apps
-# ======================
+
+# Application definition
+
 INSTALLED_APPS = [
-    # Django defaults
+    #defaults
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -66,11 +60,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    
-    # Third-party
+    #third party
     'mptt',
-    
-    # Local apps
+    #apps
     'core',
     'accounts',
     'blog',
@@ -79,9 +71,6 @@ INSTALLED_APPS = [
     'products',
 ]
 
-# ======================
-# Middleware
-# ======================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -98,7 +87,8 @@ ROOT_URLCONF = "Digito.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'templates'],
+        "DIRS": [BASE_DIR / 'templates']
+        ,
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -116,9 +106,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Digito.wsgi.application"
 
-# ======================
+
 # Database
-# ======================
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -126,58 +117,63 @@ DATABASES = {
     }
 }
 
-# ======================
-# Password Validation
-# ======================
+
+# Password validation
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
 ]
 
-# ======================
+
 # Internationalization
-# ======================
+# https://docs.djangoproject.com/en/5.2/topics/i18n/
+
 LANGUAGE_CODE = "fa-ir"
+
 TIME_ZONE = "UTC"
+
 USE_I18N = True
+
 USE_TZ = True
 
-# ======================
-# Static files
-# ======================
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/5.2/howto/static-files/
+
 STATIC_URL = "static/"
 STATIC_ROOT = Path(config('STATIC_ROOT', default=str(BASE_DIR / "staticfiles")))
-STATICFILES_DIRS = [str(BASE_DIR / "static")]
-
-# ======================
-# Media files
-# ======================
-MEDIA_URL = "/media/"
-MEDIA_ROOT = Path(config('MEDIA_ROOT', default=str(BASE_DIR / "media")))
+STATICFILES_DIRS = [
+    str(BASE_DIR / "static"),
+]
 
 STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-        "OPTIONS": {
-            "location": str(MEDIA_ROOT),
-            "base_url": MEDIA_URL,
-        },
-    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
 
-# ======================
+# Media files (User uploaded files)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = Path(config('MEDIA_ROOT', default=str(BASE_DIR / "media")))
+
 # Default primary key field type
-# ======================
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ======================
 # Logging Configuration
-# ======================
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -196,6 +192,14 @@ LOGGING = {
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },
     },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     'handlers': {
         'console': {
             'level': 'INFO',
@@ -206,7 +210,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs' / 'django.log',
-            'maxBytes': 1024 * 1024 * 10,
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 5,
             'formatter': 'verbose',
         },
@@ -214,7 +218,7 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs' / 'zarinpal.log',
-            'maxBytes': 1024 * 1024 * 10,
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 10,
             'formatter': 'zarinpal',
         },
@@ -222,7 +226,7 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs' / 'errors.log',
-            'maxBytes': 1024 * 1024 * 10,
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
             'backupCount': 10,
             'formatter': 'verbose',
         },
