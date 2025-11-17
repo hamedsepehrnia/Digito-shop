@@ -22,3 +22,6 @@ python-decouple>=3.8
 # Payment Gateway (Zarinpal)
 requests>=2.31.0
 
+# Static files serving
+whitenoise>=6.7.0
+
