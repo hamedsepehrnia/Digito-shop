@@ -1,14 +1,28 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
+from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from PIL import Image
+from faker import Faker
 import random
 import io
+from urllib.parse import quote_plus
 
 from products.models import Category, Product, ProductImage, ProductSpecification, Color, Brand
 from blog.models import Post, Category as BlogCategory
-from core.models import Banner, ContactInfo, FooterSettings, AdminSettings, About, AboutSection
+from core.models import (
+    Banner,
+    ContactInfo,
+    FooterSettings,
+    AdminSettings,
+    About,
+    AboutSection,
+    ContactMessage,
+    SocialMedia,
+    FooterLink,
+    FooterLinkGroup,
+)
 
 User = get_user_model()
 
@@ -21,6 +35,15 @@ SAMPLE_TEXTS = [
     "این محصول با توجه به نیازهای مشتریان طراحی شده است. دارای کیفیت بالا و دوام طولانی مدت می‌باشد.",
 ]
 
+IRAN_PROVINCES = [
+    'تهران', 'البرز', 'اصفهان', 'فارس', 'خراسان رضوی', 'آذربایجان شرقی', 'آذربایجان غربی',
+    'گیلان', 'مازندران', 'هرمزگان', 'سیستان و بلوچستان', 'کرمان', 'یزد', 'قم', 'قزوین',
+    'زنجان', 'همدان', 'کردستان', 'کرمانشاه', 'لرستان', 'خوزستان', 'چهارمحال و بختیاری',
+    'کهگیلویه و بویراحمد', 'گلستان', 'خراسان شمالی', 'خراسان جنوبی', 'ایلام', 'بوشهر', 'اردبیل'
+]
+
+LANDLINE_PREFIXES = ['21', '26', '31', '41', '44', '51', '61', '71']
+
 
 class Command(BaseCommand):
     help = 'پاک کردن تمام داده‌ها و ایجاد داده‌های نمونه'
@@ -31,8 +54,21 @@ class Command(BaseCommand):
             action='store_true',
             help='فقط داده‌ها را پاک کن (بدون ایجاد داده جدید)',
         )
+        parser.add_argument(
+            '--seed',
+            type=int,
+            default=None,
+            help='سید تصادفی برای تولید داده‌های منطقی (به صورت پیش‌فرض تاریخ روز)',
+        )
 
     def handle(self, *args, **options):
+        seed = options.get('seed') or int(timezone.now().strftime('%Y%m%d'))
+        random.seed(seed)
+        self.fake = Faker('fa_IR')
+        self.fake.seed_instance(seed)
+        self.seed = seed
+        self.stdout.write(f'➤ در حال تولید داده‌ها با سید {seed}')
+
         if options['clear']:
             self.clear_data()
             return
@@ -56,6 +92,11 @@ class Command(BaseCommand):
         
         # Create products
         self.create_products(categories, colors, brands)
+        
+        # Contact related seed data
+        self.create_contact_messages()
+        self.create_social_media_links()
+        self.create_footer_links()
         
         # Create banners
         self.create_banners()
@@ -88,39 +129,88 @@ class Command(BaseCommand):
         AboutSection.objects.all().delete()
         About.objects.all().delete()
         
+        ContactMessage.objects.all().delete()
+        FooterLinkGroup.objects.all().delete()
+        FooterLink.objects.all().delete()
+        SocialMedia.objects.all().delete()
+        ContactInfo.objects.all().delete()
+        FooterSettings.objects.all().delete()
+        AdminSettings.objects.all().delete()
+        
         self.stdout.write(self.style.SUCCESS('✓ تمام داده‌ها پاک شدند'))
     
     def create_base_settings(self):
         """Create base settings"""
-        # AdminSettings
-        AdminSettings.objects.get_or_create(
+        company_name = self.fake.company()
+        self.company_name = company_name
+        current_year = str(self.seed)[:4]
+        
+        admin_settings, _ = AdminSettings.objects.update_or_create(
             id=1,
             defaults={
                 'use_jalali_date': True,
-                'site_title': 'دیجیتو',
-                'site_header': 'پنل مدیریت دیجیتو',
-                'site_index_title': 'خوش آمدید به پنل مدیریت',
+                'site_title': company_name,
+                'site_header': f'پنل مدیریت {company_name}',
+                'site_index_title': f'خوش آمدید به {company_name}',
                 'show_hidden_models': False,
             }
         )
         
-        # ContactInfo
-        if not ContactInfo.objects.exists():
-            ContactInfo.objects.create(
-                phone='021-12345678',
-                email='info@digito.ir',
-                address='تهران، خیابان ولیعصر',
-                working_hours='شنبه تا پنجشنبه: 9 صبح تا 6 عصر',
-            )
+        province = random.choice(IRAN_PROVINCES)
+        city = self.fake.city()
+        try:
+            street = self.fake.street_name()
+        except AttributeError:
+            street = self.fake.street_address().split('\n')[0]
+        try:
+            building = self.fake.building_number()
+        except AttributeError:
+            building = random.randint(1, 250)
+        address = f'{province}، {city}، {street}، پلاک {building}'
+        working_hours = f'شنبه تا پنجشنبه: {random.randint(8,10)} صبح تا {random.randint(17,21)} عصر'
+        map_url = f'https://www.google.com/maps/search/?api=1&query={quote_plus(address)}'
         
-        # FooterSettings
-        if not FooterSettings.objects.exists():
-            FooterSettings.objects.create(
-                description='فروشگاه اینترنتی دیجیتو - بهترین محصولات دیجیتال',
-                copyright_text='© 1403 تمام حقوق محفوظ است',
+        contact_info = ContactInfo.objects.first()
+        phone_number = self.generate_landline_number()
+        if not contact_info:
+            contact_info = ContactInfo(
+                email=self.fake.company_email(),
+                phone=phone_number,
+                address=address,
+                postal_code=self.fake.postcode(),
+                working_hours=working_hours,
+                map_url=map_url,
+                is_active=True,
             )
+        else:
+            contact_info.email = self.fake.company_email()
+            contact_info.phone = phone_number
+            contact_info.address = address
+            contact_info.postal_code = self.fake.postcode()
+            contact_info.working_hours = working_hours
+            contact_info.map_url = map_url
+            contact_info.is_active = True
+        contact_info.save()
+        
+        footer_settings = FooterSettings.objects.first()
+        footer_defaults = {
+            'description': f'{company_name} | {self.fake.sentence(nb_words=6)}',
+            'copyright_text': f'© {current_year} {company_name} - تمامی حقوق محفوظ است.',
+            'is_active': True,
+        }
+        if not footer_settings:
+            footer_settings = FooterSettings.objects.create(**footer_defaults)
+        else:
+            for field, value in footer_defaults.items():
+                setattr(footer_settings, field, value)
+            footer_settings.save()
         
         self.stdout.write(self.style.SUCCESS('✓ تنظیمات پایه ایجاد شد'))
+        return {
+            'admin_settings': admin_settings,
+            'contact': contact_info,
+            'footer': footer_settings,
+        }
 
     def create_colors(self):
         """Create colors"""
@@ -342,8 +432,8 @@ class Command(BaseCommand):
             # Create product
             product = Product.objects.create(
                 title=title,
-                english_title=f"Product {i+1}",
-                description=random.choice(SAMPLE_TEXTS) * 3,
+                english_title=f"{self.fake.word().title()} {i+1}",
+                description=' '.join(self.fake.paragraphs(nb=3)),
                 category=category,
                 brand=brand,
                 price=random.randint(50000, 50000000),
@@ -399,8 +489,6 @@ class Command(BaseCommand):
 
     def create_blog_categories(self):
         """Create blog categories"""
-        from django.utils.text import slugify
-        
         categories_data = [
             'فناوری',
             'سبک زندگی',
@@ -551,32 +639,30 @@ class Command(BaseCommand):
     
     def create_about_page(self):
         """Create about page"""
-        # Create main about page
-        about_content = """
-        <h2>درباره دیجیتو</h2>
-        <p>فروشگاه اینترنتی دیجیتو در سال 1400 با هدف ارائه بهترین محصولات دیجیتال به مشتریان عزیز تاسیس شد. ما با بیش از 3 سال تجربه در زمینه فروش آنلاین، همواره تلاش کرده‌ایم تا رضایت مشتریان را در اولویت اول قرار دهیم.</p>
+        company_name = getattr(self, 'company_name', 'دیجیتو')
+        foundation_year = random.randint(1395, 1403)
+        achievements = f"{random.randint(30, 90)}٬{random.randint(100, 999)}"
+        mission_points = ''.join(f'<li>{self.fake.sentence(nb_words=10)}</li>' for _ in range(5))
         
-        <h3>چرا دیجیتو؟</h3>
-        <ul>
-            <li>ارائه محصولات با کیفیت و اصل</li>
-            <li>گارانتی معتبر و خدمات پس از فروش</li>
-            <li>ارسال سریع و رایگان</li>
-            <li>پشتیبانی 24 ساعته</li>
-            <li>قیمت‌های رقابتی</li>
-        </ul>
+        about_content = f"""
+        <h2>درباره {company_name}</h2>
+        <p>{' '.join(self.fake.paragraphs(nb=2))}</p>
+        
+        <h3>چرا {company_name}؟</h3>
+        <ul>{mission_points}</ul>
         
         <h3>ماموریت ما</h3>
-        <p>ماموریت ما ارائه بهترین تجربه خرید آنلاین به مشتریان است. ما معتقدیم که هر مشتری حق دارد به محصولات با کیفیت و خدمات عالی دسترسی داشته باشد.</p>
+        <p>{' '.join(self.fake.paragraphs(nb=2))}</p>
         
-        <h3>ارزش‌های ما</h3>
-        <p>صداقت، کیفیت، رضایت مشتری و نوآوری از ارزش‌های اصلی ما هستند. ما همواره تلاش می‌کنیم تا این ارزش‌ها را در تمامی تعاملات خود با مشتریان حفظ کنیم.</p>
+        <h3>دستاوردها</h3>
+        <p>از سال {foundation_year} تا کنون بیش از {achievements} سفارش موفق ثبت کرده‌ایم و میانگین رضایت مشتریان ما ۹۴٪ است.</p>
         """
         
         about_image = self.create_blog_image(1200, 800)
         about, created = About.objects.get_or_create(
             id=1,
             defaults={
-                'title': 'درباره دیجیتو',
+                'title': f'درباره {company_name}',
                 'content': about_content,
                 'is_active': True,
             }
@@ -590,36 +676,78 @@ class Command(BaseCommand):
             )
         
         # Create about sections
-        about_sections = [
-            {
-                'title': 'تاریخچه ما',
-                'content': 'دیجیتو در سال 1400 با یک تیم کوچک و پرانرژی شروع به کار کرد. در طول این سال‌ها، ما توانسته‌ایم به یکی از معتبرترین فروشگاه‌های آنلاین محصولات دیجیتال تبدیل شویم.',
-                'order': 1,
-            },
-            {
-                'title': 'تیم ما',
-                'content': 'تیم دیجیتو متشکل از متخصصان با تجربه در زمینه‌های مختلف است. ما همواره تلاش می‌کنیم تا با به‌روزترین تکنولوژی‌ها و روش‌های کاری، بهترین خدمات را به مشتریان ارائه دهیم.',
-                'order': 2,
-            },
-            {
-                'title': 'دستاوردهای ما',
-                'content': 'در طول این سال‌ها، ما موفق شده‌ایم به بیش از 50,000 مشتری راضی خدمات ارائه دهیم. رضایت مشتریان و اعتماد آنها به ما، بزرگترین دستاورد ما محسوب می‌شود.',
-                'order': 3,
-            },
-            {
-                'title': 'آینده ما',
-                'content': 'ما در آینده قصد داریم تا دامنه محصولات خود را گسترش دهیم و خدمات بهتری به مشتریان ارائه کنیم. هدف ما تبدیل شدن به برترین فروشگاه آنلاین محصولات دیجیتال در ایران است.',
-                'order': 4,
-            },
-        ]
-        
-        for section_data in about_sections:
+        section_titles = ['تاریخچه ما', 'ارزش‌های کلیدی', 'تیم و فرهنگ کاری', 'چشم‌انداز آینده']
+        for order, title in enumerate(section_titles, start=1):
             section = AboutSection.objects.create(
                 about=about,
-                title=section_data['title'],
-                content=section_data['content'],
-                order=section_data['order'],
+                title=title,
+                content=' '.join(self.fake.paragraphs(nb=2)),
+                order=order,
             )
         
         self.stdout.write(self.style.SUCCESS('✓ صفحه درباره ما ایجاد شد'))
+
+    def create_contact_messages(self, count=8):
+        """Create sample contact messages"""
+        ContactMessage.objects.all().delete()
+        messages = []
+        for _ in range(count):
+            messages.append(ContactMessage.objects.create(
+                name=self.fake.name(),
+                phone=self.generate_mobile_number(),
+                message='\n'.join(self.fake.paragraphs(nb=random.randint(1, 2))),
+                is_read=random.choice([True, False]),
+            ))
+        self.stdout.write(self.style.SUCCESS(f'✓ {len(messages)} پیام تماس نمونه ایجاد شد'))
+
+    def create_social_media_links(self):
+        """Create active social media links"""
+        SocialMedia.objects.all().delete()
+        base_username = slugify(f"{getattr(self, 'company_name', 'digito')}") or 'digito'
+        base_username = base_username.replace('-', '')
+        for order, (platform, _) in enumerate(SocialMedia.SOCIAL_CHOICES, start=1):
+            SocialMedia.objects.create(
+                platform=platform,
+                url=f'https://{platform}.com/{base_username}{order}',
+                is_active=True,
+                order=order,
+            )
+        self.stdout.write(self.style.SUCCESS('✓ لینک‌های شبکه اجتماعی ایجاد شد'))
+
+    def create_footer_links(self):
+        """Create footer link groups with links"""
+        FooterLinkGroup.objects.all().delete()
+        FooterLink.objects.all().delete()
+        
+        groups_data = [
+            ('خدمات مشتریان', ['پاسخ به پرسش‌های متداول', 'رویه‌های بازگرداندن کالا', 'شرایط استفاده', 'حریم خصوصی']),
+            ('راهنمای خرید', ['نحوه ثبت سفارش', 'شیوه‌های ارسال سفارش', 'شیوه‌های پرداخت', 'پیگیری مرسولات']),
+            ('درباره فروشگاه', ['داستان ما', 'همکاری با ما', 'فرصت‌های شغلی', 'تماس مستقیم']),
+        ]
+        
+        for group_order, (group_title, links) in enumerate(groups_data, start=1):
+            group = FooterLinkGroup.objects.create(
+                title=group_title,
+                order=group_order,
+                is_active=True,
+            )
+            for link_order, link_title in enumerate(links, start=1):
+                link = FooterLink.objects.create(
+                    title=link_title,
+                    url=self.fake.url(),
+                    order=link_order,
+                    is_active=True,
+                )
+                group.links.add(link)
+        
+        self.stdout.write(self.style.SUCCESS('✓ لینک‌ها و گروه‌های فوتر ایجاد شدند'))
+
+    def generate_landline_number(self):
+        prefix = random.choice(LANDLINE_PREFIXES)
+        number = random.randint(2_000_000, 9_999_999)
+        return f'0{prefix}-{number:07d}'
+
+    def generate_mobile_number(self):
+        digits = ''.join(str(random.randint(0, 9)) for _ in range(9))
+        return f'09{digits}'
 
