@@ -1164,6 +1164,12 @@
     }
 })();
 
+// وضعیت احراز هویت برای استفاده در اسکریپت‌های فرانت
+window.isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+window.showAuthRequiredMessage = function() {
+    alert('شما وارد حساب خود نشده‌اید');
+};
+
 // افزودن به سبد خرید - برای تمام صفحات
 // جلوگیری از ثبت چندباره event listener
 if (!window.cartEventListenersAttached) {
@@ -1171,6 +1177,16 @@ if (!window.cartEventListenersAttached) {
     
     // تعریف تابع addToCart به صورت global
     window.addToCart = function(productId, colorId = null, quantity = 1, buttonElement = null) {
+        if (!window.isAuthenticated) {
+            if (typeof window.showAuthRequiredMessage === 'function') {
+                window.showAuthRequiredMessage();
+            }
+            if (buttonElement) {
+                buttonElement.disabled = false;
+            }
+            return;
+        }
+        
         const formData = new URLSearchParams();
         formData.append('product_id', productId);
         formData.append('quantity', quantity.toString());
