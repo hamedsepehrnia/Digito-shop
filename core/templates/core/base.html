@@ -410,18 +410,9 @@
         </ul>
         <!-- buttons -->
         <div class="flex gap-x-5">
-            <!-- Dark Mode Toggle -->
-            <button id="dark-mode-toggle" class="flex items-center justify-center p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors" title="تغییر تم">
-                <svg id="dark-mode-icon" class="w-5 h-5 fill-zinc-700 dark:fill-primary-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Moon icon (for dark mode) -->
-                    <path id="moon-icon" d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" style="display: none;"/>
-                    <!-- Sun icon (for light mode) -->
-                    <path id="sun-icon" d="M12,2a1,1,0,0,0,1-1V1a1,1,0,0,0-2,0V1A1,1,0,0,0,12,2ZM4.22,5.64a1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.42L4.93,3.52a1,1,0,0,0-1.42,1.42ZM2,12a1,1,0,0,0-1,1H1a1,1,0,0,0,0,2H1A1,1,0,0,0,2,12ZM4.22,18.36a1,1,0,0,0,0,1.42,1,1,0,0,0,.71.29,1,1,0,0,0,.71-.29L7.05,19.36a1,1,0,0,0-1.42-1.42ZM12,22a1,1,0,0,0-1,1V23a1,1,0,0,0,2,0V23A1,1,0,0,0,12,22ZM18.36,4.22a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42L19.36,2.29a1,1,0,0,0-1.42,1.42ZM22,12a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0V11A1,1,0,0,0,22,12ZM18.36,19.78a1,1,0,0,0-.71.29,1,1,0,0,0,0,1.42l.71.71a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42ZM12,6a6,6,0,1,0,6,6A6,6,0,0,0,12,6ZM12,16a4,4,0,1,1,4-4A4,4,0,0,1,12,16Z"/>
-                </svg>
-            </button>
             <!-- cart -->
             <div class="absolute top-3 left-16 md:top-0 md:left-0 md:relative group cursor-pointer border-2 border-primary-500 hover:shadow-lg hover:bg-zinc-200 transition rounded-xl p-2.5">
-                <a href="{% url 'cart' %}">
+                <a href="/cart/">
                 <img alt="" src='{% static "./assets/image/icons/cart.svg" %}'/>
                 </a>
                 <span class="absolute -right-2 -top-2 flex size-6 drop-shadow-lg items-center justify-center rounded-full bg-white text-sm font-semibold text-primary-500 cart-count" {% if cart_items_count == 0 %}style="display: none;"{% endif %}>
@@ -503,7 +494,7 @@
                             <span class="text-primary-500 dark:text-primary-300 font-bold header-cart-total-price">{{ cart_total_price|floatformat:0 }}</span>
                             <span class="text-primary-500 dark:text-primary-300 font-bold"> تومان</span>
                             </div>
-                        <a href="{% url 'cart' %}" class="block w-full bg-primary-500 hover:bg-primary-400 text-white text-center py-2 rounded-lg transition">
+                        <a href="/cart/" class="block w-full bg-primary-500 hover:bg-primary-400 text-white text-center py-2 rounded-lg transition">
                             مشاهده سبد خرید
                         </a>
                     </div>
